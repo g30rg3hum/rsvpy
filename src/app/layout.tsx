@@ -20,8 +20,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${lexend.variable} antialiased`}>
+    <html lang="en" className="min-h-screen">
+      <body
+        className={`${lexend.variable} antialiased flex flex-col min-h-screen border border-orange-500`}
+      >
         <Header />
         {children}
       </body>

@@ -5,7 +5,7 @@ export default function Header() {
   return (
     <div className="navbar px-6 py-4">
       <div className="flex-1">
-        <Link href="/">
+        <Link href="/" className="inline-block">
           <Image
             src="/images/logo.png"
             alt="rsvpy logo"
@@ -17,7 +17,7 @@ export default function Header() {
       <div className="flex-none">
         <ul className="menu menu-horizontal px-1">
           <li>
-            <a href="#" className="btn btn-primary">
+            <a href="/login" className="btn btn-primary">
               Login
             </a>
           </li>
