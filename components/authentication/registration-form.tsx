@@ -1,6 +1,33 @@
+"use client";
+
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 import HyperLink from "../reusables/hyperlink";
+import ErrorMessage from "../reusables/error-message";
+import "../../lib/yup/yupLocale";
+
+type FormData = {
+  email: string;
+  firstName: string;
+  lastName: string;
+};
+
+const schema = yup.object({
+  email: yup.string().email().required(),
+  firstName: yup.string().required(),
+  lastName: yup.string().required(),
+});
 
 export default function RegistrationForm() {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({ resolver: yupResolver(schema) });
+
+  const onSubmit = handleSubmit((data: FormData) => console.log(data));
+
   return (
     <div className="card card-border w-[500px] bg-base border">
       <div className="card-body">
@@ -12,11 +39,11 @@ export default function RegistrationForm() {
           </p>
         </div>
 
-        <form className="space-y-4">
+        <form className="space-y-4" onSubmit={onSubmit}>
           <div>
             <fieldset className="fieldset">
               <legend className="fieldset-legend">Email address</legend>
-              <label className="input validator w-full">
+              <label className="input w-full">
                 <svg
                   className="h-[1em] opacity-50"
                   xmlns="http://www.w3.org/2000/svg"
@@ -34,26 +61,44 @@ export default function RegistrationForm() {
                   </g>
                 </svg>
                 <input
+                  {...register("email")}
                   className="w-full"
-                  type="email"
                   placeholder="email@mail.com"
-                  required
                 />
               </label>
+              {errors.email?.message && (
+                <ErrorMessage text={errors.email.message} />
+              )}
             </fieldset>
 
             <fieldset className="fieldset">
               <legend className="fieldset-legend">First name</legend>
-              <input className="w-full input" placeholder="John" required />
+              <input
+                {...register("firstName")}
+                className="w-full input"
+                placeholder="John"
+              />
+              {errors.firstName?.message && (
+                <ErrorMessage text={errors.firstName.message} />
+              )}
             </fieldset>
 
             <fieldset className="fieldset">
               <legend className="fieldset-legend">Last name</legend>
-              <input className="w-full input" placeholder="Doe" required />
+              <input
+                {...register("lastName")}
+                className="w-full input"
+                placeholder="Doe"
+              />
+              {errors.lastName?.message && (
+                <ErrorMessage text={errors.lastName.message} />
+              )}
             </fieldset>
           </div>
 
-          <button className="btn btn-primary w-full">Register</button>
+          <button className="btn btn-primary w-full" type="submit">
+            Register
+          </button>
         </form>
       </div>
     </div>

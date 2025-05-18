@@ -1,6 +1,28 @@
+"use client";
 import HyperLink from "../reusables/hyperlink";
+import "../../lib/yup/yupLocale";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useForm } from "react-hook-form";
+import * as yup from "yup";
+import ErrorMessage from "../reusables/error-message";
+
+type FormData = {
+  email: string;
+};
+
+const schema = yup.object({
+  email: yup.string().email().required(),
+});
 
 export default function LoginForm() {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({ resolver: yupResolver(schema) });
+
+  const onSubmit = handleSubmit((data: FormData) => console.log(data));
+
   return (
     <div className="card card-border w-[500px] bg-base border">
       <div className="card-body">
@@ -13,10 +35,10 @@ export default function LoginForm() {
           </p>
         </div>
 
-        <form className="space-y-4">
+        <form className="space-y-4" onClick={onSubmit}>
           <fieldset className="fieldset">
             <legend className="fieldset-legend">Email address</legend>
-            <label className="input validator w-full">
+            <label className="input w-full">
               <svg
                 className="h-[1em] opacity-50"
                 xmlns="http://www.w3.org/2000/svg"
@@ -34,12 +56,14 @@ export default function LoginForm() {
                 </g>
               </svg>
               <input
+                {...register("email")}
                 className="w-full"
-                type="email"
                 placeholder="email@mail.com"
-                required
               />
             </label>
+            {errors.email?.message && (
+              <ErrorMessage text={errors.email.message} />
+            )}
           </fieldset>
 
           <button className="btn btn-primary w-full">Login</button>
