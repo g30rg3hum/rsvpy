@@ -22,7 +22,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="min-h-screen">
       <body
-        className={`${lexend.variable} antialiased flex flex-col min-h-screen border border-orange-500`}
+        className={`${lexend.variable} antialiased flex flex-col min-h-screen`}
       >
         <Header />
         {children}
