@@ -1,0 +1,88 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id               String          @id @default(uuid())
+  firstName        String
+  lastName         String
+  email            String          @unique
+  tokenHash        String?
+  ownedEvents      Event[]         @relation("EventCreator")
+  eventAttendees   EventAttendee[] @relation("EventAttendee")
+  paymentsMade     Payment[]       @relation("Payer")
+  paymentsReceived Payment[]       @relation("Receiver")
+  createdAt        DateTime        @default(now())
+}
+
+model Event {
+  id           String          @id @default(uuid())
+  title        String
+  description  String?
+  location     String?
+  startDate    DateTime
+  endDate      DateTime?
+  totalPrice   Float
+  maxAttendees Int
+  creatorId    String
+  creator      User            @relation("EventCreator", fields: [creatorId], references: [id])
+  attendees    EventAttendee[]
+  payments     Payment[]
+  createdAt    DateTime        @default(now())
+}
+
+model EventAttendee {
+  id            String        @id @default(uuid())
+  userId        String
+  eventId       String
+  rsvpStatus    RSVPStatus    @default(TENTATIVE)
+  paymentStatus PaymentStatus @default(PENDING)
+
+  user  User  @relation("EventAttendee", fields: [userId], references: [id])
+  event Event @relation(fields: [eventId], references: [id])
+
+  createdAt DateTime @default(now())
+}
+
+model Payment {
+  id                    String        @id @default(uuid())
+  payerId               String
+  receiverId            String
+  eventId               String
+  amount                Float
+  currency              String
+  status                PaymentStatus @default(PENDING)
+  stripePaymentIntentId String
+  paidAt                DateTime?
+
+  payer    User  @relation("Payer", fields: [payerId], references: [id])
+  receiver User  @relation("Receiver", fields: [receiverId], references: [id])
+  event    Event @relation(fields: [eventId], references: [id])
+
+  createdAt DateTime @default(now())
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+}
+
+enum RSVPStatus {
+  ACCEPTED
+  DECLINED
+  INVITED
+  TENTATIVE
+}
