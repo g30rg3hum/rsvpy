@@ -6,13 +6,17 @@ import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import ErrorMessage from "../reusables/error-message";
 import { signIn } from "next-auth/react";
+import { emailRegex } from "@/lib/helpers/utils";
 
 type FormData = {
   email: string;
 };
 
 const schema = yup.object({
-  email: yup.string().email().required(),
+  email: yup
+    .string()
+    .matches(emailRegex, { message: "Please enter a valid email" })
+    .required(),
 });
 
 export default function LoginForm() {

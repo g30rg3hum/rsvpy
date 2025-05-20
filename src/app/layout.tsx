@@ -3,6 +3,7 @@ import { Lexend } from "next/font/google";
 import "./globals.css";
 import Header from "../components/layout/header";
 import AuthProvider from "@/components/authentication/provider";
+import { Toaster } from "react-hot-toast";
 
 const lexend = Lexend({
   variable: "--font-lexend",
@@ -28,6 +29,7 @@ export default function RootLayout({
         <AuthProvider>
           <Header />
           {children}
+          <Toaster position="bottom-right" />
         </AuthProvider>
       </body>
     </html>

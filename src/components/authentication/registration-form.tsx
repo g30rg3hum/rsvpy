@@ -6,6 +6,8 @@ import * as yup from "yup";
 import HyperLink from "../reusables/hyperlink";
 import ErrorMessage from "../reusables/error-message";
 import "../../lib/yup/yupLocale";
+import toast from "react-hot-toast";
+import { emailRegex } from "@/lib/helpers/utils";
 
 type FormData = {
   email: string;
@@ -14,7 +16,10 @@ type FormData = {
 };
 
 const schema = yup.object({
-  email: yup.string().email().required(),
+  email: yup
+    .string()
+    .matches(emailRegex, { message: "Please enter a valid email" })
+    .required(),
   firstName: yup.string().required(),
   lastName: yup.string().required(),
 });
@@ -23,10 +28,40 @@ export default function RegistrationForm() {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm({ resolver: yupResolver(schema) });
 
-  const onSubmit = handleSubmit((data: FormData) => console.log(data));
+  const onSubmit = handleSubmit(async (data: FormData) => {
+    const { email, firstName, lastName } = data;
+
+    const res = await fetch("/api/register", {
+      method: "POST",
+      body: JSON.stringify({
+        email,
+        firstName,
+        lastName,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (res.ok) {
+      toast.success(
+        "User created successfully! Check your email for a login link."
+      );
+    } else {
+      if (res.status === 409) {
+        toast.error("A user with this email already exists, please login.");
+      } else {
+        // response is just not okay.
+        toast.error("Error encountered when creating user");
+      }
+    }
+
+    reset();
+  });
 
   return (
     <div className="card card-border w-[500px] bg-base border">
