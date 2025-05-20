@@ -22,6 +22,21 @@ const authOptions: NextAuthOptions = {
   pages: {
     signIn: "/login",
   },
+  callbacks: {
+    async signIn({ user }) {
+      const existingUser = await prisma.user.findUnique({
+        where: {
+          email: user.email ?? "",
+        },
+      });
+
+      if (existingUser) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+  },
 };
 
 const handler = NextAuth(authOptions);

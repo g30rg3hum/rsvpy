@@ -8,6 +8,7 @@ import ErrorMessage from "../reusables/error-message";
 import "../../lib/yup/yupLocale";
 import toast from "react-hot-toast";
 import { emailRegex } from "@/lib/helpers/utils";
+import { signIn } from "next-auth/react";
 
 type FormData = {
   email: string;
@@ -29,10 +30,12 @@ export default function RegistrationForm() {
     register,
     handleSubmit,
     reset,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm({ resolver: yupResolver(schema) });
 
   const onSubmit = handleSubmit(async (data: FormData) => {
+    const toastId = toast.loading("Registering your account...");
+
     const { email, firstName, lastName } = data;
 
     const res = await fetch("/api/register", {
@@ -47,10 +50,21 @@ export default function RegistrationForm() {
       },
     });
 
+    toast.dismiss(toastId);
     if (res.ok) {
       toast.success(
         "User created successfully! Check your email for a login link."
       );
+
+      const res = await signIn("email", {
+        email: email,
+        callbackUrl: `${window.location.origin}`,
+        redirect: false,
+      });
+
+      if (!res?.ok) {
+        toast.error("There was an error sending the login link to your email.");
+      }
     } else {
       if (res.status === 409) {
         toast.error("A user with this email already exists, please login.");
@@ -131,7 +145,11 @@ export default function RegistrationForm() {
             </fieldset>
           </div>
 
-          <button className="btn btn-primary w-full" type="submit">
+          <button
+            className="btn btn-primary w-full"
+            type="submit"
+            disabled={isSubmitting}
+          >
             Register
           </button>
         </form>

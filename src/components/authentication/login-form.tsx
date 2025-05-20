@@ -7,6 +7,7 @@ import * as yup from "yup";
 import ErrorMessage from "../reusables/error-message";
 import { signIn } from "next-auth/react";
 import { emailRegex } from "@/lib/helpers/utils";
+import toast from "react-hot-toast";
 
 type FormData = {
   email: string;
@@ -23,10 +24,12 @@ export default function LoginForm() {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm({ resolver: yupResolver(schema) });
 
   const onSubmit = handleSubmit(async (data: FormData) => {
+    const toastId = toast.loading("Sending you a login link...");
+
     const { email } = data;
 
     const res = await signIn("email", {
@@ -35,10 +38,11 @@ export default function LoginForm() {
       redirect: false,
     });
 
+    toast.dismiss(toastId);
     if (res?.ok) {
-      console.log("Check email for login link");
+      toast.success("Check your email for a login link.");
     } else {
-      console.log("Error sending email");
+      toast.success("Email does not exist in our system. Please register.");
     }
   });
 
@@ -85,7 +89,11 @@ export default function LoginForm() {
             )}
           </fieldset>
 
-          <button className="btn btn-primary w-full" type="submit">
+          <button
+            className="btn btn-primary w-full"
+            type="submit"
+            disabled={isSubmitting}
+          >
             Login
           </button>
         </form>
