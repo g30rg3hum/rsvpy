@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Lexend } from "next/font/google";
 import "./globals.css";
 import Header from "../components/layout/header";
+import AuthProvider from "@/components/authentication/provider";
 
 const lexend = Lexend({
   variable: "--font-lexend",
@@ -24,8 +25,10 @@ export default function RootLayout({
       <body
         className={`${lexend.variable} antialiased flex flex-col min-h-screen`}
       >
-        <Header />
-        {children}
+        <AuthProvider>
+          <Header />
+          {children}
+        </AuthProvider>
       </body>
     </html>
   );

@@ -5,6 +5,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import ErrorMessage from "../reusables/error-message";
+import { signIn } from "next-auth/react";
 
 type FormData = {
   email: string;
@@ -21,7 +22,21 @@ export default function LoginForm() {
     formState: { errors },
   } = useForm({ resolver: yupResolver(schema) });
 
-  const onSubmit = handleSubmit((data: FormData) => console.log(data));
+  const onSubmit = handleSubmit(async (data: FormData) => {
+    const { email } = data;
+
+    const res = await signIn("email", {
+      email: email,
+      callbackUrl: `${window.location.origin}`,
+      redirect: false,
+    });
+
+    if (res?.ok) {
+      console.log("Check email for login link");
+    } else {
+      console.log("Error sending email");
+    }
+  });
 
   return (
     <div className="card card-border w-[500px] bg-base border">
