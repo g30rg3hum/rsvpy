@@ -8,7 +8,7 @@ export default function PageWrapper({ children, centerHorizontally }: Props) {
   return (
     <div
       className={clsx(
-        "flex flex-1 mt-[5%]",
+        "flex flex-1 mt-[2.5%]",
         centerHorizontally && "justify-center"
       )}
     >
