@@ -8,6 +8,7 @@ import ErrorMessage from "../reusables/error-message";
 import { signIn } from "next-auth/react";
 import { emailRegex } from "@/lib/helpers/utils";
 import toast from "react-hot-toast";
+import { useSearchParams } from "next/navigation";
 
 type FormData = {
   email: string;
@@ -21,6 +22,9 @@ const schema = yup.object({
 });
 
 export default function LoginForm() {
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl") || "/";
+
   const {
     register,
     handleSubmit,
@@ -34,7 +38,7 @@ export default function LoginForm() {
 
     const res = await signIn("email", {
       email: email,
-      callbackUrl: `${window.location.origin}`,
+      callbackUrl: callbackUrl,
       redirect: false,
     });
 
@@ -47,7 +51,7 @@ export default function LoginForm() {
   });
 
   return (
-    <div className="card card-border w-[500px] bg-base border">
+    <div className="card card-border w-[500px] bg-base-100 border-base-300">
       <div className="card-body">
         <div className="mb-2">
           <h2 className="card-title">Login</h2>

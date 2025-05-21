@@ -7,7 +7,10 @@ interface Props {
 export default function PageWrapper({ children, centerHorizontally }: Props) {
   return (
     <div
-      className={clsx("flex flex-1", centerHorizontally && "justify-center")}
+      className={clsx(
+        "flex flex-1 mt-[5%]",
+        centerHorizontally && "justify-center"
+      )}
     >
       {children}
     </div>
