@@ -72,8 +72,8 @@ model Event {
   title       String
   description String?
   location    String?
-  startDate   DateTime
-  endDate     DateTime?
+  startDateTime   DateTime
+  endDateTime     DateTime?
   totalPrice  Float
   maxAttendees Int
   creatorId   String

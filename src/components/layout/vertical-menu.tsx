@@ -17,7 +17,7 @@ export default function VerticalMenu({ children }: Props) {
       <div className="drawer-content bg-base-100">
         <label
           htmlFor="my-drawer"
-          className="btn btn-primary btn-square drawer-button lg:hidden m-3"
+          className="btn btn-light btn-square drawer-button lg:hidden m-3"
         >
           <Bars3Icon className="size-7" />
         </label>
