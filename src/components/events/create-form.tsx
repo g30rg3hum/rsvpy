@@ -103,9 +103,6 @@ export default function CreateEventForm({ userEmail }: Props) {
   };
 
   const onSubmit = handleSubmit(async (data: CreateEventFormData) => {
-    console.log(data);
-    console.log(userEmail);
-
     const toastId = toast.loading("Creating your event...");
 
     const {
