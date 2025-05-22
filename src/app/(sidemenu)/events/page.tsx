@@ -20,7 +20,7 @@ export default function EventsPage() {
     <PageWrapper centerHorizontally>
       {signedIn ? (
         <div>
-          <CreateEventForm />
+          <CreateEventForm userEmail={session.user!.email!} />
         </div>
       ) : (
         <FetchingInfo />

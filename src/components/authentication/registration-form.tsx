@@ -7,7 +7,7 @@ import HyperLink from "../reusables/hyperlink";
 import ErrorMessage from "../reusables/error-message";
 import "../../lib/yup/yupLocale";
 import toast from "react-hot-toast";
-import { emailRegex } from "@/lib/helpers/utils";
+import { emailRegex } from "../../lib/helpers/utils";
 import { signIn } from "next-auth/react";
 
 type FormData = {
@@ -53,16 +53,16 @@ export default function RegistrationForm() {
     toast.dismiss(toastId);
     if (res.ok) {
       toast.success(
-        "User created successfully! Check your email for a login link."
+        "Account created successfully! Check your email for a login link."
       );
 
-      const res = await signIn("email", {
+      const signInRes = await signIn("email", {
         email: email,
         callbackUrl: `${window.location.origin}`,
         redirect: false,
       });
 
-      if (!res?.ok) {
+      if (!signInRes?.ok) {
         toast.error("There was an error sending the login link to your email.");
       }
     } else {

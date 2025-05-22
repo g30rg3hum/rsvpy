@@ -5,16 +5,20 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import ErrorMessage from "../reusables/error-message";
+import { Currency } from "../../lib/helpers/types";
+import toast from "react-hot-toast";
 
 const patternTwoDigisAfterComma = /^\d+(\.\d{0,2})?$/;
 
-type FormData = {
+export type CreateEventFormData = {
   name: string;
   description: string;
   location: string;
   startDateTime: Date;
   endDateTime?: Date | null;
+  currency: string;
   totalPrice: number;
+  maxAttendees: number;
 };
 const schema = yup.object({
   name: yup.string().required("Please enter a name"),
@@ -29,6 +33,7 @@ const schema = yup.object({
     .date()
     .nullable()
     .transform((curr, orig) => (orig === "" ? null : curr)),
+  currency: yup.string().required(),
   totalPrice: yup
     .number()
     .typeError("Please enter a number")
@@ -44,9 +49,14 @@ const schema = yup.object({
       }
     )
     .min(0, "Must be at least 0"),
+  maxAttendees: yup
+    .number()
+    .typeError("Please enter a number")
+    .required()
+    .min(0, "Must be at least 1"),
 });
 
-const fields = Object.keys(schema.fields) as (keyof FormData)[];
+const fields = Object.keys(schema.fields) as (keyof CreateEventFormData)[];
 
 const questions = [
   "What is the name of your event?",
@@ -54,9 +64,19 @@ const questions = [
   "Where is your event located?",
   "When is this event held?",
   "What is the total price of the event?",
+  "What is the maximum number of attendees?",
 ];
 
-export default function CreateEventForm() {
+const currencies: Currency[] = [
+  { code: "GBP", symbol: "£", name: "British Pound" },
+  { code: "USD", symbol: "$", name: "US Dollar" },
+  { code: "EUR", symbol: "€", name: "Euro" },
+];
+
+interface Props {
+  userEmail: string;
+}
+export default function CreateEventForm({ userEmail }: Props) {
   // react form; for multi step form.
   const [step, setStep] = useState(0);
   const {
@@ -68,7 +88,7 @@ export default function CreateEventForm() {
     formState: { errors, isSubmitting },
   } = useForm({
     resolver: yupResolver(schema),
-    defaultValues: { totalPrice: 0 },
+    defaultValues: { totalPrice: 0, maxAttendees: 1 },
   });
 
   const nextStep = async () => {
@@ -76,16 +96,55 @@ export default function CreateEventForm() {
       ? trigger(["startDateTime", "endDateTime"])
       : trigger(fields[step]));
     if (valid) setStep((prev) => prev + 1);
-    console.log(getValues("startDateTime"));
-    console.log(typeof getValues("endDateTime"));
   };
 
   const prevStep = () => {
     setStep((prev) => prev - 1);
   };
 
-  const onSubmit = handleSubmit((data: FormData) => {
+  const onSubmit = handleSubmit(async (data: CreateEventFormData) => {
     console.log(data);
+    console.log(userEmail);
+
+    const toastId = toast.loading("Creating your event...");
+
+    const {
+      name,
+      description,
+      location,
+      startDateTime,
+      endDateTime,
+      currency,
+      totalPrice,
+      maxAttendees,
+    } = data;
+
+    const res = await fetch("/api/events", {
+      method: "POST",
+      body: JSON.stringify({
+        name,
+        description,
+        location,
+        startDateTime,
+        endDateTime,
+        currency,
+        totalPrice,
+        maxAttendees,
+        userEmail,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    toast.dismiss(toastId);
+
+    if (res.ok) {
+      toast.success("Event created successfully!");
+    } else {
+      console.log(await res.text());
+      toast.error("Error encountered when trying to create your event.");
+    }
   });
 
   return (
@@ -173,6 +232,20 @@ export default function CreateEventForm() {
           {step === 4 && (
             <div>
               <fieldset className="fieldset">
+                <legend className="fieldset-legend">Currency</legend>
+                <select {...register("currency")} className="w-full select">
+                  {currencies.map((currency) => (
+                    <option key={currency.code} value={currency.code}>
+                      {currency.symbol} {currency.name}
+                    </option>
+                  ))}
+                </select>
+                {errors.totalPrice?.message && (
+                  <ErrorMessage text={errors.totalPrice.message} />
+                )}
+              </fieldset>
+              <fieldset className="fieldset">
+                <legend className="fieldset-legend">Price</legend>
                 <input
                   {...register("totalPrice")}
                   className="w-full input"
@@ -181,6 +254,25 @@ export default function CreateEventForm() {
                 />
                 {errors.totalPrice?.message && (
                   <ErrorMessage text={errors.totalPrice.message} />
+                )}
+              </fieldset>
+            </div>
+          )}
+
+          {step === 5 && (
+            <div>
+              <p className="font-medium font-italics text-stone-500">
+                (Including you)
+              </p>
+              <fieldset className="fieldset">
+                <input
+                  {...register("maxAttendees")}
+                  className="w-full input"
+                  type="number"
+                  step="1"
+                />
+                {errors.maxAttendees?.message && (
+                  <ErrorMessage text={errors.maxAttendees.message} />
                 )}
               </fieldset>
             </div>
@@ -198,10 +290,10 @@ export default function CreateEventForm() {
               <button
                 className="btn btn-primary w-full"
                 type="button"
-                onClick={step < 4 ? nextStep : onSubmit}
+                onClick={step < questions.length - 1 ? nextStep : onSubmit}
                 disabled={isSubmitting}
               >
-                {step === 4 ? "Submit" : "Next"}
+                {step === questions.length - 1 ? "Submit" : "Next"}
               </button>
             </div>
           </div>

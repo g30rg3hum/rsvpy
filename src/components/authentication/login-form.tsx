@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import ErrorMessage from "../reusables/error-message";
 import { signIn } from "next-auth/react";
-import { emailRegex } from "@/lib/helpers/utils";
+import { emailRegex } from "../../lib/helpers/utils";
 import toast from "react-hot-toast";
 import { useSearchParams } from "next/navigation";
 

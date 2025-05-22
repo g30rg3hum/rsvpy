@@ -1,5 +1,5 @@
-import { trimAndCapitalize } from "@/lib/helpers/utils";
-import { prisma } from "@/lib/prisma/prisma";
+import { trimAndCapitalize } from "../../../lib/helpers/utils";
+import { prisma } from "../../../lib/prisma/prisma";
 import { NextRequest } from "next/server";
 
 export async function POST(request: NextRequest) {
