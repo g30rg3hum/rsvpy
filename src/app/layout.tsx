@@ -23,7 +23,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="min-h-screen">
       <body
-        className={`${lexend.variable} antialiased flex flex-col min-h-screen bg-base-100`}
+        className={`${lexend.variable} antialiased flex flex-col min-h-screen bg-base-200`}
       >
         <AuthProvider>
           {children}

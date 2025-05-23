@@ -1,4 +1,4 @@
-import { CreateEventFormData } from "@/components/events/create-form";
+import { CreateEventFormData } from "@/components/pages/events/create-form";
 import { prisma } from "../../../lib/prisma/prisma";
 import { NextRequest } from "next/server";
 
