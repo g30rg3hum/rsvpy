@@ -8,7 +8,7 @@ export default async function EventsList({ userEmail }: Props) {
   const events = await getEventsOfUser(userEmail);
 
   return (
-    <div className="flex gap-6 justify-center flex-wrap">
+    <div className="flex gap-6 flex-wrap justify-center">
       {events.map((ev, index) => (
         <EventItem
           key={index}

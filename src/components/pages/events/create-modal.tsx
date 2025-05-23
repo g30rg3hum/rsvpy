@@ -9,7 +9,7 @@ export default function CreateEventModal({ userEmail }: Props) {
   return (
     <>
       <button
-        className="btn btn-neutral"
+        className="btn btn-accent"
         onClick={() =>
           (
             document.getElementById("create_modal") as HTMLDialogElement

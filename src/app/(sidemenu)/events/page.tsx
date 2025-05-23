@@ -38,11 +38,13 @@ export default async function EventsPage() {
     <PageWrapper centerHorizontally>
       {userEmail ? (
         <>
-          <div className="w-full space-y-8 px-6">
+          <div className="w-full space-y-8 pb-8 px-6">
             <div className="flex justify-end">
               <CreateEventModal userEmail={userEmail} />
             </div>
-            <EventsList userEmail={userEmail} />
+            <div className="flex justify-center">
+              <EventsList userEmail={userEmail} />
+            </div>
           </div>
         </>
       ) : (

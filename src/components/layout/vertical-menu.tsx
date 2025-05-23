@@ -6,6 +6,7 @@ import {
   HomeIcon,
   UserIcon,
 } from "@heroicons/react/24/solid";
+import Image from "next/image";
 
 interface Props {
   children: React.ReactNode;
@@ -17,7 +18,7 @@ export default function VerticalMenu({ children }: Props) {
       <div className="drawer-content bg-base-200">
         <label
           htmlFor="my-drawer"
-          className="btn btn-light btn-square drawer-button lg:hidden m-3"
+          className="btn btn-light btn-square drawer-button lg:hidden mx-3 mt-3"
         >
           <Bars3Icon className="size-7" />
         </label>
@@ -30,6 +31,16 @@ export default function VerticalMenu({ children }: Props) {
           className="drawer-overlay"
         ></label>
         <ul className="menu bg-neutral-900 text-white text-base-content min-h-full w-60 p-4 space-y-2 border border-base-300">
+          <div className="w-full flex justify-center">
+            <Image
+              src="/images/logo_white.png"
+              alt="rsvpy logo"
+              width={135}
+              height={0}
+              className="hover:scale-105 transition-transform my-4"
+            />
+          </div>
+
           <MenuLink
             href="#"
             icon={<HomeIcon className="size-8" />}
