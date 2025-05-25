@@ -10,14 +10,7 @@ export default async function EventsList({ userEmail }: Props) {
   return (
     <div className="flex gap-6 flex-wrap justify-center">
       {events.map((ev, index) => (
-        <EventItem
-          key={index}
-          name={ev.title}
-          description={ev.description}
-          location={ev.location}
-          startTime={ev.startDateTime}
-          endTime={ev.endDateTime}
-        />
+        <EventItem key={index} event={ev} />
       ))}
     </div>
   );

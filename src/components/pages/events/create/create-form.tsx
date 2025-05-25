@@ -81,7 +81,7 @@ export default function CreateEventForm({ userEmail }: Props) {
     handleSubmit,
     reset,
     trigger,
-    getValues,
+    // getValues,
     formState: { errors, isSubmitting },
   } = useForm({
     resolver: yupResolver(schema),

@@ -1,19 +1,14 @@
+"use client";
+
+import { formatInTimeZone } from "date-fns-tz";
+import { Event } from "@/lib/db/types";
 import Image from "next/image";
+import { redirect } from "next/navigation";
 
 interface Props {
-  name: string;
-  description: string;
-  location: string;
-  startTime: Date;
-  endTime: Date | null;
+  event: Event;
 }
-export default function EventItem({
-  name,
-  description,
-  location,
-  startTime,
-  endTime,
-}: Props) {
+export default function EventItem({ event }: Props) {
   return (
     <div className="card w-[450px] bg-base-100 shadow-xs border border-base-300">
       <figure>
@@ -25,19 +20,33 @@ export default function EventItem({
         />
       </figure>
       <div className="card-body">
-        <h2 className="card-title font-extrabold">{name}</h2>
+        <h2 className="card-title font-extrabold">{event.title}</h2>
         <div className="space-y-2">
-          <p>{description}</p>
+          <p>{event.description}</p>
           <p>
-            <b>Held at:</b> {location}
+            <b>Held at:</b> {event.location}
           </p>
           <p>
-            <b>Times:</b> {startTime.toLocaleString()}{" "}
-            {endTime && `- ${endTime.toLocaleString()}`}
+            <b>Times:</b>{" "}
+            {formatInTimeZone(event.startDateTime, "UTC", "dd/MM/yyyy (HH:mm)")}
+            {event.endDateTime &&
+              " - " +
+                formatInTimeZone(
+                  event.endDateTime,
+                  "UTC",
+                  "dd/MM/yyyy (HH:mm)"
+                )}
           </p>
         </div>
         <div className="mt-3">
-          <button className="btn btn-primary w-full">Manage</button>
+          <button
+            className="btn btn-primary w-full"
+            onClick={() => {
+              redirect(`/events/${event.id}`);
+            }}
+          >
+            Manage
+          </button>
         </div>
       </div>
     </div>
