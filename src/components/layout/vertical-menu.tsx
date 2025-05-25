@@ -30,7 +30,7 @@ export default function VerticalMenu({ children }: Props) {
           aria-label="close sidebar"
           className="drawer-overlay"
         ></label>
-        <ul className="menu bg-neutral-900 text-white text-base-content min-h-full w-60 p-4 space-y-2 border border-base-300">
+        <ul className="menu bg-neutral-900 text-white text-base-content min-h-full w-60 p-4 space-y-2">
           <div className="w-full flex justify-center">
             <Image
               src="/images/logo_white.png"

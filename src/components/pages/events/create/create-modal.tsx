@@ -1,5 +1,6 @@
 "use client";
 
+import { PlusIcon } from "@heroicons/react/24/solid";
 import CreateEventForm from "./create-form";
 
 interface Props {
@@ -9,14 +10,14 @@ export default function CreateEventModal({ userEmail }: Props) {
   return (
     <>
       <button
-        className="btn btn-accent"
+        className="btn btn-accent btn-circle"
         onClick={() =>
           (
             document.getElementById("create_modal") as HTMLDialogElement
           ).showModal()
         }
       >
-        New
+        <PlusIcon className="size-6" />
       </button>
       <dialog id="create_modal" className="modal">
         <div className="modal-box w-[1000px]">

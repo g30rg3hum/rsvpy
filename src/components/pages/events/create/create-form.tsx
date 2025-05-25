@@ -4,10 +4,10 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
-import ErrorMessage from "../../reusables/error-message";
-import { Currency } from "../../../lib/helpers/types";
+import ErrorMessage from "../../../reusables/error-message";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import { currencies } from "@/lib/helpers/utils";
 
 const patternTwoDigisAfterComma = /^\d+(\.\d{0,2})?$/;
 
@@ -66,12 +66,6 @@ const questions = [
   "When is this event held?",
   "What is the total price of the event?",
   "What is the maximum number of attendees?",
-];
-
-const currencies: Currency[] = [
-  { code: "GBP", symbol: "£", name: "British Pound" },
-  { code: "USD", symbol: "$", name: "US Dollar" },
-  { code: "EUR", symbol: "€", name: "Euro" },
 ];
 
 interface Props {

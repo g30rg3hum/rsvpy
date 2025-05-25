@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 interface Props {
   name: string;
   description: string;
@@ -14,6 +16,14 @@ export default function EventItem({
 }: Props) {
   return (
     <div className="card w-[450px] bg-base-100 shadow-xs border border-base-300">
+      <figure>
+        <Image
+          src="/images/sample-event-image.jpg"
+          alt="Shoes"
+          width={450}
+          height={250}
+        />
+      </figure>
       <div className="card-body">
         <h2 className="card-title font-extrabold">{name}</h2>
         <div className="space-y-2">
