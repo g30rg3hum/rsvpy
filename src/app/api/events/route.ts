@@ -1,6 +1,7 @@
 import { CreateEventFormData } from "@/components/pages/events/create/create-form";
 import { prisma } from "../../../lib/prisma/prisma";
 import { NextRequest } from "next/server";
+import { authoriseSession } from "@/lib/auth/utils";
 
 type PostPayload = Omit<
   CreateEventFormData,
@@ -18,6 +19,8 @@ export async function POST(request: NextRequest) {
     maxAttendees,
     userEmail,
   }: PostPayload = await request.json();
+
+  await authoriseSession();
 
   // check that have all the required fields
   if (

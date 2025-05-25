@@ -1,3 +1,4 @@
+import { authoriseSession } from "@/lib/auth/utils";
 import { attendEvent } from "@/lib/db/event";
 import { NextRequest } from "next/server";
 
@@ -5,6 +6,8 @@ interface Params {
   params: { eventId: string };
 }
 export async function POST(req: NextRequest, { params }: Params) {
+  await authoriseSession();
+
   const { userEmail } = await req.json();
   const { eventId } = await params;
 
