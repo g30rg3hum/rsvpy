@@ -1,7 +1,6 @@
 "use client";
 
 import { redirect, usePathname } from "next/navigation";
-import { useEffect } from "react";
 import toast from "react-hot-toast";
 
 interface Props {
