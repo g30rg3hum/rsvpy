@@ -2,15 +2,17 @@
 
 import { PlusIcon } from "@heroicons/react/24/solid";
 import CreateEventForm from "./create-form";
+import clsx from "clsx";
 
 interface Props {
   userEmail: string;
+  className?: string;
 }
-export default function CreateEventModal({ userEmail }: Props) {
+export default function CreateEventModal({ userEmail, className }: Props) {
   return (
     <>
       <button
-        className="btn btn-accent btn-circle"
+        className={clsx("btn btn-accent btn-circle", className)}
         onClick={() =>
           (
             document.getElementById("create_modal") as HTMLDialogElement
@@ -26,7 +28,6 @@ export default function CreateEventModal({ userEmail }: Props) {
               ✕
             </button>
           </form>
-          <h3 className="font-extrabold text-lg">Create a new event</h3>
           <div className="mt-4">
             <CreateEventForm userEmail={userEmail} />
           </div>

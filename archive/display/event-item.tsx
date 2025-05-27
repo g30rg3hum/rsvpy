@@ -1,8 +1,8 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import { formatInTimeZone } from "date-fns-tz";
 import { Event } from "@/lib/db/types";
-import Image from "next/image";
 import { redirect } from "next/navigation";
 
 interface Props {
@@ -10,14 +10,9 @@ interface Props {
 }
 export default function EventItem({ event }: Props) {
   return (
-    <div className="card w-[450px] bg-base-100 shadow-xs border border-base-300">
+    <div className="card w-full md:max-w-[400px] bg-base-200 shadow-xs border border-base-300">
       <figure>
-        <Image
-          src="/images/sample-event-image.jpg"
-          alt="Shoes"
-          width={450}
-          height={250}
-        />
+        <img src="/images/sample-event-image.jpg" alt="Shoes" />
       </figure>
       <div className="card-body">
         <h2 className="card-title font-extrabold">{event.title}</h2>
@@ -40,7 +35,7 @@ export default function EventItem({ event }: Props) {
         </div>
         <div className="mt-3">
           <button
-            className="btn btn-primary w-full"
+            className="btn btn-accent w-full"
             onClick={() => {
               redirect(`/events/${event.id}`);
             }}

@@ -1,4 +1,5 @@
 import { Currency } from "./types";
+import { formatInTimeZone } from "date-fns-tz";
 
 export function trimAndCapitalize(str: string): string {
   const trimmedStr = str.trim();
@@ -16,3 +17,7 @@ export const currencies: Currency[] = [
   { code: "USD", symbol: "$", name: "US Dollar" },
   { code: "EUR", symbol: "€", name: "Euro" },
 ];
+
+export function formatDateTime(date: Date): string {
+  return formatInTimeZone(date, "UTC", "dd/MM/yyyy (HH:mm)");
+}

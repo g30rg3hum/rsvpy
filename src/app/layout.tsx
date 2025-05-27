@@ -3,6 +3,7 @@ import { Lexend } from "next/font/google";
 import "./globals.css";
 import AuthProvider from "@/components/authentication/provider";
 import { Toaster } from "react-hot-toast";
+import Header from "@/components/layout/header";
 
 const lexend = Lexend({
   variable: "--font-lexend",
@@ -23,9 +24,10 @@ export default function RootLayout({
   return (
     <html lang="en" className="min-h-screen">
       <body
-        className={`${lexend.variable} antialiased flex flex-col min-h-screen bg-base-200`}
+        className={`${lexend.variable} antialiased flex flex-col min-h-screen bg-base-100`}
       >
         <AuthProvider>
+          <Header />
           {children}
           <Toaster position="bottom-right" />
         </AuthProvider>

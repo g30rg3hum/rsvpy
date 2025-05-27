@@ -16,18 +16,18 @@ interface Props {
 }
 export default function VerticalMenu({ name, children }: Props) {
   return (
-    <div className="drawer lg:drawer-open bg-base-200">
+    <div className="drawer lg:drawer-open bg-neutral">
       <input id="my-drawer" type="checkbox" className="drawer-toggle" />
-      <div className="drawer-content bg-base-200">
-        <div className="navbar bg-base-100 shadow-xs flex justify-between lg:justify-end text-black gap-2 px-3">
+      <div className="drawer-content bg-base-100">
+        <div className="navbar bg-base-200 shadow-xs flex justify-between lg:justify-end gap-2 px-3 border-b border-base-300">
           <label
             htmlFor="my-drawer"
             className="btn btn-light btn-square drawer-button lg:hidden"
           >
             <Bars3Icon className="size-7" />
           </label>
-          <div className="flex gap-2 items-center">
-            <p className="font-bold">{name}</p>
+          <div className="flex gap-3 items-center">
+            <p className="font-bold text-md">{name}</p>
             <div className="dropdown dropdown-end">
               <div
                 tabIndex={0}
@@ -40,7 +40,7 @@ export default function VerticalMenu({ name, children }: Props) {
               </div>
               <ul
                 tabIndex={0}
-                className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
+                className="menu menu-sm dropdown-content bg-base-200 rounded-box z-1 mt-4 w-52 p-2 shadow-xs border border-base-300"
               >
                 <li>
                   <a href="#">Profile</a>
@@ -63,10 +63,10 @@ export default function VerticalMenu({ name, children }: Props) {
           aria-label="close sidebar"
           className="drawer-overlay"
         ></label>
-        <ul className="menu bg-neutral-900 text-white text-base-content min-h-full w-60 p-4 space-y-2">
+        <ul className="menu bg-neutral text-neutral-content min-h-full w-60 p-4 space-y-2">
           <div className="w-full flex justify-center">
             <Image
-              src="/images/logo_white.png"
+              src="/images/logo_white_text.png"
               alt="rsvpy logo"
               width={135}
               height={0}

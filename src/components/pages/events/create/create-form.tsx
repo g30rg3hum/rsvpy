@@ -27,13 +27,16 @@ const schema = yup.object({
   location: yup.string().required("Please enter an address."),
   startDateTime: yup
     .date()
+    .typeError("Please enter a valid date and time")
     .nullable()
     .transform((curr, orig) => (orig === "" ? null : curr))
-    .required("Please enter a start date and time"),
+    .required("Please enter a  start date and time"),
   endDateTime: yup
     .date()
+    .typeError("Please enter a valid date and time")
     .nullable()
-    .transform((curr, orig) => (orig === "" ? null : curr)),
+    .transform((curr, orig) => (orig === "" ? null : curr))
+    .min(yup.ref("startDateTime"), "End date must be after start date"),
   currency: yup.string().required(),
   totalPrice: yup
     .number()
@@ -58,6 +61,7 @@ const schema = yup.object({
 });
 
 const fields = Object.keys(schema.fields) as (keyof CreateEventFormData)[];
+fields.splice(4, 2); // remove endDateTime and currency.
 
 const questions = [
   "What is the name of your event?",
@@ -85,7 +89,10 @@ export default function CreateEventForm({ userEmail }: Props) {
     formState: { errors, isSubmitting },
   } = useForm({
     resolver: yupResolver(schema),
-    defaultValues: { totalPrice: 0, maxAttendees: 1 },
+    defaultValues: {
+      totalPrice: 0,
+      maxAttendees: 1,
+    },
   });
 
   const nextStep = async () => {
@@ -233,9 +240,6 @@ export default function CreateEventForm({ userEmail }: Props) {
                   </option>
                 ))}
               </select>
-              {errors.totalPrice?.message && (
-                <ErrorMessage text={errors.totalPrice.message} />
-              )}
             </fieldset>
             <fieldset className="fieldset">
               <legend className="fieldset-legend">Price</legend>
@@ -274,7 +278,11 @@ export default function CreateEventForm({ userEmail }: Props) {
         <div className="flex justify-between gap-2">
           {step > 0 ? (
             <div className="flex-1">
-              <button className="btn w-full" type="button" onClick={prevStep}>
+              <button
+                className="btn btn-secondary w-full"
+                type="button"
+                onClick={prevStep}
+              >
                 Previous
               </button>
             </div>

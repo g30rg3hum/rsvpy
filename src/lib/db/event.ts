@@ -1,6 +1,6 @@
 import { prisma } from "../prisma/prisma";
 
-export async function getEventsOfUser(userEmail: string) {
+export async function getOrganisedEventsOfUser(userEmail: string) {
   // get the userId from email
   const user = await prisma.user.findUnique({
     where: {
