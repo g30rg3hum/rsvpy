@@ -27,10 +27,10 @@ export default async function Header() {
           {email ? (
             <>
               <li className="font-semibold">
-                <a href="/events">Events</a>
+                <Link href="/events">Events</Link>
               </li>
               <li className="font-semibold">
-                <a href="#">Payments</a>
+                <Link href="#">Payments</Link>
               </li>
               <div className="dropdown dropdown-end font-semibold">
                 <div
@@ -60,9 +60,9 @@ export default async function Header() {
             </>
           ) : (
             <li>
-              <a href="/login" className="btn btn-primary">
+              <Link href="/login" className="btn btn-primary">
                 Login
-              </a>
+              </Link>
             </li>
           )}
         </ul>

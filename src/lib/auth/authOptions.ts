@@ -23,9 +23,13 @@ const authOptions: NextAuthOptions = {
   },
   callbacks: {
     async signIn({ user }) {
+      if (!user.email) {
+        return false; // Prevent sign-in if email is not provided
+      }
+
       const existingUser = await prisma.user.findUnique({
         where: {
-          email: user.email ?? "",
+          email: user.email,
         },
       });
 

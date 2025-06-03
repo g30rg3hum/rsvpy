@@ -28,12 +28,18 @@ export async function getEventById(id: string) {
     },
     include: {
       creator: true,
+      attendees: { include: { user: true } },
     },
   });
 
   return event;
 }
 
+export const attendResult = {
+  NO_USER: "NO_USER",
+  ALREADY_ATTENDING: "ALREADY_ATTENDING",
+  SUCCESS: "SUCCESS",
+};
 export async function attendEvent(eventId: string, userEmail: string) {
   // get the userId from email
   const user = await prisma.user.findUnique({
@@ -43,7 +49,7 @@ export async function attendEvent(eventId: string, userEmail: string) {
   });
 
   if (!user) {
-    return false;
+    return attendResult.NO_USER;
   }
 
   // check if the user is already attending the event
@@ -55,7 +61,7 @@ export async function attendEvent(eventId: string, userEmail: string) {
   });
 
   if (existingAttendance) {
-    return false; // already attending
+    return attendResult.ALREADY_ATTENDING; // already attending
   }
 
   // create a new attendance record
@@ -67,5 +73,5 @@ export async function attendEvent(eventId: string, userEmail: string) {
     },
   });
 
-  return true;
+  return attendResult.SUCCESS;
 }

@@ -1,4 +1,4 @@
-import AttendButton from "@/components/pages/events/invite/attend-button";
+import AttendButton from "@/components/pages/events/invite/join-button";
 import authOptions from "@/lib/auth/authOptions";
 import { getEventById } from "@/lib/db/event";
 import { roundToTwoDp } from "@/lib/helpers/utils";

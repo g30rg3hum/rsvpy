@@ -1,4 +1,5 @@
 import PageWrapper from "@/components/layout/page-wrapper";
+import InviteButton from "@/components/pages/events/invite/invite-button";
 import Card from "@/components/reusables/card";
 import { getSessionThenEmail } from "@/lib/auth/utils";
 import { getEventById } from "@/lib/db/event";
@@ -11,6 +12,7 @@ import {
   UserGroupIcon,
 } from "@heroicons/react/24/solid";
 import { formatInTimeZone } from "date-fns-tz";
+import { headers } from "next/headers";
 
 interface Props {
   params: {
@@ -18,6 +20,12 @@ interface Props {
   };
 }
 export default async function EventPage({ params }: Props) {
+  // get the base URL from headers
+  const headersList = await headers();
+  const host = headersList.get("host");
+  const protocol = headersList.get("x-forwarded-proto") || "http";
+  const baseUrl = `${protocol}://${host}`;
+
   const { id } = await params;
   const userEmail = await getSessionThenEmail("/events");
 
@@ -51,7 +59,7 @@ export default async function EventPage({ params }: Props) {
                 <b>Location:</b> {event.location}
               </p>
               <p>
-                <b>Dates:</b>{" "}
+                <b>Dates and times:</b>{" "}
                 {formatInTimeZone(
                   event.startDateTime,
                   "UTC",
@@ -107,22 +115,26 @@ export default async function EventPage({ params }: Props) {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>1</td>
-                    <td>George Hum</td>
-                    <td>hmw.geo@gmail.com</td>
-                    <td>
-                      <CheckCircleIcon className="size-5" />
-                    </td>
-                    <td className="text-right">
-                      <button className="btn btn-sm btn-error">Kick</button>
-                    </td>
-                  </tr>
+                  {event.attendees.map((attendee, index) => (
+                    <tr key={attendee.id}>
+                      <td>{index + 1}</td>
+                      <td>
+                        {attendee.user.firstName} {attendee.user.lastName}
+                      </td>
+                      <td>{attendee.user.email}</td>
+                      <td>
+                        <CheckCircleIcon className="size-5" />
+                      </td>
+                      <td className="text-right">
+                        <button className="btn btn-sm btn-error">Kick</button>
+                      </td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
-              <button className="btn btn-sm btn-primary right-4 top-4 absolute">
-                Invite
-              </button>
+              <div className="right-4 top-4 absolute">
+                <InviteButton baseUrl={baseUrl} eventId={event.id} />
+              </div>
             </div>
           </Card>
           <Card>

@@ -36,17 +36,17 @@ export default function LoginForm() {
 
     const { email } = data;
 
-    const res = await signIn("email", {
+    const signInResponse = await signIn("email", {
       email: email,
       callbackUrl: callbackUrl,
       redirect: false,
     });
 
     toast.dismiss(toastId);
-    if (res?.ok) {
+    if (!signInResponse?.error) {
       toast.success("Check your email for a login link.");
     } else {
-      toast.success("Email does not exist in our system. Please register.");
+      toast.error("Email does not exist in our system. Please register.");
     }
   });
 

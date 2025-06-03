@@ -4,6 +4,8 @@ import authOptions from "@/lib/auth/authOptions";
 import { getEventById } from "@/lib/db/event";
 import { EnvelopeIcon } from "@heroicons/react/24/solid";
 import { getServerSession } from "next-auth";
+import { formatInTimeZone } from "date-fns-tz";
+import JoinButton from "@/components/pages/events/invite/join-button";
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -13,6 +15,8 @@ export default async function EventInvitePage({ params }: Props) {
 
   // get the session, if doesn't exist, guide user to login
   const session = await getServerSession(authOptions);
+  const userEmail = session?.user?.email;
+
   // still display the invite page.
 
   // get the event by id
@@ -28,6 +32,37 @@ export default async function EventInvitePage({ params }: Props) {
           <h2 className="card-title font-bold">
             <EnvelopeIcon className="size-6" /> You&apos;re invited!
           </h2>
+          <p>
+            You&apos;ve been invited to join <b>{event.title}</b>. Here&apos;s
+            what you need to know:{" "}
+          </p>
+          <p>
+            <b>Description:</b> {event.description}
+          </p>
+          <p>
+            <b>Location:</b> {event.location}
+          </p>
+          <p>
+            <b>Dates and times:</b>{" "}
+            {formatInTimeZone(event.startDateTime, "UTC", "dd/MM/yyyy (HH:mm)")}
+            {event.endDateTime &&
+              " - " +
+                formatInTimeZone(
+                  event.endDateTime,
+                  "UTC",
+                  "dd/MM/yyyy (HH:mm)"
+                )}
+          </p>
+          <p>
+            <b>Price:</b> {event.currency} {event.totalPrice}
+          </p>
+          <p>
+            {/* TODO: show the actual spaces left */}
+            <b>Attendee count:</b> {event.maxAttendees} / {event.maxAttendees}
+          </p>
+          <div className="card-actions mt-3 w-full">
+            <JoinButton userEmail={userEmail} eventId={event.id} />
+          </div>
         </Card>
       </div>
     </PageWrapper>
