@@ -30,7 +30,8 @@ const schema = yup.object({
     .typeError("Please enter a valid date and time")
     .nullable()
     .transform((curr, orig) => (orig === "" ? null : curr))
-    .required("Please enter a  start date and time"),
+    .required("Please enter a start date and time")
+    .min(new Date(), "Start date must be in the future"),
   endDateTime: yup
     .date()
     .typeError("Please enter a valid date and time")

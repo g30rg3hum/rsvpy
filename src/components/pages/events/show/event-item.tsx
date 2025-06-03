@@ -1,6 +1,9 @@
+"use client";
+
 import Card from "@/components/reusables/card";
 import { formatInTimeZone } from "date-fns-tz";
 import { Event } from "@/lib/db/types";
+import { redirect } from "next/navigation";
 
 interface Props {
   event: Event;
@@ -20,8 +23,13 @@ export default function EventItem({ event }: Props) {
           " - " +
             formatInTimeZone(event.endDateTime, "UTC", "dd/MM/yyyy (HH:mm)")}
       </p>
-      <div className="justify-end card-actions">
-        <button className="btn btn-primary">Manage</button>
+      <div className="justify-end card-actions mt-2">
+        <button
+          className="btn btn-primary"
+          onClick={() => redirect(`/events/${event.id}`)}
+        >
+          Manage
+        </button>
       </div>
     </Card>
   );
