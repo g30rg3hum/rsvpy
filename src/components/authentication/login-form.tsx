@@ -47,11 +47,11 @@ export default function LoginForm() {
     }
 
     toast.dismiss(toastId);
-    if (!signInResponse?.error) {
-      toast.success("Check your email for a login link.");
-    } else {
-      toast.error("Email does not exist in our system. Please register.");
-    }
+    // if (!signInResponse?.error) {
+    //   toast.success("Check your email for a login link.");
+    // } else {
+    //   toast.error("Email does not exist in our system. Please register.");
+    // }
   });
 
   return (
