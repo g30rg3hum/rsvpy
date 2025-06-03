@@ -36,11 +36,15 @@ export default function LoginForm() {
 
     const { email } = data;
 
-    const signInResponse = await signIn("email", {
-      email: email,
-      callbackUrl: callbackUrl,
-      redirect: false,
-    });
+    try {
+      const signInResponse = await signIn("email", {
+        email: email,
+        callbackUrl: callbackUrl,
+        redirect: false,
+      });
+    } catch (error) {
+      console.log(error);
+    }
 
     toast.dismiss(toastId);
     if (!signInResponse?.error) {
