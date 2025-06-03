@@ -37,7 +37,7 @@ export default function LoginForm() {
     const { email } = data;
 
     try {
-      const signInResponse = await signIn("email", {
+      await signIn("email", {
         email: email,
         callbackUrl: callbackUrl,
         redirect: false,
