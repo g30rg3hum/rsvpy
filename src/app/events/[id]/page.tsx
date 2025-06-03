@@ -15,9 +15,7 @@ import { formatInTimeZone } from "date-fns-tz";
 import { headers } from "next/headers";
 
 interface Props {
-  params: {
-    id: string;
-  };
+  params: Promise<{ id: string }>;
 }
 export default async function EventPage({ params }: Props) {
   // get the base URL from headers

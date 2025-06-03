@@ -2,13 +2,13 @@ import { authoriseSession } from "@/lib/auth/utils";
 import { attendEvent, attendResult } from "@/lib/db/event";
 import { NextRequest } from "next/server";
 
-interface Params {
-  params: { id: string };
-}
-export async function POST(req: NextRequest, { params }: Params) {
+export async function POST(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
   await authoriseSession();
 
-  const { userEmail } = await req.json();
+  const { userEmail } = await request.json();
   const { id } = await params;
 
   if (!userEmail)
