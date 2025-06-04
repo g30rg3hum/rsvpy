@@ -22,14 +22,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="min-h-screen">
+    <html lang="en" className="min-h-screen" data-theme="mytheme">
       <body
-        className={`${lexend.variable} antialiased flex flex-col min-h-screen bg-base-100`}
+        className={`${lexend.variable} antialiased flex flex-col min-h-screen bg-base-300`}
       >
         <AuthProvider>
           <Header />
           {children}
-          <Toaster position="bottom-right" />
+          <Toaster
+            position="bottom-right"
+            toastOptions={{ style: { background: "#1e1e1e", color: "#fff" } }}
+          />
         </AuthProvider>
       </body>
     </html>

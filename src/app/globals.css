@@ -1,23 +1,39 @@
 @import "tailwindcss";
 @plugin "daisyui" {
-  themes: lofi --default;
+  name: "mytheme";
+  default: true;
+  prefersdark: false;
 }
 @plugin "daisyui/theme" {
-  name: "lofi";
+  name: "mytheme";
   default: true;
-  --color-primary: #288fe1;
-  --color-base-100: #f8f8f8;
-  --color-base-200: #f3f3f3;
-  --color-base-300: #e1e1e1;
+  --color-primary: #fbff20;
+  --color-primary-content: #171717;
+  --color-secondary: #6cddff;
+  --color-secondary-content: #171717;
+  --color-accent: #5bffb0;
+  --color-accent-content: #171717;
+
+  --color-base-100: #2a2a2a;
+  --color-base-200: #1e1e1e;
+  --color-base-300: #131313;
+  --color-base-content: #fff;
   --color-error: #ef4256;
-  --color-error-content: #ffffff;
+  --color-error-content: #fff;
+
+  --color-neutral-content: #fff;
+  --color-accent-content: #fff;
+  --color-info-content: #fff;
+}
+
+input {
+  color-scheme: dark;
 }
 
 /* :root {
   --background: #ffffff;
   --foreground: #171717;
 } */
-
 @theme inline {
   /* --color-background: var(--background);
   --color-foreground: var(--foreground); */

@@ -57,7 +57,7 @@ export default function LoginForm() {
   });
 
   return (
-    <div className="card card-border w-[500px] bg-base-200 shadow-xs border border-base-300">
+    <div className="card card-border w-[500px] bg-base-200 shadow-xs border border-base-100">
       <div className="card-body">
         <div className="mb-2">
           <h2 className="card-title font-extrabold">Login</h2>

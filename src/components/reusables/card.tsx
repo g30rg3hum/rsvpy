@@ -13,7 +13,7 @@ export default function Card({
   return (
     <div
       className={clsx(
-        "card card-border bg-base-200 w-full shadow-xs border border-base-300",
+        "card card-border bg-base-200 w-full shadow-xs border border-base-100",
         cardClassName
       )}
     >

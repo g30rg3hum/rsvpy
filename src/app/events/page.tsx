@@ -17,10 +17,10 @@ export default async function EventsPage() {
           <div className="flex flex-col items-center">
             <h1 className="text-2xl font-extrabold mb-4">Events</h1>
             <div className="flex gap-4">
-              <div className="badge badge-soft hover:cursor-pointer hover:bg-base-300">
+              <div className="badge bg-base-200 hover:cursor-pointer hover:bg-base-100">
                 Organised
               </div>
-              <div className="badge badge-soft hover:cursor-pointer hover:bg-base-300">
+              <div className="badge bg-base-200 hover:cursor-pointer hover:bg-base-100">
                 Attending
               </div>
             </div>

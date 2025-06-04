@@ -12,7 +12,7 @@ export default function EventItem({ event }: Props) {
   return (
     <Card>
       <h2 className="card-title font-bold">{event.title}</h2>
-      <p className="text-gray-600">{event.description}</p>
+      <p className="text-slate-300">{event.description}</p>
       <p>
         <b>Location:</b> {event.location}
       </p>

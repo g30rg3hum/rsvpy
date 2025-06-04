@@ -19,10 +19,10 @@ export default function CreateEventModal({ userEmail, className }: Props) {
           ).showModal()
         }
       >
-        <PlusIcon className="size-6" />
+        <PlusIcon className="size-6 text-[#171717]" />
       </button>
       <dialog id="create_modal" className="modal">
-        <div className="modal-box w-[1000px]">
+        <div className="modal-box w-[1000px] bg-base-200">
           <form method="dialog">
             <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
               ✕
