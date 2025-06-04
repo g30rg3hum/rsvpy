@@ -1,5 +1,6 @@
 import PageWrapper from "@/components/layout/page-wrapper";
 import InviteButton from "@/components/pages/events/invite/invite-button";
+import EditButton from "@/components/pages/events/update/edit-button";
 import Card from "@/components/reusables/card";
 import { getSessionThenEmail } from "@/lib/auth/utils";
 import { getEventById } from "@/lib/db/event";
@@ -8,7 +9,6 @@ import {
   CheckCircleIcon,
   HashtagIcon,
   InformationCircleIcon,
-  PencilIcon,
   UserGroupIcon,
 } from "@heroicons/react/24/solid";
 import { formatInTimeZone } from "date-fns-tz";
@@ -40,12 +40,12 @@ export default async function EventPage({ params }: Props) {
 
   return (
     <PageWrapper centerHorizontally>
-      <div className="flex flex-col w-full items-center px-8 pb-8 border border-red-500">
+      <div className="flex flex-col w-full items-center px-8 pb-8">
         <div className="w-full max-w-[900px] space-y-8">
           <div className="text-center h-max">
             <h2 className="font-black text-3xl">{event.title}</h2>
           </div>
-          <div className="grid grid-cols-1 w-full md:grid-cols-2 gap-4 border border-red-500">
+          <div className="grid grid-cols-1 w-full md:grid-cols-2 gap-4">
             <Card cardClassName="relative">
               <h2 className="card-title font-bold">
                 <InformationCircleIcon className="size-8" /> Event details
@@ -77,22 +77,26 @@ export default async function EventPage({ params }: Props) {
               <p>
                 <b>Maximum # of attendees: </b> {event.maxAttendees}
               </p>
-              <button className="btn btn-primary btn-circle btn-sm btn-icon absolute top-3 right-3">
-                <PencilIcon className="size-3" />
-              </button>
+              <EditButton
+                className="absolute top-3 right-3"
+                eventId={event.id}
+                userEmail={userEmail}
+              />
             </Card>
             <div className="grid gap-4 grid-cols-1">
               <Card bodyClassName="flex flex-col items-center items-center">
                 <h2 className="card-title font-bold">
                   <HashtagIcon className="size-5" /> Attendee count
                 </h2>
-                <p className="font-black text-2xl">50 / 60</p>
+                <p className="font-black text-2xl">
+                  {event.attendees.length} / {event.maxAttendees}
+                </p>
               </Card>
               <Card bodyClassName="flex flex-col items-center items-center">
                 <h2 className="card-title font-bold">
                   <HashtagIcon className="size-5" /> Payment count
                 </h2>
-                <p className="font-black text-2xl">50 / 60</p>
+                <p className="font-black text-2xl">- / -</p>
               </Card>
             </div>
           </div>
