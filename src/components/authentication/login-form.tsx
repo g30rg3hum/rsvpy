@@ -37,21 +37,23 @@ export default function LoginForm() {
     const { email } = data;
 
     try {
-      await signIn("email", {
+      const signInResponse = await signIn("email", {
         email: email,
         callbackUrl: callbackUrl,
         redirect: false,
       });
-    } catch (error) {
-      console.log(error);
-    }
 
-    toast.dismiss(toastId);
-    // if (!signInResponse?.error) {
-    //   toast.success("Check your email for a login link.");
-    // } else {
-    //   toast.error("Email does not exist in our system. Please register.");
-    // }
+      toast.dismiss(toastId);
+      if (!signInResponse?.error) {
+        toast.success("Check your email for a login link.");
+      } else {
+        toast.error("Email does not exist in our system. Please register.");
+      }
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (error) {
+      toast.dismiss(toastId);
+      toast.error("An error occurred while sending the login link.");
+    }
   });
 
   return (
