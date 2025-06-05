@@ -31,7 +31,9 @@ export default function RootLayout({
           {children}
           <Toaster
             position="bottom-right"
-            toastOptions={{ style: { background: "#1e1e1e", color: "#fff" } }}
+            toastOptions={{
+              style: { background: "#1e1e1e", color: "#fff", zIndex: 5 },
+            }}
           />
         </AuthProvider>
       </body>

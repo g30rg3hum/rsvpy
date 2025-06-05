@@ -63,46 +63,56 @@ export default function EditEventForm({ userEmail, eventId }: Props) {
   }, [eventDetails, reset]);
 
   const onSubmit = handleSubmit(async (data: EventFormData) => {
-    // const toastId = toast.loading("Creating your event...");
+    const toastId = toast.loading("Updating your event...");
 
-    // const {
-    //   name,
-    //   description,
-    //   location,
-    //   startDateTime,
-    //   endDateTime,
-    //   currency,
-    //   totalPrice,
-    //   maxAttendees,
-    // } = data;
+    const {
+      name,
+      description,
+      location,
+      startDateTime,
+      endDateTime,
+      currency,
+      totalPrice,
+      maxAttendees,
+    } = data;
 
-    // const res = await fetch("/api/events", {
-    //   method: "POST",
-    //   body: JSON.stringify({
-    //     name,
-    //     description,
-    //     location,
-    //     startDateTime,
-    //     endDateTime,
-    //     currency,
-    //     totalPrice,
-    //     maxAttendees,
-    //     userEmail,
-    //   }),
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    // });
+    const res = await fetch(`/api/events/${eventId}`, {
+      method: "PUT",
+      body: JSON.stringify({
+        name,
+        description,
+        location,
+        startDateTime,
+        endDateTime,
+        currency,
+        totalPrice,
+        maxAttendees,
+        userEmail,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
 
-    // toast.dismiss(toastId);
+    toast.dismiss(toastId);
 
-    // if (res.ok) {
-    //   toast.success("Event created successfully!");
-    // } else {
-    //   toast.error("Error encountered when trying to create your event.");
-    // }
+    if (res.ok) {
+      toast.success("Event updated successfully!");
 
-    reset();
+      reset({
+        name,
+        description,
+        location,
+        startDateTime,
+        endDateTime,
+        currency,
+        totalPrice,
+        maxAttendees,
+      });
+    } else {
+      toast.error("Error encountered when trying to update your event.");
+    }
+
     (document.getElementById("edit_modal") as HTMLDialogElement).close();
     router.refresh();
   });
