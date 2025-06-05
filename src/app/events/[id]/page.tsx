@@ -1,6 +1,7 @@
 import PageWrapper from "@/components/layout/page-wrapper";
 import InviteButton from "@/components/pages/events/invite/invite-button";
 import EditButton from "@/components/pages/events/update/edit-button";
+import KickButton from "@/components/pages/events/update/kick-button";
 import Card from "@/components/reusables/card";
 import { getSessionThenEmail } from "@/lib/auth/utils";
 import { getEventById } from "@/lib/db/event";
@@ -128,7 +129,10 @@ export default async function EventPage({ params }: Props) {
                         <CheckCircleIcon className="size-5" />
                       </td>
                       <td className="text-right">
-                        <button className="btn btn-sm btn-error">Kick</button>
+                        <KickButton
+                          attendeeId={attendee.userId}
+                          eventId={event.id}
+                        />
                       </td>
                     </tr>
                   ))}
