@@ -17,7 +17,7 @@ export default function AllEvents({ userEmail, allEvents }: Props) {
   const [searchQuery, setSearchQuery] = useState("");
 
   const [currentPage, setCurrentPage] = useState(0);
-  const eventsPerPage = 2;
+  const eventsPerPage = 9;
   const startIndex = currentPage * eventsPerPage;
   const endIndex = startIndex + eventsPerPage;
 
