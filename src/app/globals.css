@@ -11,8 +11,9 @@
   --color-primary-content: #171717;
   --color-secondary: #ff9821;
   --color-secondary-content: #171717;
-  --color-accent: #42fffc;
+  --color-accent: #ad6eff;
   --color-accent-content: #171717;
+  --color-accent-active: #9b5de5;
   --color-neutral: #fff;
 
   --color-base-100: #2a2a2a;
@@ -22,7 +23,7 @@
   --color-error: #ef4256;
   --color-error-content: #fff;
 
-  --color-neutral-content: #fff;
+  --color-neutral-content: #000;
   --color-accent-content: #fff;
   --color-info-content: #fff;
 }

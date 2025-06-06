@@ -12,14 +12,14 @@ export default function CreateEventModal({ userEmail, className }: Props) {
   return (
     <>
       <button
-        className={clsx("btn btn-neutral btn-circle", className)}
+        className={clsx("btn btn-default btn-circle", className)}
         onClick={() =>
           (
             document.getElementById("create_modal") as HTMLDialogElement
           ).showModal()
         }
       >
-        <PlusIcon className="size-6 text-[#171717]" />
+        <PlusIcon className="size-6" />
       </button>
       <dialog id="create_modal" className="modal">
         <div className="modal-box w-[1000px] bg-base-200 border border-base-100">
