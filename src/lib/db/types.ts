@@ -9,5 +9,22 @@ export interface Event {
   totalPrice: number;
   maxAttendees: number;
   creatorId: string;
+  creator?: User;
+  attendees?: EventAttendee[];
   createdAt: Date;
+}
+
+export interface User {
+  id: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+}
+
+export interface EventAttendee {
+  id: string;
+  userId: string;
+  eventId: string;
+  user?: User;
+  event?: Event;
 }

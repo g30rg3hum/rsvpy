@@ -12,7 +12,7 @@ export default function CreateEventModal({ userEmail, className }: Props) {
   return (
     <>
       <button
-        className={clsx("btn btn-accent btn-circle", className)}
+        className={clsx("btn btn-neutral btn-circle", className)}
         onClick={() =>
           (
             document.getElementById("create_modal") as HTMLDialogElement

@@ -21,3 +21,8 @@ export const currencies: Currency[] = [
 export function formatDateTime(date: Date): string {
   return formatInTimeZone(date, "UTC", "dd/MM/yyyy (HH:mm)");
 }
+
+export function truncateString(str: string, maxLength: number): string {
+  if (str.length <= maxLength) return str;
+  return str.slice(0, maxLength - 3) + "...";
+}

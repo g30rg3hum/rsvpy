@@ -16,6 +16,10 @@ export async function getOrganisedEventsOfUser(userEmail: string) {
     where: {
       creatorId: user.id,
     },
+    include: {
+      creator: true,
+      attendees: { include: { user: true, event: true } },
+    },
   });
 
   return events;
