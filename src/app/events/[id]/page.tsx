@@ -12,6 +12,7 @@ import {
   InformationCircleIcon,
   UserGroupIcon,
 } from "@heroicons/react/24/solid";
+import clsx from "clsx";
 import { formatInTimeZone } from "date-fns-tz";
 import { headers } from "next/headers";
 
@@ -34,8 +35,14 @@ export default async function EventPage({ params }: Props) {
     throw new Error("Event not found");
   }
 
-  // check if user is the creator of the event
-  if (event.creator.email !== userEmail) {
+  // check if user is the creator or attendee of event
+  const isCreator = event.creator.email === userEmail;
+  const isAttendee = event.attendees.some(
+    (attendee) => attendee.user.email === userEmail
+  );
+  const isJustAttendee = isAttendee && !isCreator;
+
+  if (!isCreator && !isAttendee) {
     throw new Error("Not authorised to view this event");
   }
 
@@ -46,7 +53,12 @@ export default async function EventPage({ params }: Props) {
           <div className="text-center h-max">
             <h2 className="font-black text-3xl">{event.title}</h2>
           </div>
-          <div className="grid grid-cols-1 w-full md:grid-cols-2 gap-4">
+          <div
+            className={clsx(
+              `grid grid-cols-1 w-full`,
+              isCreator && "md:grid-cols-2 gap-8 md:gap-4"
+            )}
+          >
             <Card cardClassName="relative">
               <h2 className="card-title font-bold">
                 <InformationCircleIcon className="size-8" /> Event details
@@ -78,32 +90,40 @@ export default async function EventPage({ params }: Props) {
               <p>
                 <b>Maximum # of attendees: </b> {event.maxAttendees}
               </p>
-              <EditButton
-                className="absolute top-3 right-3"
-                eventId={event.id}
-                userEmail={userEmail}
-              />
+              {isCreator && (
+                <EditButton
+                  className={clsx("absolute top-3 right-3")}
+                  eventId={event.id}
+                  userEmail={userEmail}
+                />
+              )}
             </Card>
-            <div className="grid gap-4 grid-cols-1">
-              <Card bodyClassName="flex flex-col items-center items-center">
-                <h2 className="card-title font-bold">
-                  <HashtagIcon className="size-5" /> Attendee count
-                </h2>
-                <p className="font-black text-2xl">
-                  {event.attendees.length} / {event.maxAttendees}
-                </p>
-              </Card>
-              <Card bodyClassName="flex flex-col items-center items-center">
-                <h2 className="card-title font-bold">
-                  <HashtagIcon className="size-5" /> Payment count
-                </h2>
-                <p className="font-black text-2xl">- / -</p>
-              </Card>
+            <div className="grid gap-8 md:gap-4 grid-cols-1">
+              {isCreator && (
+                <>
+                  <Card bodyClassName="flex flex-col items-center items-center">
+                    <h2 className="card-title font-bold">
+                      <HashtagIcon className="size-5" /> Attendee count
+                    </h2>
+                    <p className="font-black text-2xl">
+                      {event.attendees.length} / {event.maxAttendees}
+                    </p>
+                  </Card>
+                  <Card bodyClassName="flex flex-col items-center items-center">
+                    <h2 className="card-title font-bold">
+                      <HashtagIcon className="size-5" /> Payment count
+                    </h2>
+                    <p className="font-black text-2xl">- / -</p>
+                  </Card>
+                </>
+              )}
             </div>
           </div>
           <Card>
             <h2 className="card-title font-bold">
-              <UserGroupIcon className="size-7" /> Attendees
+              <UserGroupIcon className="size-7" /> Attendees{" "}
+              {isJustAttendee &&
+                `(${event.attendees.length} / ${event.maxAttendees})`}
             </h2>
             {/* person's name, email, payment status, kick */}
             <div className="overflow-x-auto">
@@ -113,8 +133,12 @@ export default async function EventPage({ params }: Props) {
                     <th>#</th>
                     <th>Name</th>
                     <th>Email</th>
-                    <th>Paid?</th>
-                    <th></th>
+                    {isCreator && (
+                      <>
+                        <th>Paid?</th>
+                        <th></th>
+                      </>
+                    )}
                   </tr>
                 </thead>
                 <tbody>
@@ -125,29 +149,37 @@ export default async function EventPage({ params }: Props) {
                         {attendee.user.firstName} {attendee.user.lastName}
                       </td>
                       <td>{attendee.user.email}</td>
-                      <td>
-                        <CheckCircleIcon className="size-5" />
-                      </td>
-                      <td className="text-right">
-                        <KickButton
-                          attendeeId={attendee.userId}
-                          eventId={event.id}
-                        />
-                      </td>
+                      {isCreator && (
+                        <>
+                          <td>
+                            <CheckCircleIcon className="size-5" />
+                          </td>
+                          <td className="text-right">
+                            <KickButton
+                              attendeeId={attendee.userId}
+                              eventId={event.id}
+                            />
+                          </td>
+                        </>
+                      )}
                     </tr>
                   ))}
                 </tbody>
               </table>
-              <div className="right-4 top-4 absolute">
-                <InviteButton baseUrl={baseUrl} eventId={event.id} />
-              </div>
+              {isCreator && (
+                <div className="right-4 top-4 absolute">
+                  <InviteButton baseUrl={baseUrl} eventId={event.id} />
+                </div>
+              )}
             </div>
           </Card>
-          <Card>
-            <h2 className="card-title font-bold">
-              <BanknotesIcon className="size-7" /> Payments
-            </h2>
-          </Card>
+          {isCreator && (
+            <Card>
+              <h2 className="card-title font-bold">
+                <BanknotesIcon className="size-7" /> Payments
+              </h2>
+            </Card>
+          )}
         </div>
       </div>
     </PageWrapper>

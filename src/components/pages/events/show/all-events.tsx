@@ -13,7 +13,7 @@ interface Props {
 }
 export default function AllEvents({ userEmail, allEvents }: Props) {
   const [displayOrganised, setDisplayOrganised] = useState(true);
-  const [displayAttending, setDisplayAttending] = useState(true);
+  const [displayAttending, setDisplayAttending] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
 
   const [currentPage, setCurrentPage] = useState(0);
@@ -63,7 +63,7 @@ export default function AllEvents({ userEmail, allEvents }: Props) {
           <input
             type="text"
             className="input input-bordered w-full mb-4 mt-1"
-            placeholder="Search event..."
+            placeholder="Search event name..."
             onChange={(e) => {
               setSearchQuery(e.target.value);
               setCurrentPage(0);
