@@ -26,3 +26,19 @@ export function truncateString(str: string, maxLength: number): string {
   if (str.length <= maxLength) return str;
   return str.slice(0, maxLength - 3) + "...";
 }
+
+export function checkIsPassedOrUpcomingEvent(
+  startDateTime: Date,
+  endDateTime: Date | null = null,
+  upcomingOrPassed: "upcoming" | "passed"
+): boolean {
+  const now = new Date();
+  if (endDateTime) {
+    return upcomingOrPassed === "passed"
+      ? endDateTime < now
+      : startDateTime > now;
+  }
+  return upcomingOrPassed === "passed"
+    ? startDateTime < now
+    : startDateTime > now;
+}

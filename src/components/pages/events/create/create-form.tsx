@@ -127,7 +127,7 @@ export default function CreateEventForm({ userEmail }: Props) {
         name,
         description,
         location,
-        startDateTime,
+        startDateTime, // this is in UTC, need to convert to local time when displayed.
         endDateTime,
         currency,
         totalPrice,

@@ -6,6 +6,7 @@ import EventItem from "./event-item";
 import { Event } from "@/lib/db/types";
 import { useState } from "react";
 import clsx from "clsx";
+import { checkIsPassedOrUpcomingEvent } from "@/lib/helpers/utils";
 
 interface Props {
   userEmail: string;
@@ -21,24 +22,52 @@ export default function AllEvents({ userEmail, allEvents }: Props) {
   const startIndex = currentPage * eventsPerPage;
   const endIndex = startIndex + eventsPerPage;
 
-  const filteredAndSortedEvents = allEvents
-    .filter((event) => {
-      const isOrganizer = event.creator!.email === userEmail;
-      const isAttending = event.attendees!.some(
-        (attendee) => attendee.user!.email === userEmail
-      );
+  const viewableEvents = allEvents.filter((event) => {
+    const isOrganizer = event.creator!.email === userEmail;
+    const isAttending = event.attendees!.some(
+      (attendee) => attendee.user!.email === userEmail
+    );
 
-      if (displayOrganised && !displayAttending) {
-        return isOrganizer && !isAttending;
-      } else if (!displayOrganised && displayAttending) {
-        return !isOrganizer && isAttending;
-      } else if (displayOrganised && isAttending) {
-        return isOrganizer || isAttending;
-      } else {
-        return false;
-      }
-    })
+    if (displayOrganised && !displayAttending) {
+      return isOrganizer && !isAttending;
+    } else if (!displayOrganised && displayAttending) {
+      return !isOrganizer && isAttending;
+    } else if (displayOrganised && isAttending) {
+      return isOrganizer || isAttending;
+    } else {
+      return false;
+    }
+  });
+
+  // sort each upcoming and past events separately
+
+  // should be sorted recent first
+  const sortedUpcomingEvents = viewableEvents
+    .filter((event) =>
+      checkIsPassedOrUpcomingEvent(
+        event.startDateTime,
+        event.endDateTime,
+        "upcoming"
+      )
+    )
+
     .sort((a, b) => a.startDateTime.getTime() - b.startDateTime.getTime());
+
+  // should be sorted where most recent passed event is first
+  const sortedPastEvents = viewableEvents
+    .filter((event) =>
+      checkIsPassedOrUpcomingEvent(
+        event.startDateTime,
+        event.endDateTime,
+        "passed"
+      )
+    )
+    .sort((a, b) => b.startDateTime.getTime() - a.startDateTime.getTime());
+
+  const filteredAndSortedEvents = [
+    ...sortedUpcomingEvents,
+    ...sortedPastEvents,
+  ];
 
   const searchedEvents = filteredAndSortedEvents.filter((event) =>
     event.title.toLowerCase().includes(searchQuery.toLowerCase())
