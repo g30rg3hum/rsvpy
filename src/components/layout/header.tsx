@@ -16,22 +16,19 @@ export default async function Header() {
           <Image
             src="/images/logo.png"
             alt="rsvpy logo"
-            width={188}
+            width={160}
             height={0}
             className="hover:scale-105 transition-transform"
           />
         </Link>
       </div>
       <div>
-        <ul className="menu menu-horizontal flex items-center gap-2 p-0 ">
+        <ul className="flex items-center gap-10 p-0 ">
           {email ? (
             <>
-              <li className="font-semibold">
-                <Link href="/events">Events</Link>
-              </li>
-              <li className="font-semibold">
-                <Link href="#">Payments</Link>
-              </li>
+              <MenuLink href="/events" text="Events" />
+              <MenuLink href="/payments" text="Payments" />
+
               <div className="dropdown dropdown-end font-semibold">
                 <div
                   tabIndex={0}
@@ -47,7 +44,7 @@ export default async function Header() {
                 </div>
                 <ul
                   tabIndex={0}
-                  className="menu menu-md dropdown-content bg-base-200 rounded-box z-1 mt-3 w-52 p-2 shadow-xs"
+                  className="menu menu-md dropdown-content bg-base-200 rounded-box z-1 mt-3 w-[115px] p-2 shadow-xs"
                 >
                   <li>
                     <a href="#">Profile</a>
@@ -68,5 +65,20 @@ export default async function Header() {
         </ul>
       </div>
     </div>
+  );
+}
+
+type MenuLinkProps = {
+  href: string;
+  text: string;
+};
+function MenuLink({ href, text }: MenuLinkProps) {
+  return (
+    <li className="font-semibold">
+      <Link href={href} className="group transition duration-200">
+        {text}
+        <span className="block max-w-0 group-hover:max-w-full transition-all duration-200 h-1 bg-primary"></span>
+      </Link>
+    </li>
   );
 }

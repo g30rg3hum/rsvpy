@@ -280,7 +280,7 @@ export default function CreateEventForm({ userEmail }: Props) {
           {step > 0 ? (
             <div className="flex-1">
               <button
-                className="btn btn-secondary w-full"
+                className="btn btn-neutral w-full"
                 type="button"
                 onClick={prevStep}
               >

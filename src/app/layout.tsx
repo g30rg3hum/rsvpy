@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
-import { Lexend } from "next/font/google";
+import { Averia_Libre } from "next/font/google";
 import "./globals.css";
 import AuthProvider from "@/components/authentication/provider";
 import { Toaster } from "react-hot-toast";
 import Header from "@/components/layout/header";
 
-const lexend = Lexend({
-  variable: "--font-lexend",
+const averia_libre = Averia_Libre({
+  variable: "--font-averia-libre",
   subsets: ["latin"],
+  weight: ["300", "400", "700"],
 });
 
 export const metadata: Metadata = {
@@ -24,7 +25,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="min-h-screen" data-theme="mytheme">
       <body
-        className={`${lexend.variable} antialiased flex flex-col min-h-screen bg-base-300`}
+        className={`${averia_libre.variable} antialiased flex flex-col min-h-screen bg-base-300 font-averia-libre`}
       >
         <AuthProvider>
           <Header />
@@ -32,7 +33,13 @@ export default function RootLayout({
           <Toaster
             position="bottom-right"
             toastOptions={{
-              style: { background: "#1e1e1e", color: "#fff", zIndex: 5 },
+              style: {
+                background: "#1e1e1e",
+                color: "#fff",
+                zIndex: 5,
+                maxWidth: "249.5px",
+                width: "100%",
+              },
             }}
           />
         </AuthProvider>

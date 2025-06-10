@@ -6,7 +6,7 @@ interface Props {
 }
 export default function HyperLink({ href, children }: Props) {
   return (
-    <Link href={href} className="text-blue-400 hover:underline">
+    <Link href={href} className="text-[#6EEEFF] hover:underline">
       {children}
     </Link>
   );

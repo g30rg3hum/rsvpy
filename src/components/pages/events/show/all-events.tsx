@@ -104,8 +104,8 @@ export default function AllEvents({ userEmail, allEvents }: Props) {
               className={clsx(
                 "badge hover:cursor-pointer font-semibold",
                 displayOrganised
-                  ? `bg-accent text-[#171717] hover:bg-[#9A61E5]`
-                  : "bg-base-200 hover:bg-[#1a1a1a]"
+                  ? `bg-primary text-primary-content hover:bg-[#E25EC1]`
+                  : "bg-base-100 hover:bg-[#1a1a1a]"
               )}
               onClick={() => {
                 setDisplayOrganised(!displayOrganised);
@@ -122,8 +122,8 @@ export default function AllEvents({ userEmail, allEvents }: Props) {
               className={clsx(
                 "badge hover:cursor-pointer font-semibold",
                 displayAttending
-                  ? `bg-accent text-[#171717] hover:bg-#[9A61E5]`
-                  : "bg-base-200 hover:bg-[#1a1a1a]"
+                  ? `bg-primary text-primary-content hover:bg-#[E25EC1]`
+                  : "bg-base-100 hover:bg-[#1a1a1a]"
               )}
             >
               Attending <TicketIcon className="size-4" />
@@ -134,7 +134,7 @@ export default function AllEvents({ userEmail, allEvents }: Props) {
       </div>
 
       {displayedEvents.length === 0 ? (
-        <div className="flex justify-center items-center flex-col">
+        <div className="flex justify-center items-center flex-col mt-4">
           <FaceFrownIcon className="size-8 mb-2" />
           <p className="font-medium">There are no events here.</p>
           <p className="text-stone-600">

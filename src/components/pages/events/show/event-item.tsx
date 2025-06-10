@@ -67,7 +67,11 @@ export default function EventItem({ event, currentUserEmail }: Props) {
               })
               .includes(currentUserEmail) && <TicketIcon className="size-4" />}
           </h2>
-          {isPassedEvent && <CheckCircleIcon className="size-8 text-success" />}
+          {isPassedEvent && (
+            <div className="w-8 h-8 bg-success text-success-content rounded-full flex justify-center items-center font-bold">
+              ✔
+            </div>
+          )}
         </div>
 
         <p className="text-slate-300">
@@ -83,7 +87,7 @@ export default function EventItem({ event, currentUserEmail }: Props) {
       </div>
       <div className="justify-end card-actions mt-3">
         <button
-          className="btn btn-primary"
+          className="btn btn-neutral"
           onClick={() => redirect(`/events/${event.id}`)}
         >
           Manage
