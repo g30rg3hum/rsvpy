@@ -228,9 +228,7 @@ export default function EditEventForm({ userEmail, eventId }: Props) {
 
         <div>
           <fieldset className="fieldset">
-            <legend className="fieldset-legend">
-              Max attendees (including you)
-            </legend>
+            <legend className="fieldset-legend">Max attendees</legend>
             <input
               {...register("maxAttendees")}
               className="w-full input"

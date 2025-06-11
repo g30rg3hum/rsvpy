@@ -259,9 +259,6 @@ export default function CreateEventForm({ userEmail }: Props) {
 
         {step === 5 && (
           <div>
-            <p className="font-medium font-italics text-slate-300 text-sm">
-              (Including you)
-            </p>
             <fieldset className="fieldset">
               <input
                 {...register("maxAttendees")}

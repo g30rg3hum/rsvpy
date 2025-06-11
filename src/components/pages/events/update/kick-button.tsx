@@ -32,8 +32,59 @@ export default function KickButton({ eventId, attendeeId }: Props) {
   };
 
   return (
-    <button className="btn btn-sm btn-error" onClick={handleKick}>
-      Kick
-    </button>
+    <>
+      <button
+        className="btn btn-sm btn-error"
+        onClick={() =>
+          (
+            document.getElementById(
+              "kick_confirmation_modal"
+            ) as HTMLDialogElement
+          ).showModal()
+        }
+      >
+        Kick
+      </button>
+      <dialog id="kick_confirmation_modal" className="modal">
+        <div className="modal-box max-w-[400px] bg-base-200 border border-base-100">
+          <form method="dialog">
+            <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+              ✕
+            </button>
+          </form>
+          <div className="mt-4 text-left">
+            <p className="font-bold text-lg">Confirm your action</p>
+            <p>Are you sure you want to kick this attendee?</p>
+            <div className="flex gap-3 mt-5 justify-end ">
+              <button
+                className="btn btn-neutral"
+                onClick={() =>
+                  (
+                    document.getElementById(
+                      "kick_confirmation_modal"
+                    ) as HTMLDialogElement
+                  ).close()
+                }
+              >
+                Cancel
+              </button>
+              <button
+                className="btn btn-primary"
+                onClick={async () => {
+                  await handleKick();
+                  (
+                    document.getElementById(
+                      "kick_confirmation_modal"
+                    ) as HTMLDialogElement
+                  ).showModal();
+                }}
+              >
+                Confirm
+              </button>
+            </div>
+          </div>
+        </div>
+      </dialog>
+    </>
   );
 }
