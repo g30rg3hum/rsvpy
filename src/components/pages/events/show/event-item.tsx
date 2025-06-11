@@ -3,54 +3,23 @@
 import Card from "@/components/reusables/card";
 import { Event } from "@/lib/db/types";
 import { redirect } from "next/navigation";
-import {
-  CheckCircleIcon,
-  CogIcon,
-  TicketIcon,
-} from "@heroicons/react/24/solid";
+import { CogIcon, TicketIcon } from "@heroicons/react/24/solid";
 import {
   checkIsPassedOrUpcomingEvent,
   truncateString,
 } from "@/lib/helpers/utils";
-import { useEffect, useState } from "react";
+import DisplayStartAndEndDates from "@/components/reusables/display-dates";
 
 interface Props {
   event: Event;
   currentUserEmail: string;
 }
 export default function EventItem({ event, currentUserEmail }: Props) {
-  // hydration error workaround
-  const [localStartDate, setLocalStartDate] = useState<string>();
-  const [localEndDate, setLocalEndDate] = useState<string | undefined>();
-
-  const dateDisplayOptions: Intl.DateTimeFormatOptions = {
-    timeStyle: "short",
-    dateStyle: "short",
-  };
-  useEffect(() => {
-    setLocalStartDate(
-      event.startDateTime.toLocaleString(undefined, dateDisplayOptions)
-    );
-    if (event.endDateTime) {
-      setLocalEndDate(
-        event.endDateTime.toLocaleString(undefined, dateDisplayOptions)
-      );
-    }
-  });
   const isPassedEvent = checkIsPassedOrUpcomingEvent(
     event.startDateTime,
     event.endDateTime,
     "passed"
   );
-
-  // const currentDate = new Date();
-  // const eventStartDate = event.startDateTime;
-  // const isPastEvent = currentDate >= eventStartDate;
-
-  // const displayStartDate = event.startDateTime.toLocaleString(undefined, {
-  //   dateStyle: "short",
-  //   timeStyle: "short",
-  // });
 
   return (
     <Card bodyClassName="justify-between">
@@ -80,10 +49,10 @@ export default function EventItem({ event, currentUserEmail }: Props) {
         <p>
           <b>Location:</b> {truncateString(event.location, 90)}
         </p>
-        <p>
-          <b>Dates:</b> {localStartDate}
-          {event.endDateTime && " - " + localEndDate}
-        </p>
+        <DisplayStartAndEndDates
+          startDateTime={event.startDateTime}
+          endDateTime={event.endDateTime}
+        />
       </div>
       <div className="justify-end card-actions mt-3">
         <button

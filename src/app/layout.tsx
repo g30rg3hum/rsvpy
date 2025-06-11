@@ -37,8 +37,6 @@ export default function RootLayout({
                 background: "#1e1e1e",
                 color: "#fff",
                 zIndex: 5,
-                maxWidth: "249.5px",
-                width: "100%",
               },
             }}
           />

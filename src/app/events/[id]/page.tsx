@@ -3,6 +3,7 @@ import InviteButton from "@/components/pages/events/invite/invite-button";
 import EditButton from "@/components/pages/events/update/edit-button";
 import KickButton from "@/components/pages/events/update/kick-button";
 import Card from "@/components/reusables/card";
+import DisplayStartAndEndDates from "@/components/reusables/display-dates";
 import { getSessionThenEmail } from "@/lib/auth/utils";
 import { getEventById } from "@/lib/db/event";
 import {
@@ -13,7 +14,6 @@ import {
   UserGroupIcon,
 } from "@heroicons/react/24/solid";
 import clsx from "clsx";
-import { formatInTimeZone } from "date-fns-tz";
 import { headers } from "next/headers";
 
 interface Props {
@@ -69,21 +69,10 @@ export default async function EventPage({ params }: Props) {
               <p>
                 <b>Location:</b> {event.location}
               </p>
-              <p>
-                <b>Dates and times:</b>{" "}
-                {formatInTimeZone(
-                  event.startDateTime,
-                  "UTC",
-                  "dd/MM/yyyy (HH:mm)"
-                )}
-                {event.endDateTime &&
-                  " - " +
-                    formatInTimeZone(
-                      event.endDateTime,
-                      "UTC",
-                      "dd/MM/yyyy (HH:mm)"
-                    )}
-              </p>
+              <DisplayStartAndEndDates
+                startDateTime={event.startDateTime}
+                endDateTime={event.endDateTime}
+              />
               <p>
                 <b>Price: </b> {event.currency} {event.totalPrice}
               </p>

@@ -5,7 +5,7 @@ import { Controller, useForm } from "react-hook-form";
 import ErrorMessage from "../../../reusables/error-message";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
-import { currencies } from "@/lib/helpers/utils";
+import { currencies, formatLocalDateTime } from "@/lib/helpers/utils";
 import { EventFormData, schema } from "@/lib/form/event-form";
 import { useEffect, useState } from "react";
 import { Event } from "@/lib/db/types";
@@ -171,11 +171,7 @@ export default function EditEventForm({ userEmail, eventId }: Props) {
                   {...field}
                   className="w-full input"
                   type="datetime-local"
-                  value={
-                    field.value
-                      ? new Date(field.value).toISOString().substring(0, 16)
-                      : ""
-                  }
+                  value={field.value ? formatLocalDateTime(field.value) : ""}
                 />
               )}
             />
@@ -195,11 +191,7 @@ export default function EditEventForm({ userEmail, eventId }: Props) {
                   {...field}
                   className="w-full input"
                   type="datetime-local"
-                  value={
-                    field.value
-                      ? new Date(field.value).toISOString().substring(0, 16)
-                      : ""
-                  }
+                  value={field.value ? formatLocalDateTime(field.value) : ""}
                 />
               )}
             />
