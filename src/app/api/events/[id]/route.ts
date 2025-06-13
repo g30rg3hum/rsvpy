@@ -3,18 +3,32 @@ import { EventFormData } from "@/lib/form/event-form";
 import { prisma } from "@/lib/prisma/prisma";
 import { NextRequest } from "next/server";
 
+// get event details by id
 export async function GET(
   Request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  await authoriseSession(); // TODO: need to ensure that the user is authorised to get this event's details, use userId from session
-
   const { id } = await params;
+
+  const authResponse = await authoriseSession();
+
+  // generic logic authorisation check
+  if (authResponse instanceof Response) {
+    return authResponse;
+  }
 
   try {
     const event = await prisma.event.findUnique({
       where: {
         id: id,
+      },
+      include: {
+        creator: true,
+        attendees: {
+          include: {
+            user: true,
+          },
+        },
       },
     });
 
@@ -22,6 +36,18 @@ export async function GET(
       return new Response("Event not found", { status: 404 });
     }
 
+    // check that the user is either creator or attendee
+    const userEmail = authResponse;
+    const isCreator = event.creator.email === userEmail;
+    const isAttendee = event.attendees.some(
+      (attendee) => attendee.user.email === userEmail
+    );
+
+    if (!isCreator && !isAttendee) {
+      return new Response("Unauthorized to view this event", { status: 403 });
+    }
+
+    // otherwise can get this event
     return Response.json(event);
   } catch (error) {
     console.error("Error fetching event:", error);
@@ -30,7 +56,6 @@ export async function GET(
 }
 
 type PutPayload = Omit<EventFormData, "startDateTime" | "endDateTime"> & {
-  userEmail: string;
   startDateTime: string;
   endDateTime: string | null;
 };
@@ -38,6 +63,22 @@ export async function PUT(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const authResponse = await authoriseSession();
+
+  // generic logic authorisation check
+  if (authResponse instanceof Response) {
+    return authResponse;
+  }
+
+  // check that there is a request body
+  let requestData: PutPayload;
+  try {
+    requestData = await request.json();
+  } catch (error) {
+    console.error("Error parsing request body:", error);
+    return new Response("Invalid request body", { status: 400 });
+  }
+
   const {
     name,
     description,
@@ -47,10 +88,7 @@ export async function PUT(
     currency,
     totalPrice,
     maxAttendees,
-    userEmail,
-  }: PutPayload = await request.json();
-
-  await authoriseSession(); // TODO: need to ensure that the user is authorised to update this event, use userId from session
+  }: PutPayload = requestData;
 
   // check that have all the required fields
   if (
@@ -60,8 +98,7 @@ export async function PUT(
     !startDateTime ||
     !currency ||
     totalPrice === undefined ||
-    maxAttendees === undefined ||
-    !userEmail
+    maxAttendees === undefined
   ) {
     return new Response("Missing required fields in request body", {
       status: 400,
@@ -71,6 +108,30 @@ export async function PUT(
   // id of event
   const { id } = await params;
 
+  // get the event first and check that the user is creator
+  try {
+    const event = await prisma.event.findUnique({
+      where: { id: id },
+      include: { creator: true },
+    });
+
+    if (!event) {
+      return new Response("Event not found", { status: 404 });
+    }
+
+    // check if user is the event creator
+    const email = authResponse;
+    if (event.creator.email !== email) {
+      return new Response("Unauthorized to update this event", { status: 403 });
+    }
+  } catch (error) {
+    console.error("Error fetching event while trying to update:", error);
+    return new Response("Failed to fetch event while trying to update", {
+      status: 500,
+    });
+  }
+
+  // now authorised to update event
   try {
     const updatedEvent = await prisma.event.update({
       where: {
@@ -92,5 +153,54 @@ export async function PUT(
   } catch (error) {
     console.error("Error updating event:", error);
     return new Response("Encountered error updating event", { status: 500 });
+  }
+}
+
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const authResponse = await authoriseSession();
+
+  if (authResponse instanceof Response) {
+    return authResponse;
+  }
+
+  const { id } = await params;
+
+  // get the event first and check that the user is creator
+  try {
+    const event = await prisma.event.findUnique({
+      where: { id: id },
+      include: { creator: true },
+    });
+
+    if (!event) {
+      return new Response("Event not found", { status: 404 });
+    }
+
+    // check if user is the event creator
+    const email = authResponse;
+    if (event.creator.email !== email) {
+      return new Response("Unauthorized to delete this event", { status: 403 });
+    }
+  } catch (error) {
+    console.error("Error fetching event while trying to delete:", error);
+    return new Response("Failed to fetch event while trying to delete", {
+      status: 500,
+    });
+  }
+
+  try {
+    const deletedEvent = await prisma.event.delete({
+      where: {
+        id: id,
+      },
+    });
+
+    return Response.json(deletedEvent);
+  } catch (error) {
+    console.error("Error deleting event:", error);
+    return new Response("Encountered error deleting event", { status: 500 });
   }
 }

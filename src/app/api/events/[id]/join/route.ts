@@ -6,9 +6,15 @@ export async function POST(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  await authoriseSession();
+  const authResponse = await authoriseSession();
 
+  if (authResponse instanceof Response) {
+    return authResponse;
+  }
+
+  // current logged in user's email
   const { userEmail } = await request.json();
+  // event id
   const { id } = await params;
 
   if (!userEmail)
