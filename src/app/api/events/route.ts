@@ -8,6 +8,20 @@ type PostPayload = Omit<
   "startDateTime" | "endDateTime"
 > & { userEmail: string; startDateTime: string; endDateTime: string | null };
 export async function POST(request: NextRequest) {
+  const authResponse = await authoriseSession();
+
+  if (authResponse instanceof Response) {
+    return authResponse; // unauthorised response
+  }
+
+  let payload: PostPayload;
+  try {
+    payload = await request.json();
+  } catch (error) {
+    console.error("Error parsing request body:", error);
+    return new Response("Invalid JSON in request body", { status: 400 });
+  }
+
   const {
     name,
     description,
@@ -17,10 +31,7 @@ export async function POST(request: NextRequest) {
     currency,
     totalPrice,
     maxAttendees,
-    userEmail,
-  }: PostPayload = await request.json();
-
-  await authoriseSession();
+  }: PostPayload = payload;
 
   // check that have all the required fields
   if (
@@ -30,8 +41,7 @@ export async function POST(request: NextRequest) {
     !startDateTime ||
     !currency ||
     totalPrice === undefined ||
-    maxAttendees === undefined ||
-    !userEmail
+    maxAttendees === undefined
   ) {
     return new Response("Missing required fields in request body", {
       status: 400,
@@ -39,10 +49,11 @@ export async function POST(request: NextRequest) {
   }
 
   try {
+    const email = authResponse;
     // get the userId from email
     const user = await prisma.user.findUnique({
       where: {
-        email: userEmail,
+        email,
       },
     });
 
@@ -50,7 +61,7 @@ export async function POST(request: NextRequest) {
       return new Response("User not found", { status: 404 });
     }
 
-    await prisma.event.create({
+    const event = await prisma.event.create({
       data: {
         title: name,
         description: description,
@@ -64,10 +75,9 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    return new Response("Event created successfully", { status: 200 });
+    return new Response(event.id, { status: 200 });
   } catch (error) {
     console.error("Error creating event:", error);
-
     return new Response("Encountered an error creating your event", {
       status: 500,
     });

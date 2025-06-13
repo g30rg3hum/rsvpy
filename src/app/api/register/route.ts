@@ -2,8 +2,21 @@ import { trimAndCapitalize } from "../../../lib/helpers/utils";
 import { prisma } from "../../../lib/prisma/prisma";
 import { NextRequest } from "next/server";
 
+interface PostPayload {
+  email: string;
+  firstName: string;
+  lastName: string;
+}
 export async function POST(request: NextRequest) {
-  const { email, firstName, lastName } = await request.json();
+  let payload: PostPayload;
+  try {
+    payload = await request.json();
+  } catch (error) {
+    console.error("Error parsing request body:", error);
+    return new Response("Invalid JSON in request body", { status: 400 });
+  }
+
+  const { email, firstName, lastName } = payload;
 
   // check that have all the required fields
   if (!email || !firstName || !lastName) {
@@ -31,7 +44,7 @@ export async function POST(request: NextRequest) {
 
   // otherwise at this point, we can create the user
   try {
-    await prisma.user.create({
+    const user = await prisma.user.create({
       data: {
         email: sanitizedEmail,
         firstName: sanitizedFirstName,
@@ -39,10 +52,9 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    return new Response("User created successfully", { status: 200 });
+    return new Response(user.id, { status: 200 });
   } catch (error) {
     console.error("Error creating user:", error);
-
     return new Response("Encountered an error creating your user", {
       status: 500,
     });
