@@ -6,10 +6,9 @@ import EditEventForm from "./edit-form";
 
 interface Props {
   className?: string;
-  userEmail: string;
   eventId: string;
 }
-export default function EditButton({ className, userEmail, eventId }: Props) {
+export default function EditButton({ className, eventId }: Props) {
   return (
     <>
       <button
@@ -33,7 +32,7 @@ export default function EditButton({ className, userEmail, eventId }: Props) {
             </button>
           </form>
           <div className="mt-4">
-            <EditEventForm userEmail={userEmail} eventId={eventId} />
+            <EditEventForm eventId={eventId} />
           </div>
         </div>
       </dialog>

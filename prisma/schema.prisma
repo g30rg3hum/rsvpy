@@ -92,7 +92,7 @@ model EventAttendee {
   paymentStatus PaymentStatus @default(PENDING)
 
   user      User     @relation("EventAttendee", fields: [userId], references: [id])
-  event     Event    @relation(fields: [eventId], references: [id])
+  event     Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
 }
@@ -110,7 +110,7 @@ model Payment {
 
   payer     User     @relation("Payer", fields: [payerId], references: [id])
   receiver  User     @relation("Receiver", fields: [receiverId], references: [id])
-  event     Event    @relation(fields: [eventId], references: [id])
+  event     Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
 }

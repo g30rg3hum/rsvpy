@@ -78,7 +78,7 @@ export default function RegistrationForm() {
   });
 
   return (
-    <div className="card card-border w-[500px] bg-base-200 shadow-xs border border-base-100">
+    <div className="card card-border w-full max-w-[500px] bg-base-200 shadow-xs border border-base-100">
       <div className="card-body">
         <div className="mb-2">
           <h2 className="card-title font-extrabold">Register</h2>

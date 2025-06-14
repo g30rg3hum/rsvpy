@@ -11,10 +11,9 @@ import { useEffect, useState } from "react";
 import { Event } from "@/lib/db/types";
 
 interface Props {
-  userEmail: string;
   eventId: string;
 }
-export default function EditEventForm({ userEmail, eventId }: Props) {
+export default function EditEventForm({ eventId }: Props) {
   const router = useRouter();
 
   const [eventDetails, setEventDetails] = useState<Event | null>(null);
@@ -87,7 +86,6 @@ export default function EditEventForm({ userEmail, eventId }: Props) {
         currency,
         totalPrice,
         maxAttendees,
-        userEmail,
       }),
       headers: {
         "Content-Type": "application/json",

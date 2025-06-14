@@ -1,5 +1,6 @@
 import PageWrapper from "@/components/layout/page-wrapper";
 import InviteButton from "@/components/pages/events/invite/invite-button";
+import DeleteButton from "@/components/pages/events/update/delete-button";
 import EditButton from "@/components/pages/events/update/edit-button";
 import KickButton from "@/components/pages/events/update/kick-button";
 import Card from "@/components/reusables/card";
@@ -80,11 +81,10 @@ export default async function EventPage({ params }: Props) {
                 <b>Maximum # of attendees: </b> {event.maxAttendees}
               </p>
               {isCreator && (
-                <EditButton
-                  className={clsx("absolute top-3 right-3")}
-                  eventId={event.id}
-                  userEmail={userEmail}
-                />
+                <div className="absolute top-3 right-3 flex gap-2">
+                  <DeleteButton eventId={id} />
+                  <EditButton eventId={event.id} />
+                </div>
               )}
             </Card>
             <div className="grid gap-8 md:gap-4 grid-cols-1">

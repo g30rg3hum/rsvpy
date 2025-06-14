@@ -7,6 +7,8 @@ export async function authoriseSession() {
 
   if (!session || !session.user?.email) {
     return new Response("Unauthorised", { status: 401 });
+  } else {
+    return session.user.email;
   }
 }
 

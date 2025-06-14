@@ -4,6 +4,7 @@ import { getServerSession } from "next-auth";
 import Image from "next/image";
 import Link from "next/link";
 import SignOut from "../authentication/sign-out";
+import { Bars3Icon } from "@heroicons/react/24/solid";
 
 export default async function Header() {
   const session = await getServerSession(authOptions);
@@ -22,7 +23,26 @@ export default async function Header() {
           />
         </Link>
       </div>
-      <div>
+      <div className="sm:hidden">
+        <div className="dropdown dropdown-end font-semibold">
+          <div
+            tabIndex={0}
+            role="button"
+            className="btn btn-primary btn-md btn-square"
+          >
+            <Bars3Icon className="size-5" />
+          </div>
+          <ul
+            tabIndex={0}
+            className="menu menu-md dropdown-content bg-base-200 rounded-box z-1 mt-3 w-[115px] p-2 shadow-xs"
+          >
+            <li>
+              <a href="/login">Login</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div className="hidden sm:block">
         <ul className="flex items-center gap-10 p-0 ">
           {email ? (
             <>

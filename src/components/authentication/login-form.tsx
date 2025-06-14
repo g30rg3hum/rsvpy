@@ -28,6 +28,7 @@ export default function LoginForm() {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors, isSubmitting },
   } = useForm({ resolver: yupResolver(schema) });
 
@@ -54,10 +55,12 @@ export default function LoginForm() {
       toast.dismiss(toastId);
       toast.error("An error occurred while sending the login link.");
     }
+
+    reset();
   });
 
   return (
-    <div className="card card-border w-[500px] bg-base-200 shadow-xs border border-base-100">
+    <div className="card card-border w-full max-w-[500px] bg-base-200 shadow-xs border border-base-100">
       <div className="card-body">
         <div className="mb-2">
           <h2 className="card-title font-extrabold">Login</h2>
