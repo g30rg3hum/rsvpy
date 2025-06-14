@@ -7,6 +7,7 @@ import Card from "@/components/reusables/card";
 import DisplayStartAndEndDates from "@/components/reusables/display-dates";
 import { getSessionThenEmail } from "@/lib/auth/utils";
 import { getEventById } from "@/lib/db/event";
+import { checkIsPassedOrUpcomingEvent } from "@/lib/helpers/utils";
 import {
   BanknotesIcon,
   CheckCircleIcon,
@@ -47,11 +48,17 @@ export default async function EventPage({ params }: Props) {
     throw new Error("Not authorised to view this event");
   }
 
+  const isPassedEvent = checkIsPassedOrUpcomingEvent(
+    event.startDateTime,
+    event.endDateTime,
+    "passed"
+  );
+
   return (
     <PageWrapper centerHorizontally>
       <div className="flex flex-col w-full items-center px-8 pb-8">
         <div className="w-full max-w-[900px] space-y-8">
-          <div className="text-center h-max">
+          <div className="text-center h-max break-all">
             <h2 className="font-black text-3xl">{event.title}</h2>
           </div>
           <div
@@ -64,6 +71,9 @@ export default async function EventPage({ params }: Props) {
               <h2 className="card-title font-bold">
                 <InformationCircleIcon className="size-8" /> Event details
               </h2>
+              {isPassedEvent && (
+                <p className="italic">(This event has passed)</p>
+              )}
               <p>
                 <b>Description:</b> {event.description}
               </p>
@@ -83,7 +93,10 @@ export default async function EventPage({ params }: Props) {
               {isCreator && (
                 <div className="absolute top-3 right-3 flex gap-2">
                   <DeleteButton eventId={id} />
-                  <EditButton eventId={event.id} />
+                  <EditButton
+                    isPassedEvent={isPassedEvent}
+                    eventId={event.id}
+                  />
                 </div>
               )}
             </Card>

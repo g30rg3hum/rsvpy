@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-html-link-for-pages */
 /* eslint-disable @next/next/no-img-element */
 import authOptions from "@/lib/auth/authOptions";
 import { getServerSession } from "next-auth";
@@ -36,9 +37,20 @@ export default async function Header() {
             tabIndex={0}
             className="menu menu-md dropdown-content bg-base-200 rounded-box z-1 mt-3 w-[115px] p-2 shadow-xs"
           >
-            <li>
-              <a href="/login">Login</a>
-            </li>
+            {email ? (
+              <>
+                <li>
+                  <a href="/events">Events</a>
+                </li>
+                <li>
+                  <a href="/payments">Payments</a>
+                </li>
+              </>
+            ) : (
+              <li>
+                <a href="/login">Login</a>
+              </li>
+            )}
           </ul>
         </div>
       </div>

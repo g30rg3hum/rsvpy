@@ -24,29 +24,29 @@ export default function EventItem({ event, currentUserEmail }: Props) {
   return (
     <Card bodyClassName="justify-between">
       <div className="flex flex-col gap-2">
-        <div className="flex justify-between">
-          <h2 className="card-title font-bold">
-            {event.title}{" "}
+        <div className="flex justify-between gap-2">
+          <h2 className="card-title font-bold break-all">{event.title}</h2>
+          <div className="flex items-center gap-2">
             {currentUserEmail === event.creator!.email && (
-              <CogIcon className="size-4" />
+              <CogIcon className="size-6" />
             )}
             {event
               .attendees!.map((attendee) => {
                 return attendee.user!.email;
               })
-              .includes(currentUserEmail) && <TicketIcon className="size-4" />}
-          </h2>
-          {isPassedEvent && (
-            <div className="w-8 h-8 bg-success text-success-content rounded-full flex justify-center items-center font-bold">
-              ✔
-            </div>
-          )}
+              .includes(currentUserEmail) && <TicketIcon className="size-6" />}
+            {isPassedEvent && (
+              <div className="w-5 h-5 bg-success text-success-content rounded-full flex justify-center items-center font-bold text-[10px]">
+                ✔
+              </div>
+            )}
+          </div>
         </div>
 
-        <p className="text-slate-300">
+        <p className="text-slate-300 break-all">
           {truncateString(event.description, 105)}
         </p>
-        <p>
+        <p className="break-all">
           <b>Location:</b> {truncateString(event.location, 90)}
         </p>
         <DisplayStartAndEndDates

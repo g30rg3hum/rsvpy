@@ -158,7 +158,7 @@ export default function EditEventForm({ eventId }: Props) {
           )}
         </fieldset>
 
-        <div className="flex gap-4">
+        <div className="flex gap-4 flex-col sm:flex-row">
           <fieldset className="fieldset w-full">
             <legend className="fieldset-legend">Start date and time *</legend>
             <Controller
@@ -199,7 +199,7 @@ export default function EditEventForm({ eventId }: Props) {
           </fieldset>
         </div>
 
-        <div className="flex gap-4">
+        <div className="flex gap-4 flex-col sm:flex-row">
           <fieldset className="fieldset w-full">
             <legend className="fieldset-legend">Currency</legend>
             <select {...register("currency")} className="w-full select">

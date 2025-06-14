@@ -33,7 +33,7 @@ export default function DisplayStartAndEndDates({
 
   return (
     <p>
-      <b>Dates & times:</b> {localStartDateTime}
+      <b>Dates/times:</b> {localStartDateTime}
       {endDateTime && " - " + localEndDateTime}
     </p>
   );

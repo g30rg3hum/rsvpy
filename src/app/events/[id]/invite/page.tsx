@@ -43,7 +43,7 @@ export default async function EventInvitePage({ params }: Props) {
             <b>Location:</b> {event.location}
           </p>
           <p>
-            <b>Dates and times:</b>{" "}
+            <b>Dates/times:</b>{" "}
             {formatInTimeZone(event.startDateTime, "UTC", "dd/MM/yyyy (HH:mm)")}
             {event.endDateTime &&
               " - " +
