@@ -50,7 +50,7 @@ export const schema = yup.object({
     .number()
     .typeError("Please enter a number")
     .required()
-    .min(0, "Must be at least 1"),
+    .min(1, "Must be at least 1"),
 });
 
 export const fields = Object.keys(schema.fields) as (keyof EventFormData)[];

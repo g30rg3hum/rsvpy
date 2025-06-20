@@ -113,7 +113,13 @@ export default function EditEventForm({
         maxAttendees,
       });
     } else {
-      toast.error("Error encountered when trying to update your event.");
+      if (res.status === 422) {
+        toast.error(
+          "Max attendees cannot be less than the current no. of attendees. Please kick some or increase your amount."
+        );
+      } else {
+        toast.error("Error encountered when trying to update your event.");
+      }
     }
 
     (document.getElementById("edit_modal") as HTMLDialogElement).close();

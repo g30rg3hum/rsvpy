@@ -109,7 +109,11 @@ export default async function EventPage({ params }: Props) {
                       <HashtagIcon className="size-5" /> Attendee count
                     </h2>
                     <p className="font-black text-2xl">
-                      {event.attendees.length} / {event.maxAttendees}
+                      {
+                        event.attendees.filter((attendee) => !attendee.old)
+                          .length
+                      }{" "}
+                      / {event.maxAttendees}
                     </p>
                   </Card>
                   <Card bodyClassName="flex flex-col items-center items-center">
@@ -146,36 +150,40 @@ export default async function EventPage({ params }: Props) {
                   </tr>
                 </thead>
                 <tbody>
-                  {event.attendees.map((attendee, index) => (
-                    <tr
-                      key={attendee.id}
-                      className={clsx(attendee.old && "opacity-50")}
-                    >
-                      <td>{index + 1}</td>
-                      <td>
-                        {attendee.user.firstName} {attendee.user.lastName}
-                      </td>
-                      <td>{attendee.old ? "old" : "not old"}</td>
-                      <td>
-                        <DisplayDate date={attendee.createdAt} />
-                      </td>
-                      {isCreator && (
-                        <>
-                          <td>
-                            <CheckCircleIcon className="size-5" />
-                          </td>
-                          <td className="text-right">
-                            {!isPassedEvent && !attendee.old && (
-                              <KickButton
-                                attendeeId={attendee.userId}
-                                eventId={event.id}
-                              />
-                            )}
-                          </td>
-                        </>
-                      )}
-                    </tr>
-                  ))}
+                  {event.attendees
+                    .sort(
+                      (a, b) => b.createdAt.getTime() - a.createdAt.getTime()
+                    )
+                    .map((attendee, index) => (
+                      <tr
+                        key={attendee.id}
+                        className={clsx(attendee.old && "opacity-50")}
+                      >
+                        <td>{attendee.old ? "-" : index + 1}</td>
+                        <td>
+                          {attendee.user.firstName} {attendee.user.lastName}
+                        </td>
+                        <td>{attendee.user.email}</td>
+                        <td>
+                          <DisplayDate date={attendee.createdAt} />
+                        </td>
+                        {isCreator && (
+                          <>
+                            <td>
+                              <CheckCircleIcon className="size-5" />
+                            </td>
+                            <td className="text-right">
+                              {!isPassedEvent && !attendee.old && (
+                                <KickButton
+                                  attendeeId={attendee.userId}
+                                  eventId={event.id}
+                                />
+                              )}
+                            </td>
+                          </>
+                        )}
+                      </tr>
+                    ))}
                 </tbody>
               </table>
               {isCreator && (

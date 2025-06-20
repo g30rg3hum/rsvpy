@@ -115,7 +115,7 @@ export async function PUT(
   try {
     const event = await prisma.event.findUnique({
       where: { id: id },
-      include: { creator: true },
+      include: { creator: true, attendees: true },
     });
 
     if (!event) {
@@ -126,6 +126,16 @@ export async function PUT(
     const email = authResponse;
     if (event.creator.email !== email) {
       return new Response("Unauthorized to update this event", { status: 403 });
+    }
+
+    // max attendees cannot be less than current set of attendees
+    if (
+      maxAttendees < event.attendees.filter((attendee) => !attendee.old).length
+    ) {
+      return new Response(
+        "Max attendees cannot be less than current number of attendees",
+        { status: 422 }
+      );
     }
   } catch (error) {
     console.error("Error fetching event while trying to update:", error);

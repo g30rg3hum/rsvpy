@@ -58,8 +58,8 @@ export default async function EventInvitePage({ params }: Props) {
             {event.totalPrice}
           </p>
           <p>
-            {/* TODO: show the actual spaces left */}
-            <b>Attendee count:</b> {event.attendees.length} /{" "}
+            <b>Attendee count:</b>{" "}
+            {event.attendees.filter((attendee) => !attendee.old).length} /{" "}
             {event.maxAttendees}
           </p>
           <div className="card-actions mt-3 w-full">
@@ -72,11 +72,13 @@ export default async function EventInvitePage({ params }: Props) {
             Attendees
           </h2>
           <ul className="mt-2 grid grid-cols-3 justify-between gap-2 break-all">
-            {event.attendees.map((attendee) => (
-              <li key={attendee.user.id} className="text-center">
-                {attendee.user.firstName} {attendee.user.lastName}
-              </li>
-            ))}
+            {event.attendees
+              .filter((attendee) => !attendee.old)
+              .map((attendee) => (
+                <li key={attendee.user.id} className="text-center">
+                  {attendee.user.firstName} {attendee.user.lastName}
+                </li>
+              ))}
           </ul>
         </Card>
       </div>

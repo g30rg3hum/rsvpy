@@ -73,7 +73,10 @@ export async function attendEvent(eventId: string, userEmail: string) {
     return attendResult.EVENT_OVER; // event has passed
   }
 
-  if (event.maxAttendees <= event.attendees.length) {
+  if (
+    event.maxAttendees <=
+    event.attendees.filter((attendee) => !attendee.old).length
+  ) {
     return attendResult.EVENT_FULL; // event is full
   }
 
@@ -93,6 +96,7 @@ export async function attendEvent(eventId: string, userEmail: string) {
     where: {
       eventId: eventId,
       userId: user.id,
+      old: false,
     },
   });
 
