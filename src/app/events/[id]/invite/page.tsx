@@ -2,7 +2,7 @@ import PageWrapper from "@/components/layout/page-wrapper";
 import Card from "@/components/reusables/card";
 import authOptions from "@/lib/auth/authOptions";
 import { getEventById } from "@/lib/db/event";
-import { EnvelopeIcon } from "@heroicons/react/24/solid";
+import { EnvelopeIcon, UserGroupIcon } from "@heroicons/react/24/solid";
 import { getServerSession } from "next-auth";
 import { formatInTimeZone } from "date-fns-tz";
 import JoinButton from "@/components/pages/events/invite/join-button";
@@ -27,7 +27,7 @@ export default async function EventInvitePage({ params }: Props) {
 
   return (
     <PageWrapper centerHorizontally>
-      <div className="flex flex-col w-full items-center px-8 pb-8">
+      <div className="flex flex-col w-full items-center px-8 pb-8 gap-4">
         <Card cardClassName="max-w-[600px]">
           <h2 className="card-title font-bold">
             <EnvelopeIcon className="size-6" /> You&apos;re invited!
@@ -54,15 +54,30 @@ export default async function EventInvitePage({ params }: Props) {
                 )}
           </p>
           <p>
-            <b>Price:</b> {event.currency} {event.totalPrice}
+            <b>Total price (to be divided):</b> {event.currency}{" "}
+            {event.totalPrice}
           </p>
           <p>
             {/* TODO: show the actual spaces left */}
-            <b>Attendee count:</b> {event.maxAttendees} / {event.maxAttendees}
+            <b>Attendee count:</b> {event.attendees.length} /{" "}
+            {event.maxAttendees}
           </p>
           <div className="card-actions mt-3 w-full">
             <JoinButton userEmail={userEmail} eventId={event.id} />
           </div>
+        </Card>
+        <Card cardClassName="max-w-[600px]">
+          <h2 className="card-title font-bold">
+            <UserGroupIcon className="size-7" />
+            Attendees
+          </h2>
+          <ul className="mt-2 grid grid-cols-3 justify-between gap-2 break-all">
+            {event.attendees.map((attendee) => (
+              <li key={attendee.user.id} className="text-center">
+                {attendee.user.firstName} {attendee.user.lastName}
+              </li>
+            ))}
+          </ul>
         </Card>
       </div>
     </PageWrapper>

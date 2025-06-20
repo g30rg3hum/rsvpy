@@ -1,3 +1,4 @@
+import { checkIsPassedOrUpcomingEvent } from "../helpers/utils";
 import { prisma } from "../prisma/prisma";
 
 export async function getOrganisedEventsOfUser(userEmail: string) {
@@ -40,11 +41,42 @@ export async function getEventById(id: string) {
 }
 
 export const attendResult = {
+  EVENT_OVER: "EVENT_OVER",
+  EVENT_NOT_FOUND: "EVENT_NOT_FOUND",
+  EVENT_FULL: "EVENT_FULL",
   NO_USER: "NO_USER",
   ALREADY_ATTENDING: "ALREADY_ATTENDING",
   SUCCESS: "SUCCESS",
 };
 export async function attendEvent(eventId: string, userEmail: string) {
+  // check if event has passed
+  const event = await prisma.event.findUnique({
+    where: {
+      id: eventId,
+    },
+    include: {
+      attendees: true,
+    },
+  });
+
+  if (!event) {
+    return attendResult.EVENT_NOT_FOUND; // event does not exist
+  }
+
+  const isPassedEvent = checkIsPassedOrUpcomingEvent(
+    event.startDateTime,
+    event.endDateTime,
+    "passed"
+  );
+
+  if (isPassedEvent) {
+    return attendResult.EVENT_OVER; // event has passed
+  }
+
+  if (event.maxAttendees <= event.attendees.length) {
+    return attendResult.EVENT_FULL; // event is full
+  }
+
   // get the userId from email
   const user = await prisma.user.findUnique({
     where: {

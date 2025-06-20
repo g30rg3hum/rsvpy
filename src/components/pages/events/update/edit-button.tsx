@@ -44,7 +44,7 @@ export default function EditButton({
             </button>
           </form>
           <div className="mt-4">
-            <EditEventForm eventId={eventId} />
+            <EditEventForm isPassedEvent={isPassedEvent} eventId={eventId} />
           </div>
         </div>
       </dialog>

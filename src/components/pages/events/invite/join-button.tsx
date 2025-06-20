@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
 interface Props {
@@ -7,6 +8,8 @@ interface Props {
   userEmail: string | null | undefined;
 }
 export default function JoinButton({ eventId, userEmail }: Props) {
+  const router = useRouter();
+
   const handleJoin = async () => {
     if (!userEmail) {
       toast.error("Please sign in first to join the event.");
@@ -30,8 +33,16 @@ export default function JoinButton({ eventId, userEmail }: Props) {
         toast.error("You need to sign in to join the event.");
       } else if (body.result === "ALREADY_ATTENDING") {
         toast.error("You are already attending this event.");
+      } else if (body.result === "EVENT_NOT_FOUND") {
+        toast.error("This event does not exist. Please contact the organiser.");
+      } else if (body.result === "EVENT_OVER") {
+        toast.error("This event has already passed.");
+      } else if (body.result === "EVENT_FULL") {
+        toast.error("This event is already full.");
       }
     }
+
+    router.refresh();
   };
 
   return (

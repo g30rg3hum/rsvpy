@@ -58,6 +58,7 @@ export async function GET(
 type PutPayload = Omit<EventFormData, "startDateTime" | "endDateTime"> & {
   startDateTime: string;
   endDateTime: string | null;
+  isPassedEvent: boolean;
 };
 export async function PUT(
   request: NextRequest,
@@ -88,6 +89,7 @@ export async function PUT(
     currency,
     totalPrice,
     maxAttendees,
+    isPassedEvent,
   }: PutPayload = requestData;
 
   // check that have all the required fields
@@ -98,7 +100,8 @@ export async function PUT(
     !startDateTime ||
     !currency ||
     totalPrice === undefined ||
-    maxAttendees === undefined
+    maxAttendees === undefined ||
+    isPassedEvent === undefined
   ) {
     return new Response("Missing required fields in request body", {
       status: 400,
@@ -148,6 +151,18 @@ export async function PUT(
         maxAttendees: maxAttendees,
       },
     });
+
+    // if the event is passed, also update the attendees to old'
+    if (isPassedEvent) {
+      await prisma.eventAttendee.updateMany({
+        where: {
+          eventId: id,
+        },
+        data: {
+          old: true,
+        },
+      });
+    }
 
     return Response.json(updatedEvent);
   } catch (error) {

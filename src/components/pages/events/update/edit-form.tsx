@@ -12,8 +12,12 @@ import { Event } from "@/lib/db/types";
 
 interface Props {
   eventId: string;
+  isPassedEvent?: boolean;
 }
-export default function EditEventForm({ eventId }: Props) {
+export default function EditEventForm({
+  eventId,
+  isPassedEvent = false,
+}: Props) {
   const router = useRouter();
 
   const [eventDetails, setEventDetails] = useState<Event | null>(null);
@@ -86,6 +90,7 @@ export default function EditEventForm({ eventId }: Props) {
         currency,
         totalPrice,
         maxAttendees,
+        isPassedEvent,
       }),
       headers: {
         "Content-Type": "application/json",

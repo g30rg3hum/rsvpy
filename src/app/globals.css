@@ -34,6 +34,11 @@ input {
   color-scheme: dark;
 }
 
+body {
+  background-color: #0a0501;
+  background-image: url("/images/background-pattern.png");
+}
+
 /* :root {
   --background: #ffffff;
   --foreground: #171717;

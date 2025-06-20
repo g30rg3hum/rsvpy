@@ -4,6 +4,7 @@ import DeleteButton from "@/components/pages/events/update/delete-button";
 import EditButton from "@/components/pages/events/update/edit-button";
 import KickButton from "@/components/pages/events/update/kick-button";
 import Card from "@/components/reusables/card";
+import DisplayDate from "@/components/reusables/display-date";
 import DisplayStartAndEndDates from "@/components/reusables/display-dates";
 import { getSessionThenEmail } from "@/lib/auth/utils";
 import { getEventById } from "@/lib/db/event";
@@ -135,6 +136,7 @@ export default async function EventPage({ params }: Props) {
                     <th>#</th>
                     <th>Name</th>
                     <th>Email</th>
+                    <th>Joined at</th>
                     {isCreator && (
                       <>
                         <th>Paid?</th>
@@ -145,22 +147,30 @@ export default async function EventPage({ params }: Props) {
                 </thead>
                 <tbody>
                   {event.attendees.map((attendee, index) => (
-                    <tr key={attendee.id}>
+                    <tr
+                      key={attendee.id}
+                      className={clsx(attendee.old && "opacity-50")}
+                    >
                       <td>{index + 1}</td>
                       <td>
                         {attendee.user.firstName} {attendee.user.lastName}
                       </td>
-                      <td>{attendee.user.email}</td>
+                      <td>{attendee.old ? "old" : "not old"}</td>
+                      <td>
+                        <DisplayDate date={attendee.createdAt} />
+                      </td>
                       {isCreator && (
                         <>
                           <td>
                             <CheckCircleIcon className="size-5" />
                           </td>
                           <td className="text-right">
-                            <KickButton
-                              attendeeId={attendee.userId}
-                              eventId={event.id}
-                            />
+                            {!isPassedEvent && !attendee.old && (
+                              <KickButton
+                                attendeeId={attendee.userId}
+                                eventId={event.id}
+                              />
+                            )}
                           </td>
                         </>
                       )}
