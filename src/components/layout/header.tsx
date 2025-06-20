@@ -12,7 +12,7 @@ export default async function Header() {
   const email = session?.user?.email; // defined if logged in.
 
   return (
-    <div className="navbar px-6 py-4">
+    <div className="navbar sm:px-6 py-4">
       <div className="flex-1">
         <Link href="/" className="inline-block">
           <Image
@@ -44,6 +44,12 @@ export default async function Header() {
                 </li>
                 <li>
                   <a href="/payments">Payments</a>
+                </li>
+                <li>
+                  <a href="/profile">Profile</a>
+                </li>
+                <li>
+                  <SignOut type="link" />
                 </li>
               </>
             ) : (
@@ -79,10 +85,10 @@ export default async function Header() {
                   className="menu menu-md dropdown-content bg-base-200 rounded-box z-1 mt-3 w-[115px] p-2 shadow-xs"
                 >
                   <li>
-                    <a href="#">Profile</a>
+                    <a href="/profile">Profile</a>
                   </li>
                   <li>
-                    <SignOut />
+                    <SignOut type="button" />
                   </li>
                 </ul>
               </div>
