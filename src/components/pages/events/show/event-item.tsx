@@ -54,9 +54,9 @@ export default function EventItem({ event, currentUserEmail }: Props) {
           endDateTime={event.endDateTime}
         />
       </div>
-      <div className="justify-end card-actions mt-3">
+      <div className="justify-end card-actions mt-3 w-full">
         <button
-          className="btn btn-neutral"
+          className="btn btn-primary w-full sm:w-max"
           onClick={() => redirect(`/events/${event.id}`)}
         >
           Manage
