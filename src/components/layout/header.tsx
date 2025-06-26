@@ -31,7 +31,9 @@ export default function Header() {
       }
     };
 
-    fetchUserDetails();
+    if (email) {
+      fetchUserDetails();
+    }
   }, [email]);
 
   useEffect(() => {
