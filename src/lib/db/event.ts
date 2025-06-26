@@ -26,6 +26,37 @@ export async function getOrganisedEventsOfUser(userEmail: string) {
   return events;
 }
 
+export async function getAttendingEventsOfUser(userEmail: string) {
+  const user = await prisma.user.findUnique({
+    where: {
+      email: userEmail,
+    },
+  });
+
+  if (!user) {
+    return [];
+  }
+
+  const eventAttendeeRecords = await prisma.eventAttendee.findMany({
+    where: {
+      userId: user.id,
+      old: false, // only get current attendances
+    },
+    select: {
+      event: {
+        include: {
+          creator: true,
+          attendees: { include: { user: true } },
+        },
+      },
+    },
+  });
+
+  const events = eventAttendeeRecords.map((record) => record.event);
+
+  return events;
+}
+
 export async function getEventById(id: string) {
   const event = await prisma.event.findUnique({
     where: {

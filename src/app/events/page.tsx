@@ -1,17 +1,24 @@
 import PageWrapper from "@/components/layout/page-wrapper";
 import AllEvents from "@/components/pages/events/show/all-events";
 import { getSessionThenEmail } from "@/lib/auth/utils";
-import { getOrganisedEventsOfUser } from "@/lib/db/event";
+import {
+  getAttendingEventsOfUser,
+  getOrganisedEventsOfUser,
+} from "@/lib/db/event";
 
 export default async function EventsPage() {
   // this handles a redirect to login if session doesn't exist.
   const userEmail = await getSessionThenEmail("/events");
-  const events = await getOrganisedEventsOfUser(userEmail);
+  const organisedEvents = await getOrganisedEventsOfUser(userEmail);
+  const attendingEvents = await getAttendingEventsOfUser(userEmail);
 
   return (
     <PageWrapper>
       <div className="flex flex-col items-center justify-center w-full h-full px-6 pb-8">
-        <AllEvents allEvents={events} userEmail={userEmail} />
+        <AllEvents
+          allEvents={[...organisedEvents, ...attendingEvents]}
+          userEmail={userEmail}
+        />
       </div>
     </PageWrapper>
   );

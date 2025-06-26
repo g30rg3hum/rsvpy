@@ -32,8 +32,8 @@ export default function AllEvents({ userEmail, allEvents }: Props) {
       return isOrganizer && !isAttending;
     } else if (!displayOrganised && displayAttending) {
       return !isOrganizer && isAttending;
-    } else if (displayOrganised && isAttending) {
-      return isOrganizer || isAttending;
+    } else if (displayOrganised && displayAttending) {
+      return isOrganizer && isAttending;
     } else {
       return false;
     }
