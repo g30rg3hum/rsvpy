@@ -1,18 +1,62 @@
+"use client";
+
 /* eslint-disable @next/next/no-html-link-for-pages */
 /* eslint-disable @next/next/no-img-element */
-import authOptions from "@/lib/auth/authOptions";
-import { getServerSession } from "next-auth";
 import Image from "next/image";
 import Link from "next/link";
 import SignOut from "../authentication/sign-out";
 import { Bars3Icon } from "@heroicons/react/24/solid";
+import { useSession } from "next-auth/react";
+import { useEffect, useState } from "react";
+import { User } from "@prisma/client";
 
-export default async function Header() {
-  const session = await getServerSession(authOptions);
+export default function Header() {
+  const { data: session } = useSession();
   const email = session?.user?.email; // defined if logged in.
 
+  const [userDetails, setUserDetails] = useState<User | null>(null);
+  const [profilePictureUrl, setProfilePictureUrl] = useState<string | null>(
+    null
+  );
+
+  useEffect(() => {
+    const fetchUserDetails = async () => {
+      const res = await fetch(`/api/users?email=${email}`, {
+        method: "GET",
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        setUserDetails(data);
+      }
+    };
+
+    fetchUserDetails();
+  }, [email]);
+
+  useEffect(() => {
+    const fetchProfilePicture = async () => {
+      if (userDetails) {
+        // id is defined
+        const res = await fetch(`/api/s3/${userDetails.id}`, {
+          method: "GET",
+        });
+
+        if (res.ok) {
+          setProfilePictureUrl(
+            `https://rsvpy.s3.eu-north-1.amazonaws.com/profile-pictures/${userDetails.id}`
+          );
+        } else {
+          setProfilePictureUrl(null);
+        }
+      }
+    };
+
+    fetchProfilePicture();
+  });
+
   return (
-    <div className="navbar sm:px-6 py-4">
+    <div className="navbar pr-6 pl-5 py-6">
       <div className="flex-1">
         <Link href="/" className="inline-block">
           <Image
@@ -71,14 +115,14 @@ export default async function Header() {
                 <div
                   tabIndex={0}
                   role="button"
-                  className="btn btn-ghost btn-circle avatar"
+                  className="btn btn-ghost btn-circle avatar w-12"
                 >
-                  <div className="w-10 rounded-full border border-base-300">
-                    <img
-                      src="/images/portrait.png"
-                      alt="User profile picture"
-                    />
-                  </div>
+                  <div
+                    className="rounded-full border border-base-300 w-12 bg-cover bg-center"
+                    style={{
+                      backgroundImage: `url(${profilePictureUrl})`,
+                    }}
+                  />
                 </div>
                 <ul
                   tabIndex={0}

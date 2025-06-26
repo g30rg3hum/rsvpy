@@ -1,9 +1,28 @@
-import { UserDetailsFormData } from "@/components/pages/profile/user-details-form";
 import { authoriseSession } from "@/lib/auth/utils";
 import { prisma } from "@/lib/prisma/prisma";
 import { NextRequest } from "next/server";
+import { PutObjectCommand } from "@aws-sdk/client-s3";
+import { s3Client } from "@/lib/s3/utils";
 
-type PutPayload = UserDetailsFormData;
+async function uploadFileToS3(
+  fileBuffer: Buffer,
+  fileName: string,
+  fileType: string
+) {
+  const params = {
+    Bucket: process.env.AWS_BUCKET_NAME,
+    Key: `profile-pictures/${fileName}`,
+    Body: fileBuffer,
+    ContentType: fileType,
+  };
+
+  const command = new PutObjectCommand(params);
+
+  await s3Client.send(command);
+
+  return fileName;
+}
+
 export async function PUT(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -15,17 +34,19 @@ export async function PUT(
     return authResponse;
   }
 
-  // check that there is a request payload
-  let payload: PutPayload;
+  let formData;
+  // check that there is form data payload
   try {
-    payload = await request.json();
+    formData = await request.formData();
   } catch (error) {
-    console.error("Error parsing request body:", error);
-    return new Response("Invalid request body", { status: 400 });
+    console.error("Error parsing form data:", error);
+    return new Response("Invalid form data", { status: 400 });
   }
 
-  // extract data from the payload.
-  const { firstName, lastName }: PutPayload = payload;
+  // extract form data
+  const firstName = formData.get("firstName");
+  const lastName = formData.get("lastName");
+  const profilePicture = formData.get("profilePicture");
 
   if (!firstName || !lastName) {
     return new Response("Missing required fields in request body", {
@@ -33,7 +54,7 @@ export async function PUT(
     });
   }
 
-  // get the id of the user.
+  // get id of the user
   const { id } = await params;
 
   // only the user can update their own details
@@ -64,18 +85,43 @@ export async function PUT(
     );
   }
 
-  // now we can update the user's details
+  // profile picture must be overwritten; must name the file with the id. IF not null.
+  // now can update details, already know exists + authorised.
+
   try {
+    // upload the pfp if it exists
+    if (profilePicture && profilePicture instanceof File) {
+      // check that the file is a valid image.
+      if (!profilePicture.type.startsWith("image/")) {
+        return new Response("Profile picture must be an image", {
+          status: 400,
+        });
+      }
+
+      // check that the file is not too large (at most 1MB)
+      if (profilePicture.size > 1024 * 1024) {
+        return new Response("Profile picture must be at most 1MB", {
+          status: 400,
+        });
+      }
+
+      const buffer = Buffer.from(await profilePicture.arrayBuffer());
+      await uploadFileToS3(buffer, `${id}`, profilePicture.type);
+    }
+
+    // update the user
     const updatedUser = await prisma.user.update({
-      where: { id: id },
+      where: { id },
       data: {
-        firstName: firstName,
-        lastName: lastName,
+        firstName: firstName.toString(),
+        lastName: lastName.toString(),
       },
       select: {
         id: true,
       },
     });
+
+    // no need to store profile picture url, can be retrieved using the user's id.
 
     return Response.json(updatedUser.id);
   } catch (error) {

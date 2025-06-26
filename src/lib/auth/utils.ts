@@ -28,3 +28,27 @@ export async function getSessionThenEmail(pathname?: string) {
 
   return userEmail;
 }
+
+// export const convertFileToByteArray = (file: File): Promise<number[]> => {
+//   return new Promise((resolve, reject) => {
+//     const fileReader = new FileReader();
+//     const fileByteArray = [];
+
+//     fileReader.onloadend = (event) => {
+//       if (event.target?.readyState === FileReader.DONE) {
+//         const arrayBuffer = event.target.result as ArrayBuffer;
+//         const array = new Uint8Array(arrayBuffer);
+//         for (let i = 0; i < array.length; i++) {
+//           fileByteArray.push(array[i]);
+//         }
+//         // resolve(fileByteArray);
+//       }
+//     };
+
+//     fileReader.onerror = () => {
+//       reject(new Error("Failed to read file"));
+//     };
+
+//     fileReader.readAsArrayBuffer(file);
+//   });
+// };

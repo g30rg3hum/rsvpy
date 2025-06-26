@@ -142,7 +142,7 @@ export default function AllEvents({ userEmail, allEvents }: Props) {
           </p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-7xl">
           {displayedEvents.map((event) => (
             <EventItem
               key={event.id}

@@ -12,19 +12,34 @@ import * as yup from "yup";
 export type UserDetailsFormData = {
   firstName: string;
   lastName: string;
+  profilePicture?: FileList;
 };
 const schema = yup.object({
   firstName: yup.string().required("First name is required"),
   lastName: yup.string().required("Last name is required"),
+  profilePicture: yup
+    .mixed<FileList>()
+    .test("fileSize", "The file is too large (max size is 1MB)", (fileList) => {
+      if (!fileList) return true;
+
+      // check that the file size is at most 1MB
+      if (fileList && fileList.length > 0) {
+        return fileList[0].size <= 1024 * 1024;
+      }
+    }),
 });
 
-/* eslint-disable @next/next/no-img-element */
 interface Props {
   userEmail: string;
 }
 export default function UserDetailsForm({ userEmail }: Props) {
   const [userDetails, setUserDetails] = useState<User | null>(null);
+  const [profilePictureUrl, setProfilePictureUrl] = useState<string | null>(
+    null
+  );
+  const [pfpVersion, setPfpVersion] = useState(0); // to force re-render when pfp changes];
 
+  // getting the user details (id, first/lastName, email) from db)
   useEffect(() => {
     const fetchUserDetails = async () => {
       const res = await fetch(`/api/users?email=${userEmail}`, {
@@ -41,6 +56,27 @@ export default function UserDetailsForm({ userEmail }: Props) {
 
     fetchUserDetails();
   }, [userEmail]);
+
+  useEffect(() => {
+    const fetchProfilePicture = async () => {
+      if (userDetails) {
+        // id is defined
+        const res = await fetch(`/api/s3/${userDetails.id}`, {
+          method: "GET",
+        });
+
+        if (res.ok) {
+          setProfilePictureUrl(
+            `https://rsvpy.s3.eu-north-1.amazonaws.com/profile-pictures/${userDetails.id}`
+          );
+        } else {
+          setProfilePictureUrl(null);
+        }
+      }
+    };
+
+    fetchProfilePicture();
+  }, [userDetails]);
 
   const {
     register,
@@ -61,7 +97,9 @@ export default function UserDetailsForm({ userEmail }: Props) {
   const onSubmit = handleSubmit(async (data: UserDetailsFormData) => {
     const toastId = toast.loading("Updating your details...");
 
-    const { firstName, lastName } = data;
+    const { firstName, lastName, profilePicture } = data;
+
+    const profilePictureFile = profilePicture ? profilePicture[0] : null;
 
     // if userDetails is null, don't do anything
     if (!userDetails) {
@@ -71,15 +109,17 @@ export default function UserDetailsForm({ userEmail }: Props) {
       return;
     }
 
+    // create form data to send to the endpoint
+    const formData = new FormData();
+    formData.append("firstName", firstName);
+    formData.append("lastName", lastName);
+    if (profilePictureFile) {
+      formData.append("profilePicture", profilePictureFile);
+    }
+
     const res = await fetch(`/api/users/${userDetails.id}`, {
       method: "PUT",
-      body: JSON.stringify({
-        firstName,
-        lastName,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
+      body: formData,
     });
 
     toast.dismiss(toastId);
@@ -90,7 +130,12 @@ export default function UserDetailsForm({ userEmail }: Props) {
       reset({
         firstName,
         lastName,
+        profilePicture,
       });
+
+      if (profilePictureFile) {
+        setPfpVersion((prev) => prev + 1);
+      }
     } else {
       toast.error("Error encountered when trying to update your details.");
     }
@@ -109,17 +154,22 @@ export default function UserDetailsForm({ userEmail }: Props) {
             {userEmail}
           </p>
         </div>
-        <img
-          className="avatar rounded-full w-14 h-14 sm:w-18 sm:h-18 border border-base-100"
-          src="/images/portrait.png"
-          alt="Avatar"
+        <div
+          className="avatar rounded-full w-14 h-14 sm:w-18 sm:h-18 border border-base-100 bg-cover bg-center"
+          style={{
+            backgroundImage: `url(${
+              profilePictureUrl
+                ? `${profilePictureUrl}?=v${pfpVersion}`
+                : "/images/sample-pfp.png"
+            })`,
+          }}
         />
       </div>
 
       <form className="flex flex-col gap-2">
         <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
           <fieldset className="fieldset w-full sm:w-1/2">
-            <legend className="fieldset-legend">First name</legend>
+            <legend className="fieldset-legend">First name *</legend>
             <input
               {...register("firstName")}
               className="w-full input"
@@ -130,7 +180,7 @@ export default function UserDetailsForm({ userEmail }: Props) {
             )}
           </fieldset>
           <fieldset className="fieldset w-full sm:w-1/2">
-            <legend className="fieldset-legend">Last name</legend>
+            <legend className="fieldset-legend">Last name *</legend>
             <input
               {...register("lastName")}
               className="w-full input"
@@ -145,13 +195,14 @@ export default function UserDetailsForm({ userEmail }: Props) {
         <fieldset className="fieldset">
           <legend className="fieldset-legend">Profile picture</legend>
           <input
-            // {...register("bio")}
+            {...register("profilePicture")}
             className="w-full file-input"
             type="file"
+            accept="image/png, image/jpeg, image/jpg"
           />
-          {/* {errors.bio?.message && (
-                  <ErrorMessage text={errors.bio.message} />
-                )} */}
+          {errors.profilePicture?.message && (
+            <ErrorMessage text={errors.profilePicture.message} />
+          )}
         </fieldset>
 
         <div className="flex justify-end w-full mt-4 sm:mt-2">
