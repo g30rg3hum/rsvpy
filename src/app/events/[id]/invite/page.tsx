@@ -75,8 +75,23 @@ export default async function EventInvitePage({ params }: Props) {
             {event.attendees
               .filter((attendee) => !attendee.old)
               .map((attendee) => (
-                <li key={attendee.user.id} className="text-center">
-                  {attendee.user.firstName} {attendee.user.lastName}
+                <li
+                  key={attendee.user.id}
+                  className="text-center flex gap-3 flex justify-center"
+                >
+                  <div
+                    className="rounded-full w-6 h-6 bg-center bg-cover"
+                    style={{
+                      backgroundImage: `url(${
+                        attendee.user.uploadedPfp
+                          ? `https://rsvpy.s3.eu-north-1.amazonaws.com/profile-pictures/${attendee.user.id}`
+                          : `/images/sample-pfp.jpg`
+                      })`,
+                    }}
+                  />
+                  <span>
+                    {attendee.user.firstName} {attendee.user.lastName}
+                  </span>
                 </li>
               ))}
           </ul>

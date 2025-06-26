@@ -1,17 +1,14 @@
 import PageWrapper from "@/components/layout/page-wrapper";
-import InviteButton from "@/components/pages/events/invite/invite-button";
+import ManageAttendeesList from "@/components/pages/events/attendees/manage-attendees-list";
 import DeleteButton from "@/components/pages/events/update/delete-button";
 import EditButton from "@/components/pages/events/update/edit-button";
-import KickButton from "@/components/pages/events/update/kick-button";
 import Card from "@/components/reusables/card";
-import DisplayDate from "@/components/reusables/display-date";
 import DisplayStartAndEndDates from "@/components/reusables/display-dates";
 import { getSessionThenEmail } from "@/lib/auth/utils";
 import { getEventById } from "@/lib/db/event";
 import { checkIsPassedOrUpcomingEvent } from "@/lib/helpers/utils";
 import {
   BanknotesIcon,
-  CheckCircleIcon,
   HashtagIcon,
   InformationCircleIcon,
   UserGroupIcon,
@@ -133,65 +130,12 @@ export default async function EventPage({ params }: Props) {
                 `(${event.attendees.length} / ${event.maxAttendees})`}
             </h2>
             {/* person's name, email, payment status, kick */}
-            <div className="overflow-x-auto">
-              <table className="table relative">
-                <thead>
-                  <tr>
-                    <th>#</th>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Joined at</th>
-                    {isCreator && (
-                      <>
-                        <th>Paid?</th>
-                        <th></th>
-                      </>
-                    )}
-                  </tr>
-                </thead>
-                <tbody>
-                  {event.attendees
-                    .sort(
-                      (a, b) => b.createdAt.getTime() - a.createdAt.getTime()
-                    )
-                    .map((attendee, index) => (
-                      <tr
-                        key={attendee.id}
-                        className={clsx(attendee.old && "opacity-50")}
-                      >
-                        <td>{attendee.old ? "-" : index + 1}</td>
-                        <td>
-                          {attendee.user.firstName} {attendee.user.lastName}
-                        </td>
-                        <td>{attendee.user.email}</td>
-                        <td>
-                          <DisplayDate date={attendee.createdAt} />
-                        </td>
-                        {isCreator && (
-                          <>
-                            <td>
-                              <CheckCircleIcon className="size-5" />
-                            </td>
-                            <td className="text-right">
-                              {!isPassedEvent && !attendee.old && (
-                                <KickButton
-                                  attendeeId={attendee.userId}
-                                  eventId={event.id}
-                                />
-                              )}
-                            </td>
-                          </>
-                        )}
-                      </tr>
-                    ))}
-                </tbody>
-              </table>
-              {isCreator && (
-                <div className="right-4 top-4 absolute">
-                  <InviteButton baseUrl={baseUrl} eventId={event.id} />
-                </div>
-              )}
-            </div>
+            <ManageAttendeesList
+              isCreator={isCreator}
+              event={event}
+              isPassedEvent={isPassedEvent}
+              baseUrl={baseUrl}
+            />
           </Card>
           {isCreator && (
             <Card>

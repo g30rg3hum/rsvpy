@@ -41,6 +41,7 @@ model User {
   firstName        String
   lastName         String
   emailVerified    DateTime?
+  uploadedPfp     Boolean         @default(false)
   accounts         Account[]
   ownedEvents      Event[]         @relation("EventCreator")
   eventAttendees   EventAttendee[] @relation("EventAttendee")

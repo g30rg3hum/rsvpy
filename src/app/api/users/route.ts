@@ -37,6 +37,7 @@ export async function GET(request: NextRequest) {
         email: true,
         firstName: true,
         lastName: true,
+        uploadedPfp: true,
       },
     });
 

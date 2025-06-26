@@ -109,13 +109,23 @@ export async function PUT(
       await uploadFileToS3(buffer, `${id}`, profilePicture.type);
     }
 
+    const updateData: {
+      firstName: string;
+      lastName: string;
+      uploadedPfp?: boolean;
+    } = {
+      firstName: firstName.toString(),
+      lastName: lastName.toString(),
+    };
+
+    if (profilePicture) {
+      updateData.uploadedPfp = true;
+    }
+
     // update the user
     const updatedUser = await prisma.user.update({
       where: { id },
-      data: {
-        firstName: firstName.toString(),
-        lastName: lastName.toString(),
-      },
+      data: updateData,
       select: {
         id: true,
       },

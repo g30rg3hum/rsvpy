@@ -19,12 +19,15 @@ export interface User {
   email: string;
   firstName: string;
   lastName: string;
+  uploadedPfp: boolean;
 }
 
 export interface EventAttendee {
   id: string;
   userId: string;
   eventId: string;
+  createdAt: Date;
+  old: boolean;
   user?: User;
   event?: Event;
 }

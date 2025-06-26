@@ -59,7 +59,7 @@ export default function UserDetailsForm({ userEmail }: Props) {
 
   useEffect(() => {
     const fetchProfilePicture = async () => {
-      if (userDetails) {
+      if (userDetails && userDetails.uploadedPfp) {
         // id is defined
         const res = await fetch(`/api/s3/${userDetails.id}`, {
           method: "GET",
@@ -72,6 +72,8 @@ export default function UserDetailsForm({ userEmail }: Props) {
         } else {
           setProfilePictureUrl(null);
         }
+      } else {
+        setProfilePictureUrl(null);
       }
     };
 
@@ -160,7 +162,7 @@ export default function UserDetailsForm({ userEmail }: Props) {
             backgroundImage: `url(${
               profilePictureUrl
                 ? `${profilePictureUrl}?=v${pfpVersion}`
-                : "/images/sample-pfp.png"
+                : "/images/sample-pfp.jpg"
             })`,
           }}
         />

@@ -38,7 +38,7 @@ export default function Header() {
 
   useEffect(() => {
     const fetchProfilePicture = async () => {
-      if (userDetails) {
+      if (userDetails && userDetails.uploadedPfp) {
         // id is defined
         const res = await fetch(`/api/s3/${userDetails.id}`, {
           method: "GET",
@@ -51,11 +51,13 @@ export default function Header() {
         } else {
           setProfilePictureUrl(null);
         }
+      } else {
+        setProfilePictureUrl(null);
       }
     };
 
     fetchProfilePicture();
-  });
+  }, [userDetails]);
 
   return (
     <div className="navbar pr-6 pl-5 py-6">
@@ -122,7 +124,11 @@ export default function Header() {
                   <div
                     className="rounded-full border border-base-300 w-12 bg-cover bg-center"
                     style={{
-                      backgroundImage: `url(${profilePictureUrl})`,
+                      backgroundImage: `url(${
+                        profilePictureUrl
+                          ? `${profilePictureUrl}`
+                          : "/images/sample-pfp.jpg"
+                      })`,
                     }}
                   />
                 </div>
