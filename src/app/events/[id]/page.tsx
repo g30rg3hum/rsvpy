@@ -127,12 +127,15 @@ export default async function EventPage({ params }: Props) {
             <h2 className="card-title font-bold">
               <UserGroupIcon className="size-7" /> Attendees{" "}
               {isJustAttendee &&
-                `(${event.attendees.length} / ${event.maxAttendees})`}
+                `(${
+                  event.attendees.filter((attendee) => !attendee.old).length
+                } / ${event.maxAttendees})`}
             </h2>
             {/* person's name, email, payment status, kick */}
             <ManageAttendeesList
               isCreator={isCreator}
               event={event}
+              isJustAttendee={isJustAttendee}
               isPassedEvent={isPassedEvent}
               baseUrl={baseUrl}
             />

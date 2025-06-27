@@ -14,24 +14,33 @@ import InviteButton from "../invite/invite-button";
 
 interface Props {
   isCreator: boolean;
+  isJustAttendee: boolean;
   event: Event;
   isPassedEvent: boolean;
   baseUrl: string;
 }
 export default function ManageAttendeesList({
   isCreator,
+  isJustAttendee,
   event,
   isPassedEvent,
   baseUrl,
 }: Props) {
+  const attendeesToDisplay = isJustAttendee
+    ? event.attendees!.filter((attendee) => !attendee.old)
+    : event.attendees!;
+
   // add pagination to the list
   const [page, setPage] = useState(1);
   const itemsPerPage = 5;
-  const totalPages = Math.ceil(event.attendees!.length / itemsPerPage);
+  const totalPages = Math.max(
+    Math.ceil(attendeesToDisplay.length / itemsPerPage),
+    1
+  );
   const startIndex = (page - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
 
-  const sortedAttendees = event.attendees!.sort(
+  const sortedAttendees = attendeesToDisplay.sort(
     (a, b) => b.createdAt.getTime() - a.createdAt.getTime()
   );
   const paginatedAttendees = sortedAttendees.slice(startIndex, endIndex);

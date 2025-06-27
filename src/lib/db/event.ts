@@ -26,7 +26,7 @@ export async function getOrganisedEventsOfUser(userEmail: string) {
   return events;
 }
 
-export async function getAttendingEventsOfUser(userEmail: string) {
+export async function getPurelyAttendingEventsOfUser(userEmail: string) {
   const user = await prisma.user.findUnique({
     where: {
       email: userEmail,
@@ -54,7 +54,12 @@ export async function getAttendingEventsOfUser(userEmail: string) {
 
   const events = eventAttendeeRecords.map((record) => record.event);
 
-  return events;
+  // filter out events that they are creator of
+  const filteredEvents = events.filter((event) => event.creatorId !== user.id);
+
+  console.log("attending events", events);
+
+  return filteredEvents;
 }
 
 export async function getEventById(id: string) {
