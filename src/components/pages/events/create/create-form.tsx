@@ -107,7 +107,8 @@ export default function CreateEventForm({ userEmail }: Props) {
     setStep((prev) => prev - 1);
   };
 
-  const onSubmit = handleSubmit(async (data: CreateEventFormData) => {
+  const onSubmit = handleSubmit(async (data: CreateEventFormData, e) => {
+    e?.preventDefault();
     const toastId = toast.loading("Creating your event...");
 
     const {

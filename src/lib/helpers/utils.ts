@@ -18,6 +18,8 @@ export const currencies: Currency[] = [
   { code: "EUR", symbol: "€", name: "Euro" },
 ];
 
+export const paymentOptions = ["TRANSFERRED", "CASH"];
+
 export function formatDateTime(date: Date): string {
   return formatInTimeZone(date, "UTC", "dd/MM/yyyy (HH:mm)");
 }

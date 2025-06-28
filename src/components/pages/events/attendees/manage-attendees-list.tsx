@@ -52,7 +52,7 @@ export default function ManageAttendeesList({
           <thead>
             <tr>
               <th>#</th>
-              <th className="text-center">Picture?</th>
+              <th className="text-center">Picture</th>
               <th>Icon</th>
               <th>Email</th>
               <th>Joined at</th>

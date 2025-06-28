@@ -90,9 +90,9 @@ export default function Header() {
                 <li>
                   <a href="/events">Events</a>
                 </li>
-                <li>
+                {/* <li>
                   <a href="/payments">Payments</a>
-                </li>
+                </li> */}
                 <li>
                   <a href="/profile">Profile</a>
                 </li>
@@ -113,7 +113,8 @@ export default function Header() {
           {email ? (
             <>
               <MenuLink href="/events" text="Events" />
-              <MenuLink href="/payments" text="Payments" />
+              {/* <MenuLink href="/payments" text="Payments" /> */}
+              {/* <MenuLink href="/wallets" text="Wallets" /> */}
 
               <div className="dropdown dropdown-end font-semibold">
                 <div

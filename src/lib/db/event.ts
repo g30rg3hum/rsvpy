@@ -57,8 +57,6 @@ export async function getPurelyAttendingEventsOfUser(userEmail: string) {
   // filter out events that they are creator of
   const filteredEvents = events.filter((event) => event.creatorId !== user.id);
 
-  console.log("attending events", events);
-
   return filteredEvents;
 }
 
@@ -150,4 +148,30 @@ export async function attendEvent(eventId: string, userEmail: string) {
   });
 
   return attendResult.SUCCESS;
+}
+
+export async function getEventAttendeeRecordOfUser(
+  eventId: string,
+  userEmail: string
+) {
+  const user = await prisma.user.findUnique({
+    where: {
+      email: userEmail,
+    },
+  });
+
+  if (!user) {
+    return null; // user does not exist
+  }
+
+  const eventAttendeeRecord = await prisma.eventAttendee.findFirst({
+    where: {
+      eventId: eventId,
+      userId: user.id,
+      old: false, // only get current attendance
+    },
+  });
+
+  // might be null.
+  return eventAttendeeRecord;
 }

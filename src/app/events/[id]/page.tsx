@@ -1,14 +1,19 @@
 import PageWrapper from "@/components/layout/page-wrapper";
 import ManageAttendeesList from "@/components/pages/events/attendees/manage-attendees-list";
+import PaymentForm from "@/components/pages/events/show/payment-form";
 import DeleteButton from "@/components/pages/events/update/delete-button";
 import EditButton from "@/components/pages/events/update/edit-button";
 import Card from "@/components/reusables/card";
 import DisplayStartAndEndDates from "@/components/reusables/display-dates";
 import { getSessionThenEmail } from "@/lib/auth/utils";
-import { getEventById } from "@/lib/db/event";
-import { checkIsPassedOrUpcomingEvent } from "@/lib/helpers/utils";
+import { getEventAttendeeRecordOfUser, getEventById } from "@/lib/db/event";
+import {
+  checkIsPassedOrUpcomingEvent,
+  roundToTwoDp,
+} from "@/lib/helpers/utils";
 import {
   BanknotesIcon,
+  // BanknotesIcon,
   HashtagIcon,
   InformationCircleIcon,
   UserGroupIcon,
@@ -52,6 +57,20 @@ export default async function EventPage({ params }: Props) {
     "passed"
   );
 
+  const numberOfAttendees = event.attendees.filter(
+    (attendee) => !attendee.old
+  ).length;
+
+  let paid, attendeeId;
+  if (isJustAttendee) {
+    const attendeeRecord = await getEventAttendeeRecordOfUser(
+      event.id,
+      userEmail
+    );
+    paid = !(attendeeRecord?.payment === "PENDING");
+    attendeeId = attendeeRecord?.userId;
+  }
+
   return (
     <PageWrapper centerHorizontally>
       <div className="flex flex-col w-full items-center px-8 pb-8">
@@ -61,8 +80,7 @@ export default async function EventPage({ params }: Props) {
           </div>
           <div
             className={clsx(
-              `grid grid-cols-1 w-full`,
-              isCreator && "md:grid-cols-2 gap-8 md:gap-4"
+              `grid grid-cols-1 w-full md:grid-cols-2 gap-8 md:gap-4`
             )}
           >
             <Card cardClassName="relative">
@@ -86,6 +104,10 @@ export default async function EventPage({ params }: Props) {
                 <b>Price: </b> {event.currency} {event.totalPrice}
               </p>
               <p>
+                <b>Expected price per person:</b> {event.currency}{" "}
+                {roundToTwoDp(event.totalPrice / event.maxAttendees)}
+              </p>
+              <p>
                 <b>Maximum # of attendees: </b> {event.maxAttendees}
               </p>
               {isCreator && (
@@ -106,20 +128,42 @@ export default async function EventPage({ params }: Props) {
                       <HashtagIcon className="size-5" /> Attendee count
                     </h2>
                     <p className="font-black text-2xl">
-                      {
-                        event.attendees.filter((attendee) => !attendee.old)
-                          .length
-                      }{" "}
-                      / {event.maxAttendees}
+                      {numberOfAttendees} / {event.maxAttendees}
                     </p>
                   </Card>
                   <Card bodyClassName="flex flex-col items-center items-center">
                     <h2 className="card-title font-bold">
                       <HashtagIcon className="size-5" /> Payment count
                     </h2>
-                    <p className="font-black text-2xl">- / -</p>
+                    <p className="font-black text-2xl">
+                      - / {numberOfAttendees}{" "}
+                    </p>
                   </Card>
                 </>
+              )}
+              {isJustAttendee && (
+                <Card>
+                  <h2 className="card-title font-bold">
+                    <BanknotesIcon className="size-7" />
+                    <span className="mr-2">Payment status</span>
+                    {paid ? (
+                      <div className="badge badge-success">Paid</div>
+                    ) : (
+                      <div className="badge badge-error">Unpaid</div>
+                    )}
+                  </h2>
+                  <PaymentForm
+                    paid={paid!}
+                    eventId={event.id}
+                    attendeeId={attendeeId!}
+                  />
+                  <p className="font-bold mt-2">Overall payment progress</p>
+                  <progress
+                    className="progress progress-success w-full"
+                    value={100}
+                    max="100"
+                  ></progress>
+                </Card>
               )}
             </div>
           </div>
@@ -140,13 +184,13 @@ export default async function EventPage({ params }: Props) {
               baseUrl={baseUrl}
             />
           </Card>
-          {isCreator && (
+          {/* {isCreator && (
             <Card>
               <h2 className="card-title font-bold">
                 <BanknotesIcon className="size-7" /> Payments
               </h2>
             </Card>
-          )}
+          )} */}
         </div>
       </div>
     </PageWrapper>

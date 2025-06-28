@@ -41,13 +41,24 @@ model User {
   firstName        String
   lastName         String
   emailVerified    DateTime?
-  uploadedPfp     Boolean         @default(false)
+  uploadedPfp      Boolean         @default(false)
   accounts         Account[]
   ownedEvents      Event[]         @relation("EventCreator")
   eventAttendees   EventAttendee[] @relation("EventAttendee")
-  paymentsMade     Payment[]       @relation("Payer")
-  paymentsReceived Payment[]       @relation("Receiver")
+  // paymentsMade     Payment[]       @relation("Payer")
+  // paymentsReceived Payment[]       @relation("Receiver")
   sessions         Session[]
+  wallets          Wallet?         @relation("WalletOwner")
+}
+
+model Wallet {
+  id        String   @id @default(uuid())
+  userId    String   @unique
+  balance   Float    @default(0)
+  currency  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation("WalletOwner", fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model VerificationToken {
@@ -73,7 +84,7 @@ model Event {
   startDateTime DateTime
   creator       User            @relation("EventCreator", fields: [creatorId], references: [id])
   attendees     EventAttendee[]
-  payments      Payment[]
+  // payments      Payment[]
 }
 
 model EventAttendee {
@@ -81,33 +92,39 @@ model EventAttendee {
   userId        String
   eventId       String
   rsvpStatus    RSVPStatus    @default(TENTATIVE)
-  paymentStatus PaymentStatus @default(PENDING)
+  // paymentStatus PaymentStatus @default(PENDING)
+  payment       PaymentTransferStatus @default(PENDING)
   createdAt     DateTime      @default(now())
   old           Boolean       @default(false)
   event         Event         @relation(fields: [eventId], references: [id], onDelete: Cascade)
   user          User          @relation("EventAttendee", fields: [userId], references: [id])
 }
 
-model Payment {
-  id                    String        @id @default(uuid())
-  payerId               String
-  receiverId            String
-  eventId               String
-  amount                Float
-  currency              String
-  status                PaymentStatus @default(PENDING)
-  stripePaymentIntentId String
-  paidAt                DateTime?
-  createdAt             DateTime      @default(now())
-  event                 Event         @relation(fields: [eventId], references: [id], onDelete: Cascade)
-  payer                 User          @relation("Payer", fields: [payerId], references: [id])
-  receiver              User          @relation("Receiver", fields: [receiverId], references: [id])
-}
+// model Payment {
+//   id                    String        @id @default(uuid())
+//   payerId               String
+//   receiverId            String
+//   eventId               String
+//   amount                Float
+//   currency              String
+//   status                PaymentStatus @default(PENDING)
+//   stripePaymentIntentId String
+//   paidAt                DateTime?
+//   createdAt             DateTime      @default(now())
+//   event                 Event         @relation(fields: [eventId], references: [id], onDelete: Cascade)
+//   payer                 User          @relation("Payer", fields: [payerId], references: [id])
+//   receiver              User          @relation("Receiver", fields: [receiverId], references: [id])
+// }
 
-enum PaymentStatus {
+// enum PaymentStatus {
+//   PENDING
+//   COMPLETED
+// }
+
+enum PaymentTransferStatus {
+  TRANSFERRED
+  CASH
   PENDING
-  COMPLETED
-  FAILED
 }
 
 enum RSVPStatus {

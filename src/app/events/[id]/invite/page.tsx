@@ -6,6 +6,7 @@ import { EnvelopeIcon, UserGroupIcon } from "@heroicons/react/24/solid";
 import { getServerSession } from "next-auth";
 import { formatInTimeZone } from "date-fns-tz";
 import JoinButton from "@/components/pages/events/invite/join-button";
+import { roundToTwoDp } from "@/lib/helpers/utils";
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -56,6 +57,10 @@ export default async function EventInvitePage({ params }: Props) {
           <p>
             <b>Total price (to be divided):</b> {event.currency}{" "}
             {event.totalPrice}
+          </p>
+          <p>
+            <b>Expected price per person:</b> {event.currency}{" "}
+            {roundToTwoDp(event.totalPrice / event.maxAttendees)}
           </p>
           <p>
             <b>Attendee count:</b>{" "}
