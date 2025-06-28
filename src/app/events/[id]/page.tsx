@@ -3,6 +3,7 @@ import ManageAttendeesList from "@/components/pages/events/attendees/manage-atte
 import PaymentForm from "@/components/pages/events/show/payment-form";
 import DeleteButton from "@/components/pages/events/update/delete-button";
 import EditButton from "@/components/pages/events/update/edit-button";
+import LeaveButton from "@/components/pages/events/update/leave-button";
 import Card from "@/components/reusables/card";
 import DisplayStartAndEndDates from "@/components/reusables/display-dates";
 import { getSessionThenEmail } from "@/lib/auth/utils";
@@ -43,7 +44,7 @@ export default async function EventPage({ params }: Props) {
   // check if user is the creator or attendee of event
   const isCreator = event.creator.email === userEmail;
   const isAttendee = event.attendees.some(
-    (attendee) => attendee.user.email === userEmail
+    (attendee) => attendee.user.email === userEmail && !attendee.old
   );
   const isJustAttendee = isAttendee && !isCreator;
 
@@ -69,6 +70,23 @@ export default async function EventPage({ params }: Props) {
     );
     paid = !(attendeeRecord?.payment === "PENDING");
     attendeeId = attendeeRecord?.userId;
+  }
+
+  let totalNoPaid = event.attendees.reduce((acc, attendee) => {
+    if (attendee.payment !== "PENDING" && !attendee.old) {
+      return acc + 1;
+    } else {
+      return acc;
+    }
+  }, 0);
+
+  // if the creator is attending, automatically count as paid
+  if (
+    event.attendees.some(
+      (attendee) => attendee.user.email === event.creator.email && !attendee.old
+    )
+  ) {
+    totalNoPaid += 1;
   }
 
   return (
@@ -119,6 +137,11 @@ export default async function EventPage({ params }: Props) {
                   />
                 </div>
               )}
+              {isJustAttendee && (
+                <div className="absolute top-3 right-3 flex gap-2">
+                  <LeaveButton eventId={event.id} attendeeId={attendeeId!} />
+                </div>
+              )}
             </Card>
             <div className="grid gap-8 md:gap-4 grid-cols-1">
               {isCreator && (
@@ -136,7 +159,7 @@ export default async function EventPage({ params }: Props) {
                       <HashtagIcon className="size-5" /> Payment count
                     </h2>
                     <p className="font-black text-2xl">
-                      - / {numberOfAttendees}{" "}
+                      {totalNoPaid} / {numberOfAttendees}{" "}
                     </p>
                   </Card>
                 </>
@@ -160,7 +183,7 @@ export default async function EventPage({ params }: Props) {
                   <p className="font-bold mt-2">Overall payment progress</p>
                   <progress
                     className="progress progress-success w-full"
-                    value={100}
+                    value={(totalNoPaid / numberOfAttendees) * 100}
                     max="100"
                   ></progress>
                 </Card>

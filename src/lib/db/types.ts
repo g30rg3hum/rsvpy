@@ -28,6 +28,7 @@ export interface EventAttendee {
   eventId: string;
   createdAt: Date;
   old: boolean;
+  payment: string;
   user?: User;
   event?: Event;
 }

@@ -6,6 +6,7 @@ import {
   ArrowLeftIcon,
   ArrowRightIcon,
   CheckCircleIcon,
+  XCircleIcon,
 } from "@heroicons/react/24/solid";
 import clsx from "clsx";
 import KickButton from "../update/kick-button";
@@ -26,9 +27,19 @@ export default function ManageAttendeesList({
   isPassedEvent,
   baseUrl,
 }: Props) {
+  const [emailFilter, setEmailFilter] = useState("");
+
   const attendeesToDisplay = isJustAttendee
-    ? event.attendees!.filter((attendee) => !attendee.old)
-    : event.attendees!;
+    ? event.attendees!.filter(
+        (attendee) =>
+          !attendee.old &&
+          (emailFilter !== ""
+            ? attendee.user!.email.includes(emailFilter)
+            : true)
+      )
+    : event.attendees!.filter((attendee) =>
+        emailFilter !== "" ? attendee.user!.email.includes(emailFilter) : true
+      );
 
   // add pagination to the list
   const [page, setPage] = useState(1);
@@ -47,6 +58,34 @@ export default function ManageAttendeesList({
 
   return (
     <>
+      <div>
+        <fieldset className="fieldset">
+          <legend className="fieldset-legend">Filter by email address</legend>
+          <label className="input w-full max-w-xs">
+            <svg
+              className="h-[1em] opacity-50"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+            >
+              <g
+                strokeLinejoin="round"
+                strokeLinecap="round"
+                strokeWidth="2.5"
+                fill="none"
+                stroke="currentColor"
+              >
+                <rect width="20" height="16" x="2" y="4" rx="2"></rect>
+                <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+              </g>
+            </svg>
+            <input
+              className="w-full"
+              placeholder="email@mail.com"
+              onChange={(e) => setEmailFilter(e.target.value)}
+            />
+          </label>
+        </fieldset>
+      </div>
       <div className="overflow-x-auto">
         <table className="table relative">
           <thead>
@@ -58,7 +97,7 @@ export default function ManageAttendeesList({
               <th>Joined at</th>
               {isCreator && (
                 <>
-                  <th>Paid?</th>
+                  <th>Payment</th>
                   <th></th>
                 </>
               )}
@@ -95,7 +134,16 @@ export default function ManageAttendeesList({
                   {isCreator && (
                     <>
                       <td>
-                        <CheckCircleIcon className="size-5" />
+                        {attendee.payment !== "PENDING" ||
+                        attendee.user!.email === event.creator!.email ? (
+                          <CheckCircleIcon className="size-5 inline-block" />
+                        ) : (
+                          <XCircleIcon className="size-5 inline-block" />
+                        )}{" "}
+                        {attendee.user!.email === event.creator!.email
+                          ? "Paid"
+                          : attendee.payment.charAt(0).toUpperCase() +
+                            attendee.payment.slice(1).toLowerCase()}
                       </td>
                       <td className="text-right">
                         {!isPassedEvent && !attendee.old && (

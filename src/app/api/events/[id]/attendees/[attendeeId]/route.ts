@@ -217,15 +217,18 @@ export async function DELETE(
     try {
       const event = await prisma.event.findUnique({
         where: { id: id },
-        include: { creator: true },
+        include: { creator: true, attendees: { include: { user: true } } },
       });
 
       if (!event) {
         return new Response("Event not found", { status: 404 });
       }
 
-      // check if user is the event creator
-      if (event.creator.email !== email) {
+      // check if user is the event creator OR attendee
+      if (
+        event.creator.email !== email &&
+        !event.attendees.some((attendee) => attendee.user.email === email)
+      ) {
         return new Response("Unauthorized to delete attendee", { status: 403 });
       }
     } catch (error) {
@@ -248,6 +251,7 @@ export async function DELETE(
       where: {
         userId: attendeeId,
         eventId: id,
+        old: false,
       },
     });
 

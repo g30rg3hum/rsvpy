@@ -24,8 +24,9 @@ export default function AllEvents({ userEmail, allEvents }: Props) {
 
   const viewableEvents = allEvents.filter((event) => {
     const isOrganizer = event.creator!.email === userEmail;
+    // include only where upcoming
     const isAttending = event.attendees!.some(
-      (attendee) => attendee.user!.email === userEmail
+      (attendee) => attendee.user!.email === userEmail && !attendee.old
     );
 
     if (displayOrganised && !displayAttending) {
@@ -126,7 +127,7 @@ export default function AllEvents({ userEmail, allEvents }: Props) {
                   : "bg-base-100 hover:bg-[#1a1a1a]"
               )}
             >
-              Attending <TicketIcon className="size-4" />
+              Attending & Upcoming <TicketIcon className="size-4" />
             </div>
           </div>
         </div>

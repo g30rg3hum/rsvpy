@@ -49,7 +49,7 @@ export default function PaymentForm({ paid, eventId, attendeeId }: Props) {
     // reset,
     // trigger,
     // getValues,
-    formState: { errors, isSubmitting },
+    formState: { isSubmitting },
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
