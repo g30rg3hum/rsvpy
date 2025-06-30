@@ -6,10 +6,10 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 
-type FormData = {
-  amount: number;
-  currency: string;
-};
+// type FormData = {
+//   amount: number;
+//   currency: string;
+// };
 const schema = yup.object({
   amount: yup
     .number()
@@ -22,7 +22,7 @@ const schema = yup.object({
 export default function TopUpForm() {
   const {
     register,
-    handleSubmit,
+    // handleSubmit,
     // reset,
     formState: { errors, isSubmitting },
   } = useForm({ resolver: yupResolver(schema) });
@@ -60,7 +60,7 @@ export default function TopUpForm() {
       <button
         className="btn btn-primary w-full mt-4"
         type="button"
-        onClick={onSubmit}
+        // onClick={onSubmit}
         disabled={isSubmitting}
       >
         Top up
