@@ -62,7 +62,7 @@ export default function Header() {
   return (
     <div className="navbar pr-6 pl-5 py-6">
       <div className="flex-1">
-        <Link href="/" className="inline-block">
+        <Link href={email ? "/events" : "/"} className="inline-block">
           <Image
             src="/images/logo.png"
             alt="rsvpy logo"

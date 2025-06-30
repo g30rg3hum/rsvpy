@@ -28,6 +28,8 @@ export default function ManageAttendeesList({
   baseUrl,
 }: Props) {
   const [emailFilter, setEmailFilter] = useState("");
+  const [displayOldAttendees, setDisplayOldAttendees] = useState(false);
+  const [displayPendingPayments, setDisplayPendingPayments] = useState(false);
 
   const attendeesToDisplay = isJustAttendee
     ? event.attendees!.filter(
@@ -37,8 +39,13 @@ export default function ManageAttendeesList({
             ? attendee.user!.email.includes(emailFilter)
             : true)
       )
-    : event.attendees!.filter((attendee) =>
-        emailFilter !== "" ? attendee.user!.email.includes(emailFilter) : true
+    : event.attendees!.filter(
+        (attendee) =>
+          (emailFilter !== ""
+            ? attendee.user!.email.includes(emailFilter)
+            : true) &&
+          (!displayOldAttendees ? !attendee.old : true) &&
+          (displayPendingPayments ? attendee.payment === "PENDING" : true)
       );
 
   // add pagination to the list
@@ -58,7 +65,7 @@ export default function ManageAttendeesList({
 
   return (
     <>
-      <div>
+      <div className="flex gap-6">
         <fieldset className="fieldset">
           <legend className="fieldset-legend">Filter by email address</legend>
           <label className="input w-full max-w-xs">
@@ -85,6 +92,29 @@ export default function ManageAttendeesList({
             />
           </label>
         </fieldset>
+
+        {isCreator && (
+          <div className="mt-3 flex flex-col gap-3">
+            <label className="label text-white">
+              <input
+                type="checkbox"
+                className="checkbox"
+                onChange={(e) => setDisplayOldAttendees(e.target.checked)}
+                defaultChecked={false}
+              />
+              Old attendees
+            </label>
+            <label className="label text-white">
+              <input
+                type="checkbox"
+                className="checkbox"
+                onChange={(e) => setDisplayPendingPayments(e.target.checked)}
+                defaultChecked={false}
+              />
+              Only pending payments
+            </label>
+          </div>
+        )}
       </div>
       <div className="overflow-x-auto">
         <table className="table relative">

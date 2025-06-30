@@ -2,13 +2,13 @@
 
 import Card from "@/components/reusables/card";
 import { Event } from "@/lib/db/types";
-import { redirect } from "next/navigation";
 import { CogIcon, TicketIcon } from "@heroicons/react/24/solid";
 import {
   checkIsPassedOrUpcomingEvent,
   truncateString,
 } from "@/lib/helpers/utils";
 import DisplayStartAndEndDates from "@/components/reusables/display-dates";
+import Link from "next/link";
 
 interface Props {
   event: Event;
@@ -55,12 +55,9 @@ export default function EventItem({ event, currentUserEmail }: Props) {
         />
       </div>
       <div className="justify-end card-actions mt-3 w-full">
-        <button
-          className="btn btn-primary w-full sm:w-max"
-          onClick={() => redirect(`/events/${event.id}`)}
-        >
-          Manage
-        </button>
+        <Link href={`/events/${event.id}`}>
+          <button className="btn btn-primary w-full sm:w-max">Manage</button>
+        </Link>
       </div>
     </Card>
   );

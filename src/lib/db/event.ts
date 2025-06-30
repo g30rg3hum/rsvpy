@@ -144,6 +144,7 @@ export async function attendEvent(eventId: string, userEmail: string) {
       eventId: eventId,
       userId: user.id,
       rsvpStatus: "ACCEPTED",
+      payment: event.creatorId === user.id ? "TRANSFERRED" : "PENDING",
     },
   });
 

@@ -17,7 +17,7 @@ export default async function Login() {
 
   return (
     <PageWrapper centerHorizontally>
-      <div className="mx-2">
+      <div className="mx-6">
         <Suspense>
           <LoginForm />
         </Suspense>

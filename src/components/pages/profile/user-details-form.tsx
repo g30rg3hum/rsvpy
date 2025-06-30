@@ -127,7 +127,9 @@ export default function UserDetailsForm({ userEmail }: Props) {
     toast.dismiss(toastId);
 
     if (res.ok) {
-      toast.success("Your details have been updated successfully.");
+      toast.success(
+        "Your details have been updated successfully. Refresh to see changes."
+      );
 
       reset({
         firstName,

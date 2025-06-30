@@ -28,7 +28,7 @@ export default async function EventInvitePage({ params }: Props) {
 
   return (
     <PageWrapper centerHorizontally>
-      <div className="flex flex-col w-full items-center px-8 pb-8 gap-4">
+      <div className="flex flex-col w-full items-center px-6 pb-8 gap-4">
         <Card cardClassName="max-w-[600px]">
           <h2 className="card-title font-bold">
             <EnvelopeIcon className="size-6" /> You&apos;re invited!
@@ -56,11 +56,11 @@ export default async function EventInvitePage({ params }: Props) {
           </p>
           <p>
             <b>Total price (to be divided):</b> {event.currency}{" "}
-            {event.totalPrice}
+            {event.totalPrice.toFixed(2)}
           </p>
           <p>
             <b>Expected price per person:</b> {event.currency}{" "}
-            {roundToTwoDp(event.totalPrice / event.maxAttendees)}
+            {roundToTwoDp(event.totalPrice / event.maxAttendees).toFixed(2)}
           </p>
           <p>
             <b>Attendee count:</b>{" "}
@@ -76,16 +76,16 @@ export default async function EventInvitePage({ params }: Props) {
             <UserGroupIcon className="size-7" />
             Attendees
           </h2>
-          <ul className="mt-2 grid grid-cols-3 justify-between gap-2 break-all">
+          <ul className="mt-2 grid grid-cols-3 justify-between gap-4 break-all">
             {event.attendees
               .filter((attendee) => !attendee.old)
               .map((attendee) => (
                 <li
                   key={attendee.user.id}
-                  className="text-center flex gap-3 flex justify-center"
+                  className="text-center flex flex-col gap-3 flex justify-center items-center"
                 >
                   <div
-                    className="rounded-full w-6 h-6 bg-center bg-cover"
+                    className="rounded-full w-10 h-10 bg-center bg-cover"
                     style={{
                       backgroundImage: `url(${
                         attendee.user.uploadedPfp
