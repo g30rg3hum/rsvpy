@@ -23,14 +23,14 @@ export default function TopUpForm() {
   const {
     register,
     handleSubmit,
-    reset,
+    // reset,
     formState: { errors, isSubmitting },
   } = useForm({ resolver: yupResolver(schema) });
 
-  const onSubmit = handleSubmit(async (data: FormData) => {});
+  // const onSubmit = handleSubmit(async (data: FormData) => {});
 
   return (
-    <form onSubmit={onSubmit} className="space-y-2">
+    <form onSubmit={() => {}} className="space-y-2">
       <fieldset className="fieldset">
         <legend className="fieldset-legend"> Amount</legend>
         <label className="input w-full">
