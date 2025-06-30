@@ -105,7 +105,7 @@ export default function AllEvents({ userEmail, allEvents }: Props) {
               className={clsx(
                 "badge hover:cursor-pointer font-semibold",
                 displayOrganised
-                  ? `bg-primary text-primary-content hover:bg-[#E55EA1]`
+                  ? `bg-primary text-primary-content hover:bg-[#2CCEE7]`
                   : "bg-base-100 hover:bg-[#1a1a1a]"
               )}
               onClick={() => {
@@ -123,7 +123,7 @@ export default function AllEvents({ userEmail, allEvents }: Props) {
               className={clsx(
                 "badge hover:cursor-pointer font-semibold",
                 displayAttending
-                  ? `bg-primary text-primary-content hover:bg-[#E55EA1]`
+                  ? `bg-primary text-primary-content hover:bg-[#2CCEE7]`
                   : "bg-base-100 hover:bg-[#1a1a1a]"
               )}
             >

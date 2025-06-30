@@ -82,7 +82,7 @@ export default async function EventPage({ params }: Props) {
 
   return (
     <PageWrapper centerHorizontally>
-      <div className="flex flex-col w-full items-center px-6 pb-8">
+      <div className="flex flex-col w-full items-center px-6 pb-12">
         <div className="w-full max-w-[900px] space-y-6">
           <div className="text-center h-max break-all">
             <h2 className="font-black text-3xl">{event.title}</h2>

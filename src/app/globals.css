@@ -7,7 +7,7 @@
 @plugin "daisyui/theme" {
   name: "mytheme";
   default: true;
-  --color-primary: #ff69b4;
+  --color-primary: #31e4ff;
   --color-primary-content: #000;
   --color-secondary: #ffeb9a;
   --color-secondary-content: #655b31;
@@ -35,8 +35,12 @@ input {
 }
 
 body {
-  background-color: #0a0501;
-  background-image: url("/images/background-pattern.png");
+  background: #0f0f0f;
+  background: linear-gradient(
+    351deg,
+    rgba(15, 15, 15, 1) 0%,
+    rgba(31, 31, 31, 1) 100%
+  );
 }
 
 /* :root {

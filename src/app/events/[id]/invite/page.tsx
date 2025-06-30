@@ -28,7 +28,7 @@ export default async function EventInvitePage({ params }: Props) {
 
   return (
     <PageWrapper centerHorizontally>
-      <div className="flex flex-col w-full items-center px-6 pb-8 gap-4">
+      <div className="flex flex-col w-full items-center px-6 pb-8 gap-6">
         <Card cardClassName="max-w-[600px]">
           <h2 className="card-title font-bold">
             <EnvelopeIcon className="size-6" /> You&apos;re invited!
