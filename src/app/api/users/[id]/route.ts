@@ -47,6 +47,7 @@ export async function PUT(
   const firstName = formData.get("firstName");
   const lastName = formData.get("lastName");
   const profilePicture = formData.get("profilePicture");
+  const paymentInformation = formData.get("paymentInformation");
 
   if (!firstName || !lastName) {
     return new Response("Missing required fields in request body", {
@@ -113,9 +114,11 @@ export async function PUT(
       firstName: string;
       lastName: string;
       uploadedPfp?: boolean;
+      paymentInformation?: string;
     } = {
       firstName: firstName.toString(),
       lastName: lastName.toString(),
+      paymentInformation: paymentInformation?.toString(),
     };
 
     if (profilePicture) {

@@ -38,6 +38,7 @@ export async function GET(request: NextRequest) {
         firstName: true,
         lastName: true,
         uploadedPfp: true,
+        paymentInformation: true,
       },
     });
 

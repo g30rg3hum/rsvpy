@@ -20,6 +20,7 @@ export interface User {
   firstName: string;
   lastName: string;
   uploadedPfp: boolean;
+  paymentInformation?: string | null;
 }
 
 export interface EventAttendee {

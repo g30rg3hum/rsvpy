@@ -1,5 +1,6 @@
 import PageWrapper from "@/components/layout/page-wrapper";
 import ManageAttendeesList from "@/components/pages/events/attendees/manage-attendees-list";
+import OrganiserInfoButton from "@/components/pages/events/show/organiser-info-button";
 import PaymentForm from "@/components/pages/events/show/payment-form";
 import DeleteButton from "@/components/pages/events/update/delete-button";
 import EditButton from "@/components/pages/events/update/edit-button";
@@ -126,6 +127,7 @@ export default async function EventPage({ params }: Props) {
               )}
               {isJustAttendee && (
                 <div className="absolute top-3 right-3 flex gap-2">
+                  <OrganiserInfoButton organiserUser={event.creator} />
                   <LeaveButton eventId={event.id} attendeeId={attendeeId!} />
                 </div>
               )}

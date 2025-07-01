@@ -13,6 +13,7 @@ export type UserDetailsFormData = {
   firstName: string;
   lastName: string;
   profilePicture?: FileList;
+  paymentInformation?: string | null;
 };
 const schema = yup.object({
   firstName: yup.string().required("First name is required"),
@@ -27,6 +28,7 @@ const schema = yup.object({
         return fileList[0].size <= 1024 * 1024;
       }
     }),
+  paymentInformation: yup.string().optional().nullable(),
 });
 
 interface Props {
@@ -92,6 +94,7 @@ export default function UserDetailsForm({ userEmail }: Props) {
       reset({
         firstName: userDetails.firstName,
         lastName: userDetails.lastName,
+        paymentInformation: userDetails.paymentInformation,
       });
     }
   }, [userDetails, reset]);
@@ -99,7 +102,7 @@ export default function UserDetailsForm({ userEmail }: Props) {
   const onSubmit = handleSubmit(async (data: UserDetailsFormData) => {
     const toastId = toast.loading("Updating your details...");
 
-    const { firstName, lastName, profilePicture } = data;
+    const { firstName, lastName, profilePicture, paymentInformation } = data;
 
     const profilePictureFile = profilePicture ? profilePicture[0] : null;
 
@@ -118,6 +121,9 @@ export default function UserDetailsForm({ userEmail }: Props) {
     if (profilePictureFile) {
       formData.append("profilePicture", profilePictureFile);
     }
+    if (paymentInformation || paymentInformation === "") {
+      formData.append("paymentInformation", paymentInformation);
+    }
 
     const res = await fetch(`/api/users/${userDetails.id}`, {
       method: "PUT",
@@ -135,6 +141,7 @@ export default function UserDetailsForm({ userEmail }: Props) {
         firstName,
         lastName,
         profilePicture,
+        paymentInformation,
       });
 
       if (profilePictureFile) {
@@ -195,6 +202,17 @@ export default function UserDetailsForm({ userEmail }: Props) {
             )}
           </fieldset>
         </div>
+
+        <fieldset className="fieldset">
+          <legend className="fieldset-legend">Payment information</legend>
+          <textarea
+            {...register("paymentInformation")}
+            className="w-full textarea"
+          />
+          {errors.paymentInformation?.message && (
+            <ErrorMessage text={errors.paymentInformation.message} />
+          )}
+        </fieldset>
 
         <fieldset className="fieldset">
           <legend className="fieldset-legend">Profile picture</legend>
