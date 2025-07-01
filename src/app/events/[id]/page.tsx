@@ -15,9 +15,9 @@ import {
 } from "@/lib/helpers/utils";
 import {
   BanknotesIcon,
-  // BanknotesIcon,
   HashtagIcon,
   InformationCircleIcon,
+  StarIcon,
   UserGroupIcon,
 } from "@heroicons/react/24/solid";
 import clsx from "clsx";
@@ -109,10 +109,22 @@ export default async function EventPage({ params }: Props) {
               <p>
                 <b>Price: </b> {event.currency} {event.totalPrice.toFixed(2)}
               </p>
-              <p>
-                <b>Expected price per person:</b> {event.currency}{" "}
-                {roundToTwoDp(event.totalPrice / event.maxAttendees).toFixed(2)}
-              </p>
+              <div className="flex w-max">
+                <p>
+                  <b>Expected price per person:</b> {event.currency}{" "}
+                  {roundToTwoDp(event.totalPrice / event.maxAttendees).toFixed(
+                    2
+                  )}
+                </p>
+                {isCreator && event.totalPrice !== 0 && (
+                  <div
+                    className="tooltip"
+                    data-tip="Set your payment information (for attendees to view) in your profile"
+                  >
+                    <StarIcon className="size-5 inline-block bg-primary text-black p-1 rounded-full ml-2" />
+                  </div>
+                )}
+              </div>
               <p>
                 <b>Maximum # of attendees: </b> {event.maxAttendees}
               </p>
