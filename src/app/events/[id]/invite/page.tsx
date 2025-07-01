@@ -7,6 +7,7 @@ import { getServerSession } from "next-auth";
 import { formatInTimeZone } from "date-fns-tz";
 import JoinButton from "@/components/pages/events/invite/join-button";
 import { roundToTwoDp } from "@/lib/helpers/utils";
+import AttendeesList from "@/components/pages/events/invite/attendees-list";
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -76,30 +77,7 @@ export default async function EventInvitePage({ params }: Props) {
             <UserGroupIcon className="size-7" />
             Attendees
           </h2>
-          <ul className="mt-2 grid grid-cols-3 justify-between gap-4 break-all">
-            {event.attendees
-              .filter((attendee) => !attendee.old)
-              .map((attendee) => (
-                <li
-                  key={attendee.user.id}
-                  className="text-center flex flex-col gap-3 flex justify-center items-center"
-                >
-                  <div
-                    className="rounded-full w-10 h-10 bg-center bg-cover"
-                    style={{
-                      backgroundImage: `url(${
-                        attendee.user.uploadedPfp
-                          ? `https://rsvpy.s3.eu-north-1.amazonaws.com/profile-pictures/${attendee.user.id}`
-                          : `/images/sample-pfp.jpg`
-                      })`,
-                    }}
-                  />
-                  <span>
-                    {attendee.user.firstName} {attendee.user.lastName}
-                  </span>
-                </li>
-              ))}
-          </ul>
+          <AttendeesList attendees={event.attendees} />
         </Card>
       </div>
     </PageWrapper>
