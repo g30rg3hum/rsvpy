@@ -23,13 +23,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="min-h-screen" data-theme="mytheme">
+    <html lang="en" data-theme="mytheme">
       <body
-        className={`${averia_libre.variable} antialiased flex flex-col min-h-screen bg-base-300 font-averia-libre`}
+        className={`${averia_libre.variable} antialiased flex flex-col h-full min-h-screen bg-base-300 font-averia-libre`}
       >
         <AuthProvider>
           <Header />
-          {children}
+          <main className="flex-grow flex flex-col justify-start">
+            {children}
+          </main>
           <Toaster
             position="bottom-right"
             toastOptions={{

@@ -22,6 +22,7 @@ const authOptions: NextAuthOptions = {
   ],
   pages: {
     signIn: "/login",
+    error: "/error?verification_failure=true",
   },
   callbacks: {
     async signIn({ user }) {

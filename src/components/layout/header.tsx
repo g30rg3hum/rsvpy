@@ -135,7 +135,7 @@ export default function Header() {
                 </div>
                 <ul
                   tabIndex={0}
-                  className="menu menu-md dropdown-content bg-base-200 rounded-box z-1 mt-3 w-[115px] p-2 shadow-xs"
+                  className="menu menu-md dropdown-content bg-base-200 rounded-box z-1 mt-3 w-[115px] p-2 shadow-xs border border-base-100"
                 >
                   <li>
                     <a href="/profile">Profile</a>

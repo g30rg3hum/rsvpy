@@ -15,7 +15,7 @@ export default async function EventsPage() {
   const allEvents = [...organisedEvents, ...attendingEvents];
   return (
     <PageWrapper>
-      <div className="flex flex-col items-center justify-center w-full h-full px-6 pb-12">
+      <div className="flex flex-col items-center justify-between flex-grow w-full h-full px-6 mb-12">
         <AllEvents allEvents={allEvents} userEmail={userEmail} />
       </div>
     </PageWrapper>

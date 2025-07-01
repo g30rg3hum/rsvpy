@@ -47,7 +47,7 @@ function html(params) {
               <table border="0" cellspacing="0" cellpadding="0">
                 <tr>
                   <td align="center" style="border-radius: 5px;" bgcolor="${primaryColour}">
-                    <a href="${url}" target="_blank" style="font-size: 14px; font-family: Helvetica, Arial, sans-serif; text-decoration: none; border-radius: 5px; padding: 10px 30px; display: inline-block; font-weight: bold; color: black">Login</a>
+                    <a href="${url}" target="_blank" style="font-size: 13px; font-family: Helvetica, Arial, sans-serif; text-decoration: none; border-radius: 5px; padding: 10px 30px; display: inline-block; font-weight: bold; color: black">Login</a>
                   </td>
                 </tr>
               </table>

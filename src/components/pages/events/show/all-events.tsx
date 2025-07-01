@@ -86,73 +86,78 @@ export default function AllEvents({ userEmail, allEvents }: Props) {
 
   return (
     <>
-      <div className="flex relative justify-center w-full mb-8">
-        <div className="flex flex-col items-center max-w-md w-full">
-          <h1 className="text-2xl font-extrabold mb-4">Events</h1>
+      <div className="w-full flex flex-col items-center max-w-7xl">
+        <div className="flex relative justify-center w-full mb-8">
+          <div className="flex flex-col items-center max-w-md w-full">
+            <h1 className="text-2xl font-extrabold mb-4">Events</h1>
 
-          <input
-            type="text"
-            className="input input-bordered w-full mb-4 mt-1"
-            placeholder="Search event name..."
-            onChange={(e) => {
-              setSearchQuery(e.target.value);
-              setCurrentPage(0);
-            }}
-          />
-
-          <div className="flex gap-4">
-            <div
-              className={clsx(
-                "badge hover:cursor-pointer font-semibold",
-                displayOrganised
-                  ? `bg-primary text-primary-content hover:bg-[#2CCEE7]`
-                  : "bg-base-100 hover:bg-[#1a1a1a]"
-              )}
-              onClick={() => {
-                setDisplayOrganised(!displayOrganised);
+            <input
+              type="text"
+              className="input input-bordered w-full mb-4 mt-1"
+              placeholder="Search event name..."
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
                 setCurrentPage(0);
               }}
-            >
-              Organised <CogIcon className="size-4" />
-            </div>
-            <div
-              onClick={() => {
-                setDisplayAttending(!displayAttending);
-                setCurrentPage(0);
-              }}
-              className={clsx(
-                "badge hover:cursor-pointer font-semibold",
-                displayAttending
-                  ? `bg-primary text-primary-content hover:bg-[#2CCEE7]`
-                  : "bg-base-100 hover:bg-[#1a1a1a]"
-              )}
-            >
-              Attending & Upcoming <TicketIcon className="size-4" />
+            />
+
+            <div className="flex gap-4">
+              <div
+                className={clsx(
+                  "badge hover:cursor-pointer font-semibold",
+                  displayOrganised
+                    ? `bg-primary text-primary-content hover:bg-[#2CCEE7]`
+                    : "bg-base-100 hover:bg-[#1a1a1a]"
+                )}
+                onClick={() => {
+                  setDisplayOrganised(!displayOrganised);
+                  setCurrentPage(0);
+                }}
+              >
+                Organised <CogIcon className="size-4" />
+              </div>
+              <div
+                onClick={() => {
+                  setDisplayAttending(!displayAttending);
+                  setCurrentPage(0);
+                }}
+                className={clsx(
+                  "badge hover:cursor-pointer font-semibold",
+                  displayAttending
+                    ? `bg-primary text-primary-content hover:bg-[#2CCEE7]`
+                    : "bg-base-100 hover:bg-[#1a1a1a]"
+                )}
+              >
+                Attending & Upcoming <TicketIcon className="size-4" />
+              </div>
             </div>
           </div>
+          <CreateEventModal
+            className="right-0 absolute"
+            userEmail={userEmail}
+          />
         </div>
-        <CreateEventModal className="right-0 absolute" userEmail={userEmail} />
-      </div>
 
-      {displayedEvents.length === 0 ? (
-        <div className="flex justify-center items-center flex-col mt-4">
-          <FaceFrownIcon className="size-8 mb-2" />
-          <p className="font-medium">There are no events here.</p>
-          <p className="text-stone-600">
-            Amend filter settings, or organise/attend a new event.
-          </p>
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-7xl">
-          {displayedEvents.map((event) => (
-            <EventItem
-              key={event.id}
-              event={event}
-              currentUserEmail={userEmail}
-            />
-          ))}
-        </div>
-      )}
+        {displayedEvents.length === 0 ? (
+          <div className="flex justify-center items-center flex-col mt-4">
+            <FaceFrownIcon className="size-8 mb-2" />
+            <p className="font-medium">There are no events here.</p>
+            <p className="text-stone-600">
+              Amend filter settings, or organise/attend a new event.
+            </p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
+            {displayedEvents.map((event) => (
+              <EventItem
+                key={event.id}
+                event={event}
+                currentUserEmail={userEmail}
+              />
+            ))}
+          </div>
+        )}
+      </div>
 
       {totalPages >= 1 && (
         <div className="mt-8 flex gap-3">

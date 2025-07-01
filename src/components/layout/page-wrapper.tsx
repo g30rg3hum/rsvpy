@@ -13,8 +13,8 @@ export default function PageWrapper({
   return (
     <div
       className={clsx(
-        "flex flex-1",
-        centerHorizontally && "justify-center",
+        "h-full flex flex-col justify-start flex-grow w-full",
+        centerHorizontally && "items-center",
         topMargin && "mt-[2.5%]"
       )}
     >
