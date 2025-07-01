@@ -12,6 +12,7 @@ import clsx from "clsx";
 import KickButton from "../update/kick-button";
 import { useState } from "react";
 import InviteButton from "../invite/invite-button";
+import EditAttendeeButton from "../update/edit-attendee-button";
 
 interface Props {
   isCreator: boolean;
@@ -122,7 +123,7 @@ export default function ManageAttendeesList({
             <tr>
               <th>#</th>
               <th className="text-center">Picture</th>
-              <th>Icon</th>
+              <th>Name</th>
               <th>Email</th>
               <th>Joined at</th>
               {isCreator && (
@@ -137,12 +138,11 @@ export default function ManageAttendeesList({
             {paginatedAttendees
               .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
               .map((attendee, index) => (
-                <tr
-                  key={attendee.id}
-                  className={clsx(attendee.old && "opacity-50")}
-                >
-                  <td>{attendee.old ? "-" : index + 1}</td>
-                  <td>
+                <tr key={attendee.id}>
+                  <td className={clsx(attendee.old && "opacity-50")}>
+                    {attendee.old ? "-" : index + 1}
+                  </td>
+                  <td className={clsx(attendee.old && "opacity-50")}>
                     <div
                       className="w-9 h-9 rounded-full bg-center bg-cover mx-auto"
                       style={{
@@ -154,16 +154,18 @@ export default function ManageAttendeesList({
                       }}
                     />
                   </td>
-                  <td>
+                  <td className={clsx(attendee.old && "opacity-50")}>
                     {attendee.user!.firstName} {attendee.user!.lastName}
                   </td>
-                  <td>{attendee.user!.email}</td>
-                  <td>
+                  <td className={clsx(attendee.old && "opacity-50")}>
+                    {attendee.user!.email}
+                  </td>
+                  <td className={clsx(attendee.old && "opacity-50")}>
                     <DisplayDate date={attendee.createdAt} />
                   </td>
                   {isCreator && (
                     <>
-                      <td>
+                      <td className={clsx(attendee.old && "opacity-50")}>
                         {attendee.payment !== "PENDING" ||
                         attendee.user!.email === event.creator!.email ? (
                           <CheckCircleIcon className="size-5 inline-block" />
@@ -175,7 +177,10 @@ export default function ManageAttendeesList({
                           : attendee.payment.charAt(0).toUpperCase() +
                             attendee.payment.slice(1).toLowerCase()}
                       </td>
-                      <td className="text-right">
+                      <td className="justify-end flex flex-col gap-2 sm:flex-row">
+                        {attendee.user!.email !== event.creator!.email && (
+                          <EditAttendeeButton attendee={attendee} />
+                        )}
                         {!isPassedEvent && !attendee.old && (
                           <KickButton
                             attendeeId={attendee.userId}

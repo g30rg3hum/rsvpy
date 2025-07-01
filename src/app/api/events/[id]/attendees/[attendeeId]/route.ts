@@ -156,12 +156,14 @@ export async function PATCH(
   }
 
   // check that the body has the payment field
-  const { payment } = body;
+  const { payment, actualEventAttendeeId } = body;
   if (!payment) {
     return new Response("Missing required fields in request body", {
       status: 400,
     });
   }
+
+  // actualEventAttendeeId is specified if we want to just update the specific event attendee record rather than the most recent one.
 
   // check that payment is a valid value
   if (["PENDING", "TRANSFERRED", "CASH"].includes(payment) === false) {
@@ -170,25 +172,43 @@ export async function PATCH(
 
   // now can update the attendee's payment status
   try {
-    const updatedAttendee = await prisma.eventAttendee.updateMany({
-      where: {
-        userId: attendeeId,
-        eventId: id,
-        old: false, // only update the most recent record.
-      },
-      data: {
-        payment: payment,
-      },
-    });
+    let updatedAttendee;
+    if (actualEventAttendeeId) {
+      updatedAttendee = await prisma.eventAttendee.update({
+        where: {
+          id: actualEventAttendeeId,
+        },
+        data: {
+          payment: payment,
+        },
+      });
 
-    if (updatedAttendee.count > 0) {
+      // will throw an error if record is not found.
+
       return new Response("Attendee payment status updated successfully", {
         status: 200,
       });
     } else {
-      return new Response("Failed to update attendee payment status", {
-        status: 404,
+      updatedAttendee = await prisma.eventAttendee.updateMany({
+        where: {
+          userId: attendeeId,
+          eventId: id,
+          old: false, // only update the most recent record.
+        },
+        data: {
+          payment: payment,
+        },
       });
+
+      if (updatedAttendee.count > 0) {
+        return new Response("Attendee payment status updated successfully", {
+          status: 200,
+        });
+      } else {
+        return new Response("Failed to update attendee payment status", {
+          status: 404,
+        });
+      }
     }
   } catch (error) {
     console.error("Error updating attendee payment status:", error);

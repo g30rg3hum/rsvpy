@@ -77,7 +77,9 @@ export default async function EventInvitePage({ params }: Props) {
             <UserGroupIcon className="size-7" />
             Attendees
           </h2>
-          <AttendeesList attendees={event.attendees} />
+          <AttendeesList
+            attendees={event.attendees.filter((attendee) => !attendee.old)}
+          />
         </Card>
       </div>
     </PageWrapper>
