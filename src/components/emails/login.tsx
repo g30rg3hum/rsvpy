@@ -27,14 +27,14 @@ export default function LoginEmail({ url }: Props) {
           <Container className="mx-auto my-[40px] max-w-[465px] rounded-lg border border-[#eaeaea] border-solid p-[30px]">
             <Section className="mt-[32px]">
               <Img
-                src="https://rsvpy.s3.eu-north-1.amazonaws.com/logo_black.png"
-                width="200"
+                src="https://rsvpy.s3.eu-north-1.amazonaws.com/icon.png"
+                width="75"
                 alt="rsvpy logo"
                 className="mx-auto my-0"
               />
             </Section>
-            <Heading className="mx-0 my-[30px] p-0 text-center font-bold text-[20px] text-black">
-              Login to your account
+            <Heading className="mx-0 my-[30px] p-0 text-center font-normal text-[20px] text-black">
+              Login to your account on <strong>rsvpy</strong>
             </Heading>
             <Text className="text-[14px] text-black leading-[24px]">
               Hello,
@@ -48,7 +48,7 @@ export default function LoginEmail({ url }: Props) {
                 className={`rounded bg-[${primaryColor}] px-5 py-3 text-center font-semibold text-[12px] text-black no-underline`}
                 href={url}
               >
-                Login to your account
+                Login
               </Button>
             </Section>
           </Container>
