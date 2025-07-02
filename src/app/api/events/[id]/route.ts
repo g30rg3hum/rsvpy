@@ -172,6 +172,14 @@ export async function PUT(
           old: true,
         },
       });
+
+      // create new restart record
+      await prisma.eventRestart.create({
+        data: {
+          eventId: id,
+          restartDate: new Date(),
+        },
+      });
     }
 
     return Response.json(updatedEvent);

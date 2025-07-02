@@ -14,6 +14,8 @@ interface Props {
 }
 export default function AllEvents({ userEmail, allEvents }: Props) {
   const [displayOrganised, setDisplayOrganised] = useState(true);
+  // attending - can be upcoming or already passed events, but where their attendance is not old.
+  // i.e. the event has not been restarted into "another" event.
   const [displayAttending, setDisplayAttending] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -24,7 +26,7 @@ export default function AllEvents({ userEmail, allEvents }: Props) {
 
   const viewableEvents = allEvents.filter((event) => {
     const isOrganizer = event.creator!.email === userEmail;
-    // include only where upcoming
+
     const isAttending = event.attendees!.some(
       (attendee) => attendee.user!.email === userEmail && !attendee.old
     );
@@ -51,7 +53,6 @@ export default function AllEvents({ userEmail, allEvents }: Props) {
         "upcoming"
       )
     )
-
     .sort((a, b) => a.startDateTime.getTime() - b.startDateTime.getTime());
 
   // should be sorted where most recent passed event is first
@@ -89,7 +90,7 @@ export default function AllEvents({ userEmail, allEvents }: Props) {
       <div className="w-full flex flex-col items-center max-w-7xl">
         <div className="flex relative justify-center w-full mb-8">
           <div className="flex flex-col items-center max-w-md w-full">
-            <h1 className="text-2xl font-extrabold mb-4">Events</h1>
+            <h1 className="text-2xl font-extrabold mb-6 sm:mb-4">Events</h1>
 
             <input
               type="text"
@@ -114,7 +115,7 @@ export default function AllEvents({ userEmail, allEvents }: Props) {
                   setCurrentPage(0);
                 }}
               >
-                Organised <CogIcon className="size-4" />
+                Organiser <CogIcon className="size-4" />
               </div>
               <div
                 onClick={() => {
@@ -128,7 +129,7 @@ export default function AllEvents({ userEmail, allEvents }: Props) {
                     : "bg-base-100 hover:bg-[#1a1a1a]"
                 )}
               >
-                Attending & Upcoming <TicketIcon className="size-4" />
+                Attendee <TicketIcon className="size-4" />
               </div>
             </div>
           </div>

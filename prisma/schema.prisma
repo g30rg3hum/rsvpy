@@ -85,7 +85,15 @@ model Event {
   startDateTime DateTime
   creator       User            @relation("EventCreator", fields: [creatorId], references: [id])
   attendees     EventAttendee[]
+  restarts      EventRestart[]
   // payments      Payment[]
+}
+
+model EventRestart {
+  id            String        @id @default(uuid())
+  eventId       String
+  restartDate   DateTime      @default(now())
+  event         Event         @relation(fields: [eventId], references: [id], onDelete: Cascade)
 }
 
 model EventAttendee {

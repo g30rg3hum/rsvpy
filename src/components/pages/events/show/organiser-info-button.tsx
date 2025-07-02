@@ -26,7 +26,7 @@ export default function OrganiserInfoButton({ organiserUser }: Props) {
             </button>
           </form>
           <div className="mt-4 text-left">
-            <p className="font-bold text-lg">Organiser information</p>
+            <p className="font-bold text-lg mb-2">Organiser information</p>
             <p>
               <b>Name:</b> {organiserUser.firstName} {organiserUser.lastName}
             </p>

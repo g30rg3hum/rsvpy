@@ -4,10 +4,10 @@ import authOptions from "@/lib/auth/authOptions";
 import { getEventById } from "@/lib/db/event";
 import { EnvelopeIcon, UserGroupIcon } from "@heroicons/react/24/solid";
 import { getServerSession } from "next-auth";
-import { formatInTimeZone } from "date-fns-tz";
 import JoinButton from "@/components/pages/events/invite/join-button";
 import { roundToTwoDp } from "@/lib/helpers/utils";
 import AttendeesList from "@/components/pages/events/invite/attendees-list";
+import DisplayStartAndEndDates from "@/components/reusables/display-dates";
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -35,8 +35,11 @@ export default async function EventInvitePage({ params }: Props) {
             <EnvelopeIcon className="size-6" /> You&apos;re invited!
           </h2>
           <p>
-            You&apos;ve been invited to join <b>{event.title}</b>. Here&apos;s
-            what you need to know:{" "}
+            You&apos;ve been invited by{" "}
+            <b>
+              {event.creator.firstName} {event.creator.lastName}
+            </b>{" "}
+            to join <b>{event.title}</b>. Here&apos;s what you need to know:{" "}
           </p>
           <p>
             <b>Description:</b> {event.description}
@@ -44,17 +47,10 @@ export default async function EventInvitePage({ params }: Props) {
           <p>
             <b>Location:</b> {event.location}
           </p>
-          <p>
-            <b>Dates/times:</b>{" "}
-            {formatInTimeZone(event.startDateTime, "UTC", "dd/MM/yyyy (HH:mm)")}
-            {event.endDateTime &&
-              " - " +
-                formatInTimeZone(
-                  event.endDateTime,
-                  "UTC",
-                  "dd/MM/yyyy (HH:mm)"
-                )}
-          </p>
+          <DisplayStartAndEndDates
+            startDateTime={event.startDateTime}
+            endDateTime={event.endDateTime}
+          />
           <p>
             <b>Total price (to be divided):</b> {event.currency}{" "}
             {event.totalPrice.toFixed(2)}

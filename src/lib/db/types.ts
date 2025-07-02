@@ -1,3 +1,5 @@
+import { EventRestart } from "@prisma/client";
+
 export interface Event {
   id: string;
   title: string;
@@ -11,6 +13,7 @@ export interface Event {
   creatorId: string;
   creator?: User;
   attendees?: EventAttendee[];
+  restarts: EventRestart[];
   createdAt: Date;
 }
 

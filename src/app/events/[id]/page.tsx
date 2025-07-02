@@ -1,5 +1,6 @@
 import PageWrapper from "@/components/layout/page-wrapper";
 import ManageAttendeesList from "@/components/pages/events/attendees/manage-attendees-list";
+import HistoryButton from "@/components/pages/events/show/history-button";
 import OrganiserInfoButton from "@/components/pages/events/show/organiser-info-button";
 import PaymentForm from "@/components/pages/events/show/payment-form";
 import DeleteButton from "@/components/pages/events/update/delete-button";
@@ -8,13 +9,18 @@ import LeaveButton from "@/components/pages/events/update/leave-button";
 import Card from "@/components/reusables/card";
 import DisplayStartAndEndDates from "@/components/reusables/display-dates";
 import { getSessionThenEmail } from "@/lib/auth/utils";
-import { getEventAttendeeRecordOfUser, getEventById } from "@/lib/db/event";
+import {
+  getEventAttendeeRecordOfUser,
+  getEventById,
+  getEventRestarts,
+} from "@/lib/db/event";
 import {
   checkIsPassedOrUpcomingEvent,
   roundToTwoDp,
 } from "@/lib/helpers/utils";
 import {
   BanknotesIcon,
+  CheckCircleIcon,
   HashtagIcon,
   InformationCircleIcon,
   StarIcon,
@@ -41,6 +47,8 @@ export default async function EventPage({ params }: Props) {
   if (!event) {
     throw new Error("Event not found");
   }
+
+  const eventRestarts = await getEventRestarts(id);
 
   // check if user is the creator or attendee of event
   const isCreator = event.creator.email === userEmail;
@@ -94,7 +102,10 @@ export default async function EventPage({ params }: Props) {
                 <InformationCircleIcon className="size-8" /> Event details
               </h2>
               {isPassedEvent && (
-                <p className="italic">(This event has passed)</p>
+                <p className="italic font-bold">
+                  <CheckCircleIcon className="size-5 inline-block mr-2" />
+                  (This event is completed)
+                </p>
               )}
               <p>
                 <b>Description:</b> {event.description}
@@ -130,17 +141,20 @@ export default async function EventPage({ params }: Props) {
               </p>
               {isCreator && (
                 <div className="absolute top-3 right-3 flex gap-2">
-                  <DeleteButton eventId={id} />
+                  <HistoryButton event={event} eventRestarts={eventRestarts} />
                   <EditButton
                     isPassedEvent={isPassedEvent}
                     eventId={event.id}
                   />
+                  <DeleteButton eventId={id} />
                 </div>
               )}
               {isJustAttendee && (
                 <div className="absolute top-3 right-3 flex gap-2">
                   <OrganiserInfoButton organiserUser={event.creator} />
-                  <LeaveButton eventId={event.id} attendeeId={attendeeId!} />
+                  {!isPassedEvent && (
+                    <LeaveButton eventId={event.id} attendeeId={attendeeId!} />
+                  )}
                 </div>
               )}
             </Card>

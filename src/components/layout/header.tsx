@@ -123,7 +123,7 @@ export default function Header() {
                   className="btn btn-ghost btn-circle avatar w-12"
                 >
                   <div
-                    className="rounded-full border border-base-300 w-12 bg-cover bg-center"
+                    className="rounded-full border border-base-100 w-12 bg-cover bg-center"
                     style={{
                       backgroundImage: `url(${
                         profilePictureUrl

@@ -68,6 +68,7 @@ export async function getEventById(id: string) {
     include: {
       creator: true,
       attendees: { include: { user: true } },
+      restarts: true,
     },
   });
 
@@ -175,4 +176,15 @@ export async function getEventAttendeeRecordOfUser(
 
   // might be null.
   return eventAttendeeRecord;
+}
+
+export async function getEventRestarts(eventId: string) {
+  const eventRestarts = await prisma.eventRestart.findMany({
+    where: {
+      eventId: eventId,
+    },
+  });
+
+  // might be empty.
+  return eventRestarts;
 }
