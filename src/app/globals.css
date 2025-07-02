@@ -14,13 +14,13 @@
   --color-accent: #d000ff;
   --color-accent-content: #171717;
   --color-accent-active: #9b5de5;
-  --color-neutral: #121212;
+  --color-neutral: #2c2c2c;
   --color-success: #51cb46;
   --color-success-content: #fff;
 
-  --color-base-100: #2a2a2a;
-  --color-base-200: #1e1e1e;
-  --color-base-300: #131313;
+  --color-base-100: #1b1b1b;
+  --color-base-200: #121212;
+  --color-base-300: #0a0a0a;
   --color-base-content: #fff;
   --color-error: #ef4256;
   --color-error-content: #fff;
@@ -38,8 +38,8 @@ body {
   background: #0f0f0f;
   background: linear-gradient(
     351deg,
-    rgba(8, 8, 8, 1) 0%,
-    rgba(15, 15, 15, 1) 100%
+    rgba(0, 5, 13, 1) 0%,
+    rgba(0, 6, 18, 1) 100%
   );
 }
 
