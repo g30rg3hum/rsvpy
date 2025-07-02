@@ -1,10 +1,8 @@
 import {
   Body,
-  Button,
   Container,
   Head,
   Heading,
-  Hr,
   Html,
   Img,
   Link,
@@ -14,6 +12,9 @@ import {
   Text,
 } from "@react-email/components";
 
+interface Props {
+  eventName: string;
+}
 export default function UpdateEmail({ eventName }: Props) {
   return (
     <Html>

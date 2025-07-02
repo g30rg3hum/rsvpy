@@ -16,7 +16,9 @@ interface Props {
   eventName: string;
   recipientEmail: string;
 }
-export default function LeftOptOutEmail({ eventName, recipientEmail }: Props) {
+export default function LeftOptOutEmail({
+  eventName /* recipientEmail */,
+}: Props) {
   return (
     <Html>
       <Head />

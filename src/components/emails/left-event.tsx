@@ -22,7 +22,7 @@ interface Props {
 }
 export default function LeftEventEmail({
   eventName,
-  recipientEmail,
+  // recipientEmail,
   inviteUrl,
 }: Props) {
   return (

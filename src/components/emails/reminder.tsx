@@ -1,19 +1,19 @@
 import {
   Body,
-  Button,
   Container,
   Head,
   Heading,
-  Hr,
   Html,
   Img,
-  Link,
   Preview,
   Section,
   Tailwind,
   Text,
 } from "@react-email/components";
 
+interface Props {
+  eventName: string;
+}
 export default function ReminderEmail({ eventName }: Props) {
   return (
     <Html>
@@ -38,7 +38,7 @@ export default function ReminderEmail({ eventName }: Props) {
             </Text>
             <Text className="text-[14px] text-black leading-[24px]">
               This is a reminder that <strong>{eventName}</strong> is happening
-              tomorrow. Don't forget to attend!
+              tomorrow. Don&pos;t forget to attend!
             </Text>
           </Container>
         </Body>
