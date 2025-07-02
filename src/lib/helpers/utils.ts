@@ -1,6 +1,8 @@
 import { Currency } from "./types";
 import { formatInTimeZone } from "date-fns-tz";
 
+export const primaryColor = "#31e4ff";
+
 export function trimAndCapitalize(str: string): string {
   const trimmedStr = str.trim();
   return trimmedStr.charAt(0).toUpperCase() + trimmedStr.slice(1);

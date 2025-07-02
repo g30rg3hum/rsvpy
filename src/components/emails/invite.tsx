@@ -1,5 +1,7 @@
+import { primaryColor } from "@/lib/helpers/utils";
 import {
   Body,
+  Button,
   Container,
   Head,
   Heading,
@@ -15,12 +17,12 @@ import {
 interface Props {
   organiserName: string;
   eventName: string;
-  recipientName: string;
+  inviteUrl: string;
 }
-export default function PayUpEmail({
+export default function InviteEmail({
   organiserName,
   eventName,
-  recipientName,
+  inviteUrl,
 }: Props) {
   return (
     <Html>
@@ -28,7 +30,7 @@ export default function PayUpEmail({
       <Tailwind>
         <Body className="mx-auto my-auto bg-white px-2 font-sans">
           <Preview>
-            {organiserName} has requested payment for {eventName}
+            {organiserName} is inviting you to {eventName}
           </Preview>
           <Container className="mx-auto my-[40px] max-w-[465px] rounded-lg border border-[#eaeaea] border-solid p-[30px]">
             <Section className="mt-[32px]">
@@ -40,21 +42,30 @@ export default function PayUpEmail({
               />
             </Section>
             <Heading className="mx-0 my-[30px] p-0 text-center font-normal text-[20px] text-black">
-              <strong>{organiserName}</strong> is requesting payment
+              <strong>{organiserName}</strong> is inviting you
             </Heading>
             <Text className="text-[14px] text-black leading-[24px]">
-              Hello {recipientName},
+              Hello,
             </Text>
             <Text className="text-[14px] text-black leading-[24px]">
-              <strong>{organiserName}</strong> is requesting that you pay for
-              your attendance at the event, <strong>{eventName}</strong>.
+              <strong>{organiserName}</strong> is inviting you to join{" "}
+              <strong>{eventName}</strong>.
             </Text>
 
             <Text className="text-[14px] text-black leading-[24px]">
-              Please make the payment accordingly and login to your account on{" "}
-              <Link href={process.env.NEXT_PUBLIC_APP_URL}>rsvpy</Link> to then
-              mark that you&apos;ve paid.
+              Login to or create your account on{" "}
+              <Link href={process.env.NEXT_PUBLIC_APP_URL}>rsvpy</Link>, and
+              then use the link below to accept the invitation.
             </Text>
+
+            <Section className="mt-[32px] mb-[32px] text-center">
+              <Button
+                className={`rounded bg-[${primaryColor}] px-5 py-3 text-center font-semibold text-[12px] text-black no-underline`}
+                href={inviteUrl}
+              >
+                Join
+              </Button>
+            </Section>
           </Container>
         </Body>
       </Tailwind>
@@ -62,8 +73,8 @@ export default function PayUpEmail({
   );
 }
 
-PayUpEmail.PreviewProps = {
+InviteEmail.PreviewProps = {
   organiserName: "George Hum",
   eventName: "Test Event",
-  recipientName: "John Doe",
+  inviteUrl: "https://rsvpy.app/invite/12345",
 };

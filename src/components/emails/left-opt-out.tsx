@@ -13,22 +13,17 @@ import {
 } from "@react-email/components";
 
 interface Props {
-  organiserName: string;
   eventName: string;
-  recipientName: string;
+  recipientEmail: string;
 }
-export default function PayUpEmail({
-  organiserName,
-  eventName,
-  recipientName,
-}: Props) {
+export default function LeftOptOutEmail({ eventName, recipientEmail }: Props) {
   return (
     <Html>
       <Head />
       <Tailwind>
         <Body className="mx-auto my-auto bg-white px-2 font-sans">
           <Preview>
-            {organiserName} has requested payment for {eventName}
+            Notification reminder for available space for {eventName}
           </Preview>
           <Container className="mx-auto my-[40px] max-w-[465px] rounded-lg border border-[#eaeaea] border-solid p-[30px]">
             <Section className="mt-[32px]">
@@ -40,20 +35,21 @@ export default function PayUpEmail({
               />
             </Section>
             <Heading className="mx-0 my-[30px] p-0 text-center font-normal text-[20px] text-black">
-              <strong>{organiserName}</strong> is requesting payment
+              You opted to be notified about available space for{" "}
+              <strong>{eventName}</strong>
             </Heading>
             <Text className="text-[14px] text-black leading-[24px]">
-              Hello {recipientName},
+              Hello,
             </Text>
             <Text className="text-[14px] text-black leading-[24px]">
-              <strong>{organiserName}</strong> is requesting that you pay for
-              your attendance at the event, <strong>{eventName}</strong>.
+              You recently submitted to be notified when space becomes available
+              for {eventName}.
             </Text>
 
             <Text className="text-[14px] text-black leading-[24px]">
-              Please make the payment accordingly and login to your account on{" "}
-              <Link href={process.env.NEXT_PUBLIC_APP_URL}>rsvpy</Link> to then
-              mark that you&apos;ve paid.
+              If this was a mistake, you can ignore this email or opt out by
+              clicking this <Link href="#">link</Link>.
+              {/* TODO: opt out API link  */}
             </Text>
           </Container>
         </Body>
@@ -62,8 +58,8 @@ export default function PayUpEmail({
   );
 }
 
-PayUpEmail.PreviewProps = {
-  organiserName: "George Hum",
-  eventName: "Test Event",
-  recipientName: "John Doe",
+LeftOptOutEmail.PreviewProps = {
+  eventName: "Event Name",
+  recipientEmail: "hmw.geo@gmail.com",
+  inviteUrl: "https://rsvpy.app/join-event",
 };

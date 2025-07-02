@@ -24,6 +24,8 @@ interface Props {
 export default function EditAttendeeButton({ attendee }: Props) {
   const router = useRouter();
 
+  const modalId = "edit_attendee_confirmation_modal_" + attendee.id;
+
   const {
     register,
     handleSubmit,
@@ -64,11 +66,7 @@ export default function EditAttendeeButton({ attendee }: Props) {
     router.refresh();
 
     // close the modal
-    (
-      document.getElementById(
-        "edit_attendee_confirmation_modal"
-      ) as HTMLDialogElement
-    ).close();
+    (document.getElementById(modalId) as HTMLDialogElement).close();
   });
 
   return (
@@ -76,25 +74,17 @@ export default function EditAttendeeButton({ attendee }: Props) {
       <button
         className="btn btn-sm btn-neutral"
         onClick={() =>
-          (
-            document.getElementById(
-              "edit_attendee_confirmation_modal"
-            ) as HTMLDialogElement
-          ).showModal()
+          (document.getElementById(modalId) as HTMLDialogElement).showModal()
         }
       >
         Edit
       </button>
-      <dialog id="edit_attendee_confirmation_modal" className="modal">
+      <dialog id={modalId} className="modal">
         <div className="modal-box max-w-[400px] bg-base-200 border border-base-100">
           <button
             className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
             onClick={() =>
-              (
-                document.getElementById(
-                  "edit_attendee_confirmation_modal"
-                ) as HTMLDialogElement
-              ).close()
+              (document.getElementById(modalId) as HTMLDialogElement).close()
             }
           >
             ✕
