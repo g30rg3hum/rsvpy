@@ -4,8 +4,9 @@ import PageWrapper from "@/components/layout/page-wrapper";
 import HyperLink from "@/components/reusables/hyperlink";
 import { ExclamationCircleIcon } from "@heroicons/react/24/solid";
 import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 
-export default function ErrorPage() {
+function ErrorContent() {
   const searchParams = useSearchParams();
   const verificationFailure = searchParams.get("verification_failure") || false;
 
@@ -25,5 +26,13 @@ export default function ErrorPage() {
         </p>
       </div>
     </PageWrapper>
+  );
+}
+
+export default function ErrorPage() {
+  return (
+    <Suspense>
+      <ErrorContent />
+    </Suspense>
   );
 }
