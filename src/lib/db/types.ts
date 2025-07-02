@@ -13,7 +13,7 @@ export interface Event {
   creatorId: string;
   creator?: User;
   attendees?: EventAttendee[];
-  restarts: EventRestart[];
+  restarts?: EventRestart[];
   createdAt: Date;
 }
 
