@@ -35,7 +35,7 @@ export default function HistoryButton({
       </div>
 
       <dialog id="history_modal" className="modal">
-        <div className="modal-box bg-base-200 border border-base-100 max-w-md max-h-[30vh]">
+        <div className="modal-box bg-base-200 border border-base-100 max-w-md max-h-[80vh]">
           <form method="dialog">
             <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
               ✕
@@ -51,6 +51,22 @@ export default function HistoryButton({
               {eventRestarts.length === 0 && "no restarts yet."}
             </p>
             <ul>
+              <li>Test</li>
+              <li>Test</li>
+              <li>Test</li>
+              <li>Test</li>
+              <li>Test</li>
+              <li>Test</li>
+              <li>Test</li>
+              <li>Test</li>
+              <li>Test</li>
+              <li>Test</li>
+              <li>Test</li>
+              <li>Test</li>
+              <li>Test</li>
+              <li>Test</li>
+              <li>Test</li>
+              <li>Test</li>
               {eventRestarts.map((restart) => (
                 <li key={restart.id}>
                   › <DisplayDate date={restart.restartDate} />
