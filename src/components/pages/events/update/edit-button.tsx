@@ -37,7 +37,7 @@ export default function EditButton({
       </div>
 
       <dialog id="edit_modal" className="modal">
-        <div className="modal-box bg-base-200 border border-base-100 max-w-xl ">
+        <div className="modal-box bg-base-200 border border-base-100 max-w-xl max-h-[80vh]">
           <form method="dialog">
             <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
               ✕
