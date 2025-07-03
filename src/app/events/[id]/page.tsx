@@ -128,10 +128,11 @@ export default async function EventPage({ params }: Props) {
                   )}
                 </p>
                 {isCreator && event.totalPrice !== 0 && (
-                  <div
-                    className="tooltip"
-                    data-tip="Set your payment information (for attendees to view) in your profile"
-                  >
+                  <div className="tooltip tooltip-left sm:tooltip-top">
+                    <div className="tooltip-content w-[120px] sm:w-[200px]">
+                      Set your payment information (for attendees to view) in
+                      your profile
+                    </div>
                     <StarIcon className="size-5 inline-block bg-primary text-black p-1 rounded-full ml-2" />
                   </div>
                 )}
