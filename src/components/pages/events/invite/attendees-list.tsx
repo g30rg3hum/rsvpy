@@ -72,14 +72,14 @@ export default function AttendeesList({ attendees }: Props) {
 
       <div className="flex gap-3 mt-5 justify-center">
         <button
-          className="btn btn-neutral btn-square btn-sm"
+          className="btn btn-neutral btn-square btn-sm disabled:hidden"
           onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
           disabled={currentPage === 1}
         >
           <ArrowLeftIcon className="size-3" />
         </button>
         <button
-          className="btn btn-neutral btn-square btn-sm"
+          className="btn btn-neutral btn-square btn-sm disabled:hidden"
           onClick={() =>
             setCurrentPage((prev) => Math.min(prev + 1, totalPages))
           }

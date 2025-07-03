@@ -13,6 +13,7 @@ import KickButton from "../update/kick-button";
 import { useState } from "react";
 import InviteButton from "../invite/invite-button";
 import EditAttendeeButton from "../update/edit-attendee-button";
+import PayUpButton from "@/components/emails/actions/pay-up-button";
 
 interface Props {
   isCreator: boolean;
@@ -66,10 +67,10 @@ export default function ManageAttendeesList({
 
   return (
     <>
-      <div className="flex gap-6">
+      <div className="flex flex-col gap-1 sm:gap-6 sm:flex-row">
         <fieldset className="fieldset">
           <legend className="fieldset-legend">Filter by email address</legend>
-          <label className="input w-full max-w-xs">
+          <label className="input w-full sm:max-w-xs">
             <svg
               className="h-[1em] opacity-50"
               xmlns="http://www.w3.org/2000/svg"
@@ -195,21 +196,22 @@ export default function ManageAttendeesList({
           </tbody>
         </table>
         {isCreator && (
-          <div className="right-4 top-4 absolute">
+          <div className="right-4 top-4 absolute flex gap-2">
+            <PayUpButton />
             <InviteButton baseUrl={baseUrl} eventId={event.id} />
           </div>
         )}
       </div>
       <div className="flex gap-3 mt-2">
         <button
-          className="btn btn-neutral btn-square btn-sm"
+          className="btn btn-neutral btn-square btn-sm disabled:hidden"
           onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
           disabled={page === 1}
         >
           <ArrowLeftIcon className="size-3" />
         </button>
         <button
-          className="btn btn-neutral btn-square btn-sm"
+          className="btn btn-neutral btn-square btn-sm disabled:hidden"
           onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
           disabled={page === totalPages}
         >
