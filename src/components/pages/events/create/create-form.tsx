@@ -210,7 +210,7 @@ export default function CreateEventForm({ userEmail }: Props) {
               <legend className="fieldset-legend">Start date and time *</legend>
               <input
                 {...register("startDateTime")}
-                className="w-full input"
+                className="w-full input text-white"
                 type="datetime-local"
               />
               {errors.startDateTime?.message && (
@@ -223,7 +223,7 @@ export default function CreateEventForm({ userEmail }: Props) {
               </legend>
               <input
                 {...register("endDateTime")}
-                className="w-full input"
+                className="w-full input text-white"
                 type="datetime-local"
               />
               {errors.endDateTime?.message && (
