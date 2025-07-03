@@ -215,7 +215,7 @@ export default function AllEvents({ userEmail, allEvents }: Props) {
         </div>
 
         {displayedEvents.length === 0 ? (
-          <div className="flex justify-center items-center flex-col mt-4">
+          <div className="flex justify-center items-center flex-col mt-4 text-center">
             <FaceFrownIcon className="size-8 mb-2" />
             <p className="font-medium">There are no events here.</p>
             <p className="text-stone-600">
