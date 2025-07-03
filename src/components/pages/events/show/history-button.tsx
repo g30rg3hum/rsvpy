@@ -51,22 +51,6 @@ export default function HistoryButton({
               {eventRestarts.length === 0 && "no restarts yet."}
             </p>
             <ul>
-              <li>Test</li>
-              <li>Test</li>
-              <li>Test</li>
-              <li>Test</li>
-              <li>Test</li>
-              <li>Test</li>
-              <li>Test</li>
-              <li>Test</li>
-              <li>Test</li>
-              <li>Test</li>
-              <li>Test</li>
-              <li>Test</li>
-              <li>Test</li>
-              <li>Test</li>
-              <li>Test</li>
-              <li>Test</li>
               {eventRestarts.map((restart) => (
                 <li key={restart.id}>
                   › <DisplayDate date={restart.restartDate} />
