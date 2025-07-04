@@ -197,7 +197,18 @@ export default function ManageAttendeesList({
         </table>
         {isCreator && (
           <div className="right-4 top-4 absolute flex gap-2">
-            <PayUpButton />
+            <PayUpButton
+              eventName={event.title}
+              organiserName={`${event.creator!.firstName} ${event.creator!.lastName}`}
+              attendeesPendingPayment={event
+                .attendees!.filter(
+                  (attendee) => !attendee.old && attendee.payment === "PENDING"
+                )
+                .map((attendee) => ({
+                  email: attendee.user!.email,
+                  name: `${attendee.user!.firstName} ${attendee.user!.lastName}`,
+                }))}
+            />
             <InviteButton baseUrl={baseUrl} eventId={event.id} />
           </div>
         )}

@@ -69,11 +69,6 @@ export default function DeleteButton({ eventId, className }: Props) {
                 className="btn btn-primary"
                 onClick={async () => {
                   // await handleKick();
-                  (
-                    document.getElementById(
-                      "delete_event_modal"
-                    ) as HTMLDialogElement
-                  ).showModal();
                   handleDelete();
                 }}
               >
