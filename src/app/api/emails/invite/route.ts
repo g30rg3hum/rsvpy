@@ -1,8 +1,13 @@
+import InviteEmail from "@/components/emails/invite";
 import { authoriseSession } from "@/lib/auth/utils";
-import { Props as PostPayload } from "@/components/emails/actions/pay-up-button";
 import { resend } from "@/lib/resend/resend";
-import PayUpEmail from "@/components/emails/pay-up";
 
+interface PostPayload {
+  emails: string[];
+  organiserName: string;
+  eventName: string;
+  eventId: string;
+}
 export async function POST(request: Request) {
   const authResponse = await authoriseSession();
 
@@ -21,43 +26,49 @@ export async function POST(request: Request) {
     return new Response("Invalid JSON in request body", { status: 400 });
   }
 
-  const { attendeesPendingPayment, eventName, organiserName } = payload;
+  const { emails, organiserName, eventName, eventId } = payload;
 
-  if (!attendeesPendingPayment || !eventName || !organiserName)
+  if (
+    !emails ||
+    emails.length === 0 ||
+    !organiserName ||
+    !eventName ||
+    !eventId
+  ) {
     return new Response("Missing required fields in request body", {
       status: 400,
     });
+  }
 
-  const totalEmails = attendeesPendingPayment.length;
+  const totalEmails = emails.length;
 
-  // now can send the email
-  for (const [index, attendee] of attendeesPendingPayment.entries()) {
+  for (const [index, email] of emails.entries()) {
     const currentProgress = `${index + 1}/${totalEmails}`;
 
     try {
       await resend.emails.send({
         from: process.env.EMAIL_FROM || "",
-        to: attendee.email,
-        subject: "Payment request for " + eventName,
-        react: PayUpEmail({
+        to: email,
+        subject: `Invitation to ${eventName}`,
+        react: InviteEmail({
           organiserName,
           eventName,
-          recipientName: attendee.name,
+          inviteUrl: `${process.env.NEXT_PUBLIC_APP_URL}/events/${eventId}/invite`,
         }),
       });
     } catch (error) {
       console.error(
-        `Error encountered sending email (${currentProgress}) to ${attendee.email}: ${error}`
+        `Error encountered sending email (${currentProgress}) to ${email}: ${error}`
       );
       return new Response(
-        `Error encountered sending email (${currentProgress}) to ${attendee.email}`,
+        `Error encountered sending email (${currentProgress}) to ${email}`,
         { status: 500 }
       );
     }
   }
 
   return new Response(
-    `Successfully sent payment request emails to all ${totalEmails} attendee(s) pending payment.`,
+    `Successfully sent invitation emails to all ${totalEmails} individual(s).`,
     { status: 200 }
   );
 }

@@ -14,6 +14,7 @@ import { useState } from "react";
 import InviteButton from "../invite/invite-button";
 import EditAttendeeButton from "../update/edit-attendee-button";
 import PayUpButton from "@/components/emails/actions/pay-up-button";
+import SendInviteButton from "@/components/emails/actions/send-invite-button";
 
 interface Props {
   isCreator: boolean;
@@ -197,6 +198,11 @@ export default function ManageAttendeesList({
         </table>
         {isCreator && (
           <div className="right-4 top-4 absolute flex gap-2">
+            <SendInviteButton
+              organiserName={`${event.creator!.firstName} ${event.creator!.lastName}`}
+              eventName={event.title}
+              eventId={event.id}
+            />
             <PayUpButton
               eventName={event.title}
               organiserName={`${event.creator!.firstName} ${event.creator!.lastName}`}

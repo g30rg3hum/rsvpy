@@ -1,6 +1,6 @@
 "use client";
 
-import { PaperAirplaneIcon } from "@heroicons/react/24/solid";
+import { CurrencyDollarIcon } from "@heroicons/react/24/solid";
 import toast from "react-hot-toast";
 
 export interface Props {
@@ -51,7 +51,7 @@ export default function PayUpButton({
           (document.getElementById(modalId) as HTMLDialogElement).showModal();
         }}
       >
-        <PaperAirplaneIcon className="size-3" />
+        <CurrencyDollarIcon className="size-3" />
       </button>
 
       <dialog id={modalId} className="modal">
@@ -62,7 +62,7 @@ export default function PayUpButton({
             </button>
           </form>
           <div className="mt-4">
-            <h2 className="font-bold text-lg mb-2">Sending email</h2>
+            <h2 className="font-bold text-lg mb-2">Request payments</h2>
             <p>
               Are you sure you want to send a payment request notification to
               all attendees pending payment?
