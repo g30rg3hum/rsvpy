@@ -38,7 +38,13 @@ export async function GET(request: Request) {
     // send emails for each event
     let emailsSent = 0;
     for (const event of events) {
-      const emails = event.attendees.map((attendee) => attendee.user.email);
+      const emailsOfAttendees = event.attendees.map(
+        (attendee) => attendee.user.email
+      );
+      const emails = [
+        ...emailsOfAttendees.filter((email) => email !== event.creator.email),
+        event.creator.email,
+      ];
       const eventName = event.title;
 
       for (const email of emails) {

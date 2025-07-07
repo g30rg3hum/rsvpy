@@ -1,6 +1,8 @@
+import UpdateEmail from "@/components/emails/update";
 import { authoriseSession } from "@/lib/auth/utils";
 import { EventFormData } from "@/lib/form/event-form";
 import { prisma } from "@/lib/prisma/prisma";
+import { resend } from "@/lib/resend/resend";
 import { NextRequest } from "next/server";
 
 // get event details by id
@@ -160,7 +162,15 @@ export async function PUT(
         currency: currency,
         maxAttendees: maxAttendees,
       },
+      include: {
+        attendees: {
+          include: {
+            user: true,
+          },
+        },
+      },
     });
+    const eventName = updatedEvent.title;
 
     // if the event is passed, also update the attendees to old'
     if (isPassedEvent) {
@@ -187,6 +197,30 @@ export async function PUT(
           eventId: id,
         },
       });
+    }
+
+    // send a notification email to all current attendees
+    const currentAttendeeEmails = updatedEvent.attendees
+      .filter((attendee) => !attendee.old)
+      .map((attendee) => attendee.user.email);
+
+    console.log(
+      `Sending update emails to all ${currentAttendeeEmails.length} current attendees of updated event ${eventName}`
+    );
+
+    for (const email of currentAttendeeEmails) {
+      try {
+        await resend.emails.send({
+          from: process.env.EMAIL_FROM || "",
+          to: email,
+          subject: `There have been updates made to ${eventName}`,
+          react: UpdateEmail({ eventName }),
+        });
+      } catch (error) {
+        console.error(
+          `Error encountered sending event ${eventName} update email to ${email}: ${error}`
+        );
+      }
     }
 
     return Response.json(updatedEvent);
