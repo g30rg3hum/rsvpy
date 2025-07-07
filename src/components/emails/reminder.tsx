@@ -20,7 +20,7 @@ export default function ReminderEmail({ eventName }: Props) {
       <Head />
       <Tailwind>
         <Body className="mx-auto my-auto bg-white px-2 font-sans">
-          <Preview>{eventName} is tomorrow!</Preview>
+          <Preview>{eventName} is coming up!</Preview>
           <Container className="mx-auto my-[40px] max-w-[465px] rounded-lg border border-[#eaeaea] border-solid p-[30px]">
             <Section className="mt-[32px]">
               <Img
@@ -38,7 +38,7 @@ export default function ReminderEmail({ eventName }: Props) {
             </Text>
             <Text className="text-[14px] text-black leading-[24px]">
               This is a reminder that <strong>{eventName}</strong> is happening
-              tomorrow. Don&pos;t forget to attend!
+              today. Don't forget to attend!
             </Text>
           </Container>
         </Body>
@@ -49,6 +49,4 @@ export default function ReminderEmail({ eventName }: Props) {
 
 ReminderEmail.PreviewProps = {
   eventName: "Event Name",
-  recipientEmail: "hmw.geo@gmail.com",
-  inviteUrl: "https://rsvpy.app/join-event",
 };

@@ -53,7 +53,7 @@ export default function PayUpEmail({
             <Text className="text-[14px] text-black leading-[24px]">
               Please make the payment accordingly and login to your account on{" "}
               <Link href={process.env.NEXT_PUBLIC_APP_URL}>rsvpy</Link> to then
-              mark that you&apos;ve paid.
+              mark that you've paid.
             </Text>
           </Container>
         </Body>
