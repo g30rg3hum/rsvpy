@@ -41,7 +41,10 @@ export default function AttendeesList({ attendees }: Props) {
           <input
             className="w-full"
             placeholder="John Doe"
-            onChange={(e) => setNameFilter(e.target.value)}
+            onChange={(e) => {
+              setNameFilter(e.target.value);
+              setCurrentPage(1); // Reset to first page on filter change
+            }}
           />
         </label>
       </fieldset>

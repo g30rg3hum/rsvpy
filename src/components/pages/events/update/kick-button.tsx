@@ -13,6 +13,8 @@ export default function KickButton({ eventId, attendeeId }: Props) {
   const modalId = "kick_confirmation_modal_" + attendeeId;
 
   const handleKick = async () => {
+    const toastId = toast.loading("Kicking attendee...");
+
     try {
       const res = await fetch(
         `/api/events/${eventId}/attendees/${attendeeId}`,
@@ -31,6 +33,8 @@ export default function KickButton({ eventId, attendeeId }: Props) {
     } catch (error) {
       toast.error("Failed to kick attendee.");
     }
+
+    toast.dismiss(toastId);
   };
 
   return (
@@ -67,10 +71,10 @@ export default function KickButton({ eventId, attendeeId }: Props) {
               <button
                 className="btn btn-primary"
                 onClick={async () => {
-                  await handleKick();
                   (
                     document.getElementById(modalId) as HTMLDialogElement
-                  ).showModal();
+                  ).close();
+                  await handleKick();
                 }}
               >
                 Confirm

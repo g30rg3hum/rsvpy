@@ -1,5 +1,7 @@
+import SpaceAvailableEmail from "@/components/emails/space-available";
 import { authoriseSession } from "@/lib/auth/utils";
 import { prisma } from "@/lib/prisma/prisma";
+import { resend } from "@/lib/resend/resend";
 import { NextRequest } from "next/server";
 
 // specific endpoint for just getting the attendee payment status
@@ -275,10 +277,70 @@ export async function DELETE(
       },
     });
 
-    if (count > 0)
+    if (count > 0) {
+      // attendee deleted, now check if event was full before this, i.e. now no. of attendees is maxAttendees-1.
+      // if so send email to all those opted for notification
+      const eventWithCurrentAttendees = await prisma.event.findUnique({
+        where: { id: id },
+        include: {
+          attendees: {
+            where: { old: false },
+          },
+        },
+      });
+
+      // already know this event exists from above.
+      if (
+        eventWithCurrentAttendees!.attendees.length ===
+        eventWithCurrentAttendees!.maxAttendees - 1
+      ) {
+        // send email
+        const optIns = await prisma.eventSpaceNotification.findMany({
+          where: {
+            eventId: id,
+          },
+          select: {
+            email: true,
+            id: true,
+          },
+        });
+
+        const totalOptIns = optIns.length;
+        const eventName = eventWithCurrentAttendees!.title;
+
+        for (const [index, optIn] of optIns.entries()) {
+          const email = optIn.email;
+          const currentProgress = `${index + 1}/${totalOptIns}`;
+
+          try {
+            await resend.emails.send({
+              from: process.env.EMAIL_FROM || "",
+              to: email,
+              subject: `Space freed up for ${eventName}`,
+              react: SpaceAvailableEmail({
+                eventName,
+                optOutUrl: `${process.env.NEXT_PUBLIC_APP_URL}/emails/notify/opt-out?id=${optIn.id}&eventName=${eventName}`,
+                inviteUrl: `${process.env.NEXT_PUBLIC_APP_URL}/events/${id}/invite`,
+              }),
+            });
+          } catch (error) {
+            // just send it to the console, don't return error response, this is only a side operation.
+            console.error(
+              `Error encountered sending space available email to ${email} (${currentProgress}): ${error}`
+            );
+          }
+        }
+
+        // finally sent all emails.
+        console.log(
+          "Successfully sent all 'space available' emails to those opted in."
+        );
+      }
+
       return new Response("Attendee deleted successfully", { status: 200 });
-    else
+    } else {
       return new Response("Attendee for the event not found", { status: 404 });
+    }
   } catch (error) {
     console.error("Error deleting attendee:", error);
     return new Response("Failed to delete attendee", { status: 500 });

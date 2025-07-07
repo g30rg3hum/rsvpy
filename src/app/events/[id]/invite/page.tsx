@@ -8,6 +8,7 @@ import JoinButton from "@/components/pages/events/invite/join-button";
 import { roundToTwoDp } from "@/lib/helpers/utils";
 import AttendeesList from "@/components/pages/events/invite/attendees-list";
 import DisplayStartAndEndDates from "@/components/reusables/display-dates";
+import NotifyButton from "@/components/emails/actions/notify-button";
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -30,7 +31,7 @@ export default async function EventInvitePage({ params }: Props) {
   return (
     <PageWrapper centerHorizontally>
       <div className="flex flex-col w-full items-center px-6 pb-8 gap-6">
-        <Card cardClassName="max-w-[600px]">
+        <Card cardClassName="max-w-[600px] relative">
           <h2 className="card-title font-bold">
             <EnvelopeIcon className="size-6" /> You&apos;re invited!
           </h2>
@@ -39,7 +40,8 @@ export default async function EventInvitePage({ params }: Props) {
             <b>
               {event.creator.firstName} {event.creator.lastName}
             </b>{" "}
-            to join <b>{event.title}</b>. Here&apos;s what you need to know:{" "}
+            to join <b>{event.title}</b>. Here&apos;s what you need to
+            know:{" "}
           </p>
           <p>
             <b>Description:</b> {event.description}
@@ -66,6 +68,9 @@ export default async function EventInvitePage({ params }: Props) {
           </p>
           <div className="card-actions mt-3 w-full">
             <JoinButton userEmail={userEmail} eventId={event.id} />
+          </div>
+          <div className="absolute top-3 right-3">
+            <NotifyButton eventName={event.title} eventId={event.id} />
           </div>
         </Card>
         <Card cardClassName="max-w-[600px]">

@@ -91,7 +91,10 @@ export default function ManageAttendeesList({
             <input
               className="w-full"
               placeholder="email@mail.com"
-              onChange={(e) => setEmailFilter(e.target.value)}
+              onChange={(e) => {
+                setEmailFilter(e.target.value);
+                setPage(1); // Reset to first page on filter change
+              }}
             />
           </label>
         </fieldset>
@@ -102,7 +105,10 @@ export default function ManageAttendeesList({
               <input
                 type="checkbox"
                 className="checkbox"
-                onChange={(e) => setDisplayOldAttendees(e.target.checked)}
+                onChange={(e) => {
+                  setDisplayOldAttendees(e.target.checked);
+                  setPage(1);
+                }}
                 defaultChecked={false}
               />
               Old attendees
@@ -111,7 +117,10 @@ export default function ManageAttendeesList({
               <input
                 type="checkbox"
                 className="checkbox"
-                onChange={(e) => setDisplayPendingPayments(e.target.checked)}
+                onChange={(e) => {
+                  setDisplayPendingPayments(e.target.checked);
+                  setPage(1);
+                }}
                 defaultChecked={false}
               />
               Only pending payments

@@ -11,6 +11,8 @@ export default function LeaveButton({ eventId, attendeeId }: Props) {
   const router = useRouter();
 
   const handleLeave = async () => {
+    const toastId = toast.loading("Leaving event...");
+
     try {
       const res = await fetch(
         `/api/events/${eventId}/attendees/${attendeeId}`,
@@ -29,6 +31,8 @@ export default function LeaveButton({ eventId, attendeeId }: Props) {
     } catch (error) {
       toast.error("Failed to leave event.");
     }
+
+    toast.dismiss(toastId);
   };
 
   return (
@@ -71,12 +75,12 @@ export default function LeaveButton({ eventId, attendeeId }: Props) {
               <button
                 className="btn btn-primary"
                 onClick={async () => {
-                  await handleLeave();
                   (
                     document.getElementById(
                       "leave_confirmation_modal"
                     ) as HTMLDialogElement
-                  ).showModal();
+                  ).close();
+                  await handleLeave();
                 }}
               >
                 Confirm

@@ -180,6 +180,13 @@ export async function PUT(
           restartDate: new Date(),
         },
       });
+
+      // event restarted, remove all opt ins in mailing list
+      await prisma.eventSpaceNotification.deleteMany({
+        where: {
+          eventId: id,
+        },
+      });
     }
 
     return Response.json(updatedEvent);

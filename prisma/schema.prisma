@@ -86,6 +86,7 @@ model Event {
   creator       User            @relation("EventCreator", fields: [creatorId], references: [id])
   attendees     EventAttendee[]
   restarts      EventRestart[]
+  spaceNotifications EventSpaceNotification[]
   // payments      Payment[]
 }
 
@@ -107,6 +108,16 @@ model EventAttendee {
   old           Boolean       @default(false)
   event         Event         @relation(fields: [eventId], references: [id], onDelete: Cascade)
   user          User          @relation("EventAttendee", fields: [userId], references: [id])
+}
+
+model EventSpaceNotification {
+  id        String   @id @default(uuid())
+  email     String
+  eventId   String
+  createdAt DateTime @default(now())
+  event     Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  @@unique([email, eventId])
 }
 
 // model Payment {

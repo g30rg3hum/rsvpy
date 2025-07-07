@@ -17,12 +17,12 @@ import {
 
 interface Props {
   eventName: string;
-  recipientEmail: string;
+  optOutUrl: string;
   inviteUrl: string;
 }
-export default function LeftEventEmail({
+export default function SpaceAvailableEmail({
   eventName,
-  // recipientEmail,
+  optOutUrl,
   inviteUrl,
 }: Props) {
   return (
@@ -47,8 +47,8 @@ export default function LeftEventEmail({
               Hello,
             </Text>
             <Text className="text-[14px] text-black leading-[24px]">
-              An attendee has left <strong>{eventName}</strong> and there is now
-              space left for you to join.
+              An attendee has left/been kicked from <strong>{eventName}</strong>{" "}
+              and there is now space left for you to join.
             </Text>
 
             <Text className="text-[14px] text-black leading-[24px]">
@@ -71,8 +71,7 @@ export default function LeftEventEmail({
             <Text className="text-[12px] text-black leading-[24px]">
               Please note that you are receiving this email because you have
               submitted to be notified. You can remove yourself from the
-              notification list by clicking <Link href="#">here</Link>.
-              {/* TODO: add the correct api url for leaving mailing list. */}
+              notification list by clicking <Link href={optOutUrl}>here</Link>.
             </Text>
           </Container>
         </Body>
@@ -81,8 +80,8 @@ export default function LeftEventEmail({
   );
 }
 
-LeftEventEmail.PreviewProps = {
+SpaceAvailableEmail.PreviewProps = {
   eventName: "Event Name",
-  recipientEmail: "hmw.geo@gmail.com",
   inviteUrl: "https://rsvpy.app/join-event",
+  optOutUrl: "https://rsvpy.app/opt-out",
 };

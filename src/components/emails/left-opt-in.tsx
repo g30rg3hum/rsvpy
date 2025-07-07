@@ -14,18 +14,17 @@ import {
 
 interface Props {
   eventName: string;
-  recipientEmail: string;
+  optOutUrl: string;
 }
-export default function LeftOptOutEmail({
-  eventName /* recipientEmail */,
-}: Props) {
+export default function LeftOptInEmail({ eventName, optOutUrl }: Props) {
   return (
     <Html>
       <Head />
       <Tailwind>
         <Body className="mx-auto my-auto bg-white px-2 font-sans">
           <Preview>
-            Notification reminder for available space for {eventName}
+            Opted in for notification reminders about available space for{" "}
+            {eventName}
           </Preview>
           <Container className="mx-auto my-[40px] max-w-[465px] rounded-lg border border-[#eaeaea] border-solid p-[30px]">
             <Section className="mt-[32px]">
@@ -50,8 +49,7 @@ export default function LeftOptOutEmail({
 
             <Text className="text-[14px] text-black leading-[24px]">
               If this was a mistake, you can ignore this email or opt out by
-              clicking this <Link href="#">link</Link>.
-              {/* TODO: opt out API link  */}
+              clicking this <Link href={optOutUrl}>link</Link>.
             </Text>
           </Container>
         </Body>
@@ -60,8 +58,7 @@ export default function LeftOptOutEmail({
   );
 }
 
-LeftOptOutEmail.PreviewProps = {
+LeftOptInEmail.PreviewProps = {
   eventName: "Event Name",
-  recipientEmail: "hmw.geo@gmail.com",
-  inviteUrl: "https://rsvpy.app/join-event",
+  optOutUrl: "https://example.com/opt-out",
 };
