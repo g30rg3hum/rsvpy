@@ -162,7 +162,13 @@ export default function CreateEventForm({ userEmail }: Props) {
         <h2 className="font-bold text-md">{questions[step]}</h2>
       </div>
 
-      <form onSubmit={onSubmit} className="space-y-4">
+      <form
+        onSubmit={onSubmit}
+        className="space-y-4"
+        onKeyDown={(e) => {
+          if (e.key === "Enter") e.preventDefault();
+        }}
+      >
         {step === 0 && (
           <fieldset className="fieldset">
             <input
