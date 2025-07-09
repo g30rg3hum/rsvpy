@@ -11,6 +11,8 @@ export default function JoinButton({ eventId, userEmail }: Props) {
   const router = useRouter();
 
   const handleJoin = async () => {
+    const toastId = toast.loading("Joining event...");
+
     if (!userEmail) {
       toast.error("Please sign in first to join the event.");
     }
@@ -43,6 +45,7 @@ export default function JoinButton({ eventId, userEmail }: Props) {
     }
 
     router.refresh();
+    toast.dismiss(toastId);
   };
 
   return (

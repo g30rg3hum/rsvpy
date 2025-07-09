@@ -38,7 +38,7 @@ export default function ReminderEmail({ eventName }: Props) {
             </Text>
             <Text className="text-[14px] text-black leading-[24px]">
               This is a reminder that <strong>{eventName}</strong> is happening
-              today. Don't forget to attend!
+              today. Don&#39;t forget to attend!
             </Text>
           </Container>
         </Body>
