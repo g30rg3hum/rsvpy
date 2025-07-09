@@ -4,7 +4,6 @@ import { EventFormData } from "@/lib/form/event-form";
 import { prisma } from "@/lib/prisma/prisma";
 import { resend } from "@/lib/resend/resend";
 import { NextRequest } from "next/server";
-import { before } from "node:test";
 
 // get event details by id
 export async function GET(
