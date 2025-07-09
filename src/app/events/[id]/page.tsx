@@ -98,7 +98,14 @@ export default async function EventPage({ params }: Props) {
           <div className="text-center h-max break-all">
             <h2 className="font-black text-3xl">{event.title}</h2>
           </div>
-          <div className={clsx(`grid grid-cols-1 w-full md:grid-cols-2 gap-6`)}>
+          <div
+            className={clsx(
+              `grid grid-cols-1 w-full`,
+              isJustAttendee && event.totalPrice === 0
+                ? "md:grid-cols-1"
+                : "md:grid-cols-2 gap-6"
+            )}
+          >
             <Card cardClassName="relative">
               <h2 className="card-title font-bold">
                 <InformationCircleIcon className="size-8" /> Event details
@@ -140,6 +147,16 @@ export default async function EventPage({ params }: Props) {
                 )}
               </div>
               <p>
+                <b>Current price per person: </b> {event.currency}{" "}
+                {event.attendees.filter((attendee) => !attendee.old).length ===
+                0
+                  ? "0.00"
+                  : (
+                      event.totalPrice /
+                      event.attendees.filter((attendee) => !attendee.old).length
+                    ).toFixed(2)}
+              </p>
+              <p>
                 <b>Maximum # of attendees: </b> {event.maxAttendees}
               </p>
               {isCreator && (
@@ -165,25 +182,27 @@ export default async function EventPage({ params }: Props) {
             <div className="grid gap-6 grid-cols-1">
               {isCreator && (
                 <>
-                  <Card bodyClassName="flex flex-col items-center items-center">
+                  <Card bodyClassName="flex flex-col items-center justify-center">
                     <h2 className="card-title font-bold">
                       <HashtagIcon className="size-5" /> Attendee count
                     </h2>
-                    <p className="font-black text-2xl">
+                    <p className="font-black text-2xl grow-0">
                       {numberOfAttendees} / {event.maxAttendees}
                     </p>
                   </Card>
-                  <Card bodyClassName="flex flex-col items-center items-center">
+                  <Card bodyClassName="flex flex-col items-center justify-center">
                     <h2 className="card-title font-bold">
                       <HashtagIcon className="size-5" /> Payment count
                     </h2>
-                    <p className="font-black text-2xl">
-                      {totalNoPaid} / {numberOfAttendees}{" "}
+                    <p className="font-black text-2xl grow-0">
+                      {event.totalPrice === 0
+                        ? "-"
+                        : `${totalNoPaid} / ${numberOfAttendees}`}
                     </p>
                   </Card>
                 </>
               )}
-              {isJustAttendee && (
+              {isJustAttendee && event.totalPrice !== 0 && (
                 <Card>
                   <h2 className="card-title font-bold">
                     <BanknotesIcon className="size-7" />

@@ -9,6 +9,7 @@ import { currencies, formatLocalDateTime } from "@/lib/helpers/utils";
 import { EventFormData, schema } from "@/lib/form/event-form";
 import { useEffect, useState } from "react";
 import { Event } from "@/lib/db/types";
+import { ExclamationTriangleIcon } from "@heroicons/react/24/solid";
 
 interface Props {
   eventId: string;
@@ -222,7 +223,16 @@ export default function EditEventForm({
             </select>
           </fieldset>
           <fieldset className="fieldset w-full">
-            <legend className="fieldset-legend">Price</legend>
+            <legend className="fieldset-legend">
+              Price
+              <div className="tooltip tooltip-right sm:tooltip-top">
+                <div className="tooltip-content w-[120px] sm:w-[200px]">
+                  Changing between free and priced will reset the payment
+                  statuses of all attendees.
+                </div>
+                <ExclamationTriangleIcon className="size-3 inline-block" />
+              </div>
+            </legend>
             <input
               {...register("totalPrice")}
               className="w-full input"

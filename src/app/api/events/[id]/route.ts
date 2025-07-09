@@ -4,6 +4,7 @@ import { EventFormData } from "@/lib/form/event-form";
 import { prisma } from "@/lib/prisma/prisma";
 import { resend } from "@/lib/resend/resend";
 import { NextRequest } from "next/server";
+import { before } from "node:test";
 
 // get event details by id
 export async function GET(
@@ -57,6 +58,7 @@ export async function GET(
   }
 }
 
+// UPDATE ROUTE!!
 type PutPayload = Omit<EventFormData, "startDateTime" | "endDateTime"> & {
   startDateTime: string;
   endDateTime: string | null;
@@ -148,6 +150,17 @@ export async function PUT(
 
   // now authorised to update event
   try {
+    const beforeUpdateEvent = await prisma.event.findUnique({
+      where: {
+        id: id,
+      },
+      include: {
+        creator: true,
+      },
+    });
+    // event will exist
+    const beforeUpdatePrice = beforeUpdateEvent!.totalPrice;
+
     const updatedEvent = await prisma.event.update({
       where: {
         id: id,
@@ -158,7 +171,7 @@ export async function PUT(
         location: location,
         startDateTime: startDateTime,
         endDateTime: endDateTime,
-        totalPrice: totalPrice,
+        totalPrice: totalPrice, // new price
         currency: currency,
         maxAttendees: maxAttendees,
       },
@@ -178,6 +191,7 @@ export async function PUT(
       await prisma.eventAttendee.updateMany({
         where: {
           eventId: id,
+          old: false,
         },
         data: {
           old: true,
@@ -222,6 +236,47 @@ export async function PUT(
             `Error encountered sending event ${eventName} update email to ${email}: ${error}`
           );
         }
+      }
+
+      // at this point, this is just an update
+      // only update payment status if price became 0 -> a value, or a value -> 0.
+      if (beforeUpdatePrice === 0 && totalPrice > 0) {
+        await prisma.eventAttendee.updateMany({
+          where: {
+            eventId: id,
+            old: false,
+          },
+          data: {
+            payment: "PENDING",
+          },
+        });
+
+        // default the organiser's payment to transferred
+        const organiserEmail = beforeUpdateEvent!.creator.email;
+        await prisma.eventAttendee.updateMany({
+          where: {
+            eventId: id,
+            user: {
+              email: organiserEmail,
+            },
+            old: false,
+          },
+          data: {
+            payment: "TRANSFERRED",
+          },
+        });
+      }
+
+      if (beforeUpdatePrice > 0 && totalPrice === 0) {
+        await prisma.eventAttendee.updateMany({
+          where: {
+            eventId: id,
+            old: false,
+          },
+          data: {
+            payment: "NA",
+          },
+        });
       }
     }
 

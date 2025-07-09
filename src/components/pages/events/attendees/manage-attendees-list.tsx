@@ -177,21 +177,24 @@ export default function ManageAttendeesList({
                   {isCreator && (
                     <>
                       <td className={clsx(attendee.old && "opacity-50")}>
-                        {attendee.payment !== "PENDING" ||
-                        attendee.user!.email === event.creator!.email ? (
+                        {attendee.payment === "TRANSFERRED" ||
+                        attendee.payment === "CASH" ? (
                           <CheckCircleIcon className="size-5 inline-block" />
                         ) : (
                           <XCircleIcon className="size-5 inline-block" />
                         )}{" "}
-                        {attendee.user!.email === event.creator!.email
-                          ? "Paid"
-                          : attendee.payment.charAt(0).toUpperCase() +
-                            attendee.payment.slice(1).toLowerCase()}
+                        {attendee.payment === "NA"
+                          ? "N/A"
+                          : attendee.user!.email === event.creator!.email
+                            ? "Paid"
+                            : attendee.payment.charAt(0).toUpperCase() +
+                              attendee.payment.slice(1).toLowerCase()}
                       </td>
                       <td className="justify-end flex flex-col gap-2 sm:flex-row">
-                        {attendee.user!.email !== event.creator!.email && (
-                          <EditAttendeeButton attendee={attendee} />
-                        )}
+                        {attendee.user!.email !== event.creator!.email &&
+                          attendee.payment !== "NA" && (
+                            <EditAttendeeButton attendee={attendee} />
+                          )}
                         {!isPassedEvent && !attendee.old && (
                           <KickButton
                             attendeeId={attendee.userId}
@@ -205,25 +208,28 @@ export default function ManageAttendeesList({
               ))}
           </tbody>
         </table>
-        {isCreator && (
+        {isCreator && !isPassedEvent && (
           <div className="right-4 top-4 absolute flex gap-2">
             <SendInviteButton
               organiserName={`${event.creator!.firstName} ${event.creator!.lastName}`}
               eventName={event.title}
               eventId={event.id}
             />
-            <PayUpButton
-              eventName={event.title}
-              organiserName={`${event.creator!.firstName} ${event.creator!.lastName}`}
-              attendeesPendingPayment={event
-                .attendees!.filter(
-                  (attendee) => !attendee.old && attendee.payment === "PENDING"
-                )
-                .map((attendee) => ({
-                  email: attendee.user!.email,
-                  name: `${attendee.user!.firstName} ${attendee.user!.lastName}`,
-                }))}
-            />
+            {event.totalPrice !== 0 && (
+              <PayUpButton
+                eventName={event.title}
+                organiserName={`${event.creator!.firstName} ${event.creator!.lastName}`}
+                attendeesPendingPayment={event
+                  .attendees!.filter(
+                    (attendee) =>
+                      !attendee.old && attendee.payment === "PENDING"
+                  )
+                  .map((attendee) => ({
+                    email: attendee.user!.email,
+                    name: `${attendee.user!.firstName} ${attendee.user!.lastName}`,
+                  }))}
+              />
+            )}
             <InviteButton baseUrl={baseUrl} eventId={event.id} />
           </div>
         )}
