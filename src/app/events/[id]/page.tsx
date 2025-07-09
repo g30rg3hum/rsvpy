@@ -67,6 +67,8 @@ export default async function EventPage({ params }: Props) {
     "passed"
   );
 
+  const eventHasBegun = new Date() > event.startDateTime;
+
   const numberOfAttendees = event.attendees.filter(
     (attendee) => !attendee.old
   ).length;
@@ -153,7 +155,8 @@ export default async function EventPage({ params }: Props) {
               {isJustAttendee && (
                 <div className="absolute top-3 right-3 flex gap-2">
                   <OrganiserInfoButton organiserUser={event.creator} />
-                  {!isPassedEvent && (
+                  {/* also check that the event has not begun */}
+                  {!isPassedEvent && !eventHasBegun && (
                     <LeaveButton eventId={event.id} attendeeId={attendeeId!} />
                   )}
                 </div>

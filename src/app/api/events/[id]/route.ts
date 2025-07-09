@@ -173,6 +173,7 @@ export async function PUT(
     const eventName = updatedEvent.title;
 
     // if the event is passed, also update the attendees to old'
+    // i.e. its a restart!
     if (isPassedEvent) {
       await prisma.eventAttendee.updateMany({
         where: {
@@ -197,29 +198,30 @@ export async function PUT(
           eventId: id,
         },
       });
-    }
+    } else {
+      // not a restart only send notis to current attendees
+      // send a notification email to all current attendees
+      const currentAttendeeEmails = updatedEvent.attendees
+        .filter((attendee) => !attendee.old)
+        .map((attendee) => attendee.user.email);
 
-    // send a notification email to all current attendees
-    const currentAttendeeEmails = updatedEvent.attendees
-      .filter((attendee) => !attendee.old)
-      .map((attendee) => attendee.user.email);
+      console.log(
+        `Sending update emails to all ${currentAttendeeEmails.length} current attendees of updated event ${eventName}`
+      );
 
-    console.log(
-      `Sending update emails to all ${currentAttendeeEmails.length} current attendees of updated event ${eventName}`
-    );
-
-    for (const email of currentAttendeeEmails) {
-      try {
-        await resend.emails.send({
-          from: process.env.EMAIL_FROM || "",
-          to: email,
-          subject: `There have been updates made to ${eventName}`,
-          react: UpdateEmail({ eventName }),
-        });
-      } catch (error) {
-        console.error(
-          `Error encountered sending event ${eventName} update email to ${email}: ${error}`
-        );
+      for (const email of currentAttendeeEmails) {
+        try {
+          await resend.emails.send({
+            from: process.env.EMAIL_FROM || "",
+            to: email,
+            subject: `There have been updates made to ${eventName}`,
+            react: UpdateEmail({ eventName }),
+          });
+        } catch (error) {
+          console.error(
+            `Error encountered sending event ${eventName} update email to ${email}: ${error}`
+          );
+        }
       }
     }
 
