@@ -99,20 +99,21 @@ export default async function Home() {
             <div className="collapse collapse-arrow bg-base-200 border border-base-100 p-2">
               <input type="radio" name="my-accordion-2" />
               <div className="collapse-title font-semibold text-lg">
-                What is rsvpy's purpose?
+                What is rsvpy&apos;s purpose?
               </div>
               <div className="collapse-content text-sm">
                 WhatsApp is often used to manage events - keeping track of who
-                is attending, who has paid, and who hasn't. Attendees copy and
-                paste the previous message to mark their attendance/payment, and
-                it quickly becomes an inefficient mess. <strong>rsvpy</strong>{" "}
-                is a platform to streamline this entire process.
+                is attending, who has paid, and who hasn&apos;t. Attendees copy
+                and paste the previous message to mark their attendance/payment,
+                and it quickly becomes an inefficient mess.{" "}
+                <strong>rsvpy</strong> is a platform to streamline this entire
+                process.
               </div>
             </div>
             <div className="collapse collapse-arrow bg-base-200 border border-base-100 p-2">
               <input type="radio" name="my-accordion-2" />
               <div className="collapse-title font-semibold text-lg">
-                Why can't I make payments through rsvpy?
+                Why can&apos;t I make payments through rsvpy?
               </div>
               <div className="collapse-content text-sm">
                 A decision has been made to rely on attendee-trust, where they
@@ -130,8 +131,8 @@ export default async function Home() {
               </div>
               <div className="collapse-content text-sm">
                 Definitely! There is still more room for improvement and to{" "}
-                better help you manage your events. We've got a couple ideas
-                ourselves on some more features we could add. Do{" "}
+                better help you manage your events. We&apos;ve got a couple
+                ideas ourselves on some more features we could add. Do{" "}
                 <HyperLink
                   href="https://docs.google.com/forms/d/e/1FAIpQLSccBLREfqOpEnCy_Wbgdn4sHL3I_UXaLt7RkE160AU30dp8HA/viewform?usp=dialog"
                   newTab
