@@ -92,8 +92,8 @@ export default async function Home() {
               <div className="collapse-content text-sm">
                 Yes, <strong>rsvpy</strong> is completely free to use. However,
                 it is not free to maintain so your{" "}
-                <HyperLink href="#">support</HyperLink> would be greatly
-                appreciated.
+                <HyperLink href="https://coff.ee/georgehum">support</HyperLink>{" "}
+                would be greatly appreciated.
               </div>
             </div>
             <div className="collapse collapse-arrow bg-base-200 border border-base-100 p-2">
@@ -130,11 +130,15 @@ export default async function Home() {
               </div>
               <div className="collapse-content text-sm">
                 Definitely! There is still more room for improvement and to{" "}
-                {/* TODO: add form hyperlink */}
                 better help you manage your events. We've got a couple ideas
                 ourselves on some more features we could add. Do{" "}
-                <HyperLink href="#">let us know</HyperLink> if you have any
-                suggestions.
+                <HyperLink
+                  href="https://docs.google.com/forms/d/e/1FAIpQLSccBLREfqOpEnCy_Wbgdn4sHL3I_UXaLt7RkE160AU30dp8HA/viewform?usp=dialog"
+                  newTab
+                >
+                  let us know
+                </HyperLink>{" "}
+                if you have any suggestions.
               </div>
             </div>
           </div>
@@ -144,7 +148,9 @@ export default async function Home() {
         <p>&copy; {currentYear} rsvpy | All rights reserved.</p>
         <p>
           Developed by{" "}
-          <HyperLink href="www.georgehum.com">George Hum</HyperLink>
+          <HyperLink newTab href="https://www.georgehum.com">
+            George Hum
+          </HyperLink>
         </p>
       </div>
     </PageWrapper>
