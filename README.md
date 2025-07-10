@@ -1,36 +1,31 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# rsvpy: Event Management Application
 
-## Getting Started
+Check it out at <a href="https://rsvpy.lol">https://rsvpy.lol</a>
 
-First, run the development server:
+## What problem does it solve?
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+I noticed that lots of casual groups/societies used WhatsApp to organise their events. The typical format would involve the organiser sending a message with the event details, followed by an empty numbered list. Those who want to join would then copy the most recent list, and add their name to it. The same process would be used to verify that attendees have paid their share of the event cost. This is very inefficient. <b>rsvpy</b> seeks to streamline this entire process on a singular, easy-to-use platform.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Features
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Organisers
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Create new events
+- Re-run old events
+- Invite attendees (by sharing an invite link, or sending an email)
+- Track who has and hasn't paid
+- Request payment from all unpaid attendees
 
-## Learn More
+### Attendees
 
-To learn more about Next.js, take a look at the following resources:
+- Join events
+- Keep updates on event changes
+- Be reminded of upcoming events
+- Mark payments by cash/bank transfer
+- Be notified of newly freed-up spots.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+NOTE: currently, attendees can only mark whether they have paid or not. Payments are not managed through rsvpy (e.g. with Stripe) so that unnecessary additional fees are avoided. Stripe, for example, takes a percentage + a fixed cent amount, which undesirably adds to the cost of organising/joining events.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Technologies/Libraries used
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Next.js, Tailwind, NextAuth, AWS S3 Storage, Postgres Prisma, Resend, React Hook Form
